@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="UnityTest" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    
+    <Target Name="_ValuesAtLoad" BeforeTargets="Clean; Build">
+        <Message Text="Item values upon initial load of BuildMgr.proj" />
+        <Message Text="__________________________________________" />
+        <Message Text="AllProjectFiles = @(AllProjectFiles)" />
+        <Message Text="Excluded Project Files = @(ExcludedProjectFiles)" />
+        <Message Text="Included Project Files = @(IncludedProjectFiles)" />
+        <Message Text="Included Assemblies = @(IncludedAssemblies)" />
+    </Target>
+
+    <Target Name="_ValuesUponExit" AfterTargets="_DynamicallyFindAssemblies">
+        <Message Text="Item values at exit of BuildMgr.proj" />
+        <Message Text="____________________________________" />
+        <Message Text="AllProjectFiles = @(AllProjectFiles)" />
+        <Message Text="Excluded Project Files = @(ExcludedProjectFiles)" />
+        <Message Text="Included Project Files = @(IncludedProjectFiles)" />
+        <Message Text="Included Assemblies = @(IncludedAssemblies)" />
+    </Target>
+
+
+    <Target Name="_DynamicallyFindAssemblies">
+        <Message Text="OutputPath = $(OutputPath)" />
+        <ItemGroup>
+            <!-- Batching allows construction of one ItemGroup from another, albeit in a Target -->
+            <IncludedAssemblies Include="%(RootDir)%(IncludedProjectFiles.Directory)$(OutputPath)%(IncludedProjectFiles.Filename).dll" />
+        </ItemGroup>
+        <Message Text="Included Filenames = %(IncludedProjectFiles.Filename)" />
+        <Message Text="Included Assemblies (local) = @(IncludedAssemblies)" />
+    </Target>
+
+    <!-- As a Rebuild of the AssemblyVersionInfo project generated from here currently doesn't generate 
+    an increment of the version number (bug in Build Version Increment addin?), I need to manually Rebuild 
+    that project before I Rebuild with this BuildMgr. -->
+    <Target Name="_IncrementAssemblyVersion" >
+        <ItemGroup>
+            <AssyVersionInfoProject Include="$(CustomToolsDir)AssemblyVersionInfo\AssemblyVersionInfo.csproj" />
+        </ItemGroup>
+        <!-- <MSBuild Projects="@(AssyVersionInfoProject)" Targets="Rebuild" /> -->
+        <Warning Text="Did you remember to increment AssemblyVersionInfo using Rebuild before running this?" />
+    </Target>
+    <!-- Main Target to Copy the Assembly files to Unity -->
+    <Target Name="_CopyAssyFiles" DependsOnTargets="_DynamicallyFindAssemblies" >
+        <!-- Dynamic loading of IncludedAssemblies item group cannot go here as the CopyAssyFilesCore target can't see the changes
+        it makes until the target that contains the item group exits -->
+        <CallTarget Targets="_CopyAssyFilesCore" />
+    </Target>
+
+    <!-- Incrementally copy the Assemblies to Unity -->
+    <Target Name="_CopyAssyFilesCore" Inputs="@(IncludedAssemblies)"
+            Outputs="@(IncludedAssemblies->'$(UnityCodeLibraryDir)%(Filename)%(Extension)')" >
+        <!-- Warning about Outputs not existing before they are copied is OK. -->
+        <!-- If the Unity CodeLibrary directory doesn't exist then create it -->
+        <MakeDir Directories="$(UnityCodeLibraryDir)" Condition="!Exists('$(UnityCodeLibraryDir)')"/>
+        <!-- Now actually copy the files -->
+        <Copy SourceFiles="@(IncludedAssemblies)" DestinationFolder="$(UnityCodeLibraryDir)" />
+    </Target>
+
+    <!-- Copy the .pdb files to Unity -->
+    <Target Name="_CopyPdbFiles" AfterTargets="_CopyAssyFiles">
+        <ItemGroup>
+            <IncludedPdbFiles Include="%(RootDir)%(IncludedAssemblies.Directory)%(IncludedAssemblies.Filename).pdb" />
+        </ItemGroup>
+        <Message Text="Included .pdb Files (local) = @(IncludedPdbFiles)" />
+        <Copy SourceFiles="@(IncludedPdbFiles)" DestinationFolder="$(UnityCodeLibraryDir)" />
+    </Target>
+
+    <!-- Generate the .mdb debug file in Unity IFF the one that may already be there requires updating -->
+    <Target Name="_GenerateDebugFiles" >
+        <!--   Inputs="@(IncludedAssemblies->'%(Filename)')"
+            Outputs="@(IncludedAssemblies->'$(UnityCodeLibraryDir)%(Filename).dll.mdb')" -->
+        <PropertyGroup>
+            <MdbGeneratorPath>"C:\Program Files\Unity\Editor\Data\Mono\lib\mono\2.0\pdb2mdb.exe"</MdbGeneratorPath>
+        </PropertyGroup>
+
+        <!--" or the hex %22 are not needed around the parameter as long as there are no spaces -->
+        <Message Text="$(MdbGeneratorPath) $(UnityCodeLibraryDir)%(IncludedAssemblies.Filename).dll" />
+        <!-- <Exec Command='$(MdbGeneratorPath) $(UnityCodeLibraryDir)%(IncludedAssemblies.Filename).dll' /> -->
+        <Warning Text="FIXME! GenerateDebugFiles does nothing. So far, pdb2mdb.exe does not take the path parameter." />
+    </Target>
+
+    <!-- TODO Confirm that the Mono Debug Environment has all the projects it needs -->
+    <Target Name="_ConfirmDebugEnvReadiness" >
+        <Message Text="WARNING! Confirm MonoDebugger includes all non-Test projects." Importance="high" />
+        <Message Text="Procedure for adding an Existing Project to the Debug Environment." />
+        <Message Text="     1. Use OpenWith to open UnityDebugEnv.sln with MonoD, NOT with VS." />
+        <Message Text="     2. Add appropriate, existing Project(s) that are not Tests." />
+        <Message Text="     3. Uncheck the Build checkbox found in Solution Properties for each Project." />
+    </Target>
+
+    <!-- Launch Unity -->
+    <Target Name="_LaunchUnity" >
+        <PropertyGroup>
+            <UnityProjectScenePath>$(UnityProjectDir)Assets\Scenes\MainLoadScene.unity</UnityProjectScenePath>
+        </PropertyGroup>
+        <!-- <Exec Command="$(UnityProjectScenePath)" /> Confirmed working. -->
+        <Message Text="LaunchUnity called." />
+    </Target>
+
+    <Target Name="_LaunchMonoDebuggerPrompt" >
+        <Message Text="Launch and attach the MonoDebugger." Importance="high" />
+    </Target>
+
+
+</Project>

@@ -1,22 +1,23 @@
-@echo off
+@echo on
 
 :: Copies .dll and .pdb to Unity, convert .pdb to .mdb, then cleanup unneeded .pdb
 :: The passed parameter %1 is $(TargetPath).
 
 :: Copy target.dll to Unity project's CodeLibrary
-xcopy "%1" "%UNITY_ENV_DIR%\UnityEntry\Assets\CodeLibrary\" /y /r
+::xcopy "%1" "%UnityEnvDir%UnityEntry\Assets\CodeLibrary\" /y /r
 
 :: Copy the target.pdb debug file to Unity project's CodeLibrary. 
 :: %~dpn1 extracts everything except the extension.
-xcopy "%~dpn1.pdb" "%UNITY_ENV_DIR%\UnityEntry\Assets\CodeLibrary\" /y /r
+:: I've now learned that pdb2mdb doesn't actually need the .pdb file, just the .dll
+::xcopy "%~dpn1.pdb" "%UnityEnvDir%UnityEntry\Assets\CodeLibrary\" /y /r
 
 :: Executes pdb2mdb.exe on the target.dll now located in the Unity project's CodeLibrary. 
 :: %~nx1 extracts the target's filename and extension.
-"C:\Program Files\Unity\Editor\Data\Mono\lib\mono\2.0\pdb2mdb.exe" "%UNITY_ENV_DIR%\UnityEntry\Assets\CodeLibrary\%~nx1"
+"C:\Program Files\Unity\Editor\Data\Mono\lib\mono\2.0\pdb2mdb.exe" %UnityEnvDir%UnityEntry\Assets\CodeLibrary\%~nx1
 
 :: Delete the .pdb file in the Unity project's CodeLibrary that was just used to generate the .mdb
 :: %~n1 extracts the target's filename.
-erase "%UNITY_ENV_DIR%\UnityEntry\Assets\CodeLibrary\%~n1.pdb"
+::erase "%UnityEnvDir%UnityEntry\Assets\CodeLibrary\%~n1.pdb"
 
 :: Next thing to try out - make a seperate .bat file for Release and Debug for
 :: copying, but keep the branching logic in the post build events. 
