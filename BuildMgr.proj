@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="UnityTest" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <!-- Multiple warnings from poorly designed MS Schema -->
+    <!-- Desktop (but not Laptop) system has lost Intellisense for MSBuild due to an MSBuild bug -->
     <!-- NOTE: MSBuildStartupDirectory has no trailing \ -->
 
     <PropertyGroup>
@@ -11,79 +12,38 @@
         <UnityEnvDir Condition = "$(UnityEnvDir) == ''">$(GameDevDir)UnityEnv1\</UnityEnvDir>
         <CodeEnvDir Condition ="$(CodeEnvDir) == ''">$(GameDevDir)CodeEnv1\</CodeEnvDir>
         <CustomToolsDir Condition="$(CustomToolsDir) == ''">$(GameDevDir)CustomTools\</CustomToolsDir>
-        <UnityProjectDir>$(UnityEnvDir)UnityEntry\</UnityProjectDir>
-        <UnityCodeLibraryDir>$(UnityProjectDir)Assets\CodeLibrary\</UnityCodeLibraryDir>
+        <ContribDir Condition="$(ContribDir) == ''">$(GameDevDir)Contrib\</ContribDir>
     </PropertyGroup>
     <PropertyGroup>
+        <UnityProjectDir>$(UnityEnvDir)UnityEntry\</UnityProjectDir>
+        <UnityCodeLibraryDir>$(UnityProjectDir)Assets\CodeLibrary\</UnityCodeLibraryDir>
+        <ExtensionTasksDir>$(ContribDir)MSBuildExtensionPack\4.0\</ExtensionTasksDir>
+        <CommunityTasksDir>$(ContribDir)MSBuildCommunityTasks\</CommunityTasksDir>
         <DebugEnvDir>$(CodeEnvDir)\MonoDebugEnv\</DebugEnvDir>
     </PropertyGroup>
 
+    <!-- These Items are dynamically defined inside a target. They are declared like this so they can be used in other targets. -->
     <ItemDefinitionGroup>
         <IncludedAssemblies></IncludedAssemblies>
+        <IncludedPdbFiles></IncludedPdbFiles>
     </ItemDefinitionGroup>
-       
+
     <ItemGroup>
+        <!-- All the .csproj files in my Game Code Development Environment -->
         <AllProjectFiles Include="$(CodeEnvDir)**\*.csproj" />
-    </ItemGroup>  
-  
+    </ItemGroup>
+
     <ItemGroup>
         <!-- Excluded .csproj files in my Game Code Development Environment -->
         <ExcludedProjectFiles Include="$(CodeEnvDir)**\CoreMonoBehaviourLibrary\*.csproj" />
         <ExcludedProjectFiles Include="$(DebugEnvDir)**\*.csproj" />
     </ItemGroup>
-   
-     <ItemGroup>
-        <!-- All the .csproj files in my Game Code Development Environment -->
+
+    <ItemGroup>
+        <!-- All the .csproj files that are included in my Game Code Development Environment -->
         <IncludedProjectFiles Include="@(AllProjectFiles)" Exclude="@(ExcludedProjectFiles)" />
     </ItemGroup>
 
     <Import Project="$(CustomToolsDir)BuildMgr.targets" />
 
-    <!-- Cleans, builds and runs Unit Tests -->
-    <Target Name="CleanTest" DependsOnTargets="Rebuild; Test" />
-
-    <Target Name="UnityTest" >
-        <!-- Clean Rebuild that also modifies the Assembly Version values -->
-        <CallTarget Targets="Rebuild" />
-        <!-- Incrementally copy to Unity any .dll that may be out of date -->
-        <CallTarget Targets="_CopyAssyFiles" />
-        <!-- Copy the .pdb files to Unity -->
-        <CallTarget Targets="_CopyPdbFiles" />
-        <!-- FIXME Generate .mdb files from the .dll in Unity -->
-        <CallTarget Targets="_GenerateDebugFiles" />
-        <!-- TODO confirm MonoD has references to all non-test projects -->
-        <CallTarget Targets="_ConfirmDebugEnvReadiness" />
-        <!-- Launch Unity with Project open -->
-        <CallTarget Targets="_LaunchUnity" />
-        <!-- Operator is prompted to manually launch and attach MonoD to Unity -->
-        <CallTarget Targets="_LaunchMonoDebuggerPrompt" />
-    </Target>
-
-    <!-- Full Clean of Included VS Projects and Unity's Code Library -->
-    <Target Name="Clean">
-        <MSBuild Projects="@(IncludedProjectFiles)" Targets="Clean" />
-        <!-- UNDONE Need to confirm Unity is not running as condition -->
-        <!-- UNDONE Need to account for more than 1 Unity Project -->
-        <ItemGroup>
-            <AllFilesInUnityCodeLibrary Include="$(UnityCodeLibraryDir)\**\*" />
-        </ItemGroup>
-        <Delete Files="@(AllFilesInUnityCodeLibrary)" />
-        <!-- TODO RemoveDir Directories="$(UnityCodeLibraryDir)" -->
-    </Target>
-
-    <!-- Incremental Build of all Included Projects -->
-    <Target Name="Build">
-        <MSBuild Projects="@(IncludedProjectFiles)" Targets="Build" />
-    </Target>
-
-    <!-- Full Clean followed by a new VS Build of Code -->
-    <Target Name="Rebuild" DependsOnTargets="Clean; _IncrementAssemblyVersion; Build" />
-
-    <!-- Fill in any Build gaps, then run all Unit Tests -->
-    <!-- If Build has already run, say via RebuildAndTest, it will be skipped here as it can only run once -->
-    <Target Name="Test" DependsOnTargets="Build">
-        <!-- TODO how to detect and call unit test projects -->
-        <!-- TODO Need notification of success or failure -->
-        <Warning Text="Running Unit Tests which currently do nothing." />
-    </Target>    
 </Project>
