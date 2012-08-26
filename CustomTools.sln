@@ -13,6 +13,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.AssemblyVersionInfo", "CustomTools.AssemblyVersionInfo\CustomTools.AssemblyVersionInfo.csproj", "{AFB15244-A569-4180-A8F2-00A3A6BE6C87}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CustomTools.Templates", "CustomTools.Templates", "{A0F5F452-9515-4D92-BE94-1A8CA603BB39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.StdClasses", "CustomTools.Templates\Class\CustomTools.Templates.StdClasses.csproj", "{3F641F1C-1D9C-49F6-A7C9-FF627AA0306D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.StdClassLibraryProject", "CustomTools.Templates\ClassLibrary\CustomTools.Templates.StdClassLibraryProject.csproj", "{4EA04B29-89F8-4568-AECB-163D1593F525}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.UnityClassLibraryProject", "CustomTools.Templates\ClassLibraryUnity\CustomTools.Templates.UnityClassLibraryProject.csproj", "{129DCF86-4FC5-4CAF-AAFE-911EFC560E10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.MonoBehaviourClasses", "CustomTools.Templates\ClassMonoBehaviour\CustomTools.Templates.MonoBehaviourClasses.csproj", "{ECD5528F-AB9B-4FEA-AF4D-6DC3384A9596}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,12 +33,34 @@ Global
 		{AFB15244-A569-4180-A8F2-00A3A6BE6C87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFB15244-A569-4180-A8F2-00A3A6BE6C87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFB15244-A569-4180-A8F2-00A3A6BE6C87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F641F1C-1D9C-49F6-A7C9-FF627AA0306D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F641F1C-1D9C-49F6-A7C9-FF627AA0306D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F641F1C-1D9C-49F6-A7C9-FF627AA0306D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F641F1C-1D9C-49F6-A7C9-FF627AA0306D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EA04B29-89F8-4568-AECB-163D1593F525}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EA04B29-89F8-4568-AECB-163D1593F525}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EA04B29-89F8-4568-AECB-163D1593F525}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EA04B29-89F8-4568-AECB-163D1593F525}.Release|Any CPU.Build.0 = Release|Any CPU
+		{129DCF86-4FC5-4CAF-AAFE-911EFC560E10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{129DCF86-4FC5-4CAF-AAFE-911EFC560E10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{129DCF86-4FC5-4CAF-AAFE-911EFC560E10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{129DCF86-4FC5-4CAF-AAFE-911EFC560E10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECD5528F-AB9B-4FEA-AF4D-6DC3384A9596}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECD5528F-AB9B-4FEA-AF4D-6DC3384A9596}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECD5528F-AB9B-4FEA-AF4D-6DC3384A9596}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECD5528F-AB9B-4FEA-AF4D-6DC3384A9596}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3F641F1C-1D9C-49F6-A7C9-FF627AA0306D} = {A0F5F452-9515-4D92-BE94-1A8CA603BB39}
+		{4EA04B29-89F8-4568-AECB-163D1593F525} = {A0F5F452-9515-4D92-BE94-1A8CA603BB39}
+		{129DCF86-4FC5-4CAF-AAFE-911EFC560E10} = {A0F5F452-9515-4D92-BE94-1A8CA603BB39}
+		{ECD5528F-AB9B-4FEA-AF4D-6DC3384A9596} = {A0F5F452-9515-4D92-BE94-1A8CA603BB39}
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_DetectChanges = True
 		BuildVersion_UseGlobalSettings = True
+		BuildVersion_DetectChanges = True
 	EndGlobalSection
 EndGlobal
