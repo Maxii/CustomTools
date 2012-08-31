@@ -5,43 +5,37 @@
     <!-- NOTE: MSBuildStartupDirectory has no trailing \ -->
 
     <PropertyGroup>
-        <Configuration Condition ="$(Configuration) == ''">Debug</Configuration>
-        <OutputPath Condition ="$(OutputPath) == ''">bin\$(Configuration)\</OutputPath>
+        <NewLine>%0a%0d</NewLine>
     </PropertyGroup>
+
     <PropertyGroup>
-        <UnityEnvDir Condition = "$(UnityEnvDir) == ''">$(GameDevDir)UnityEnv1\</UnityEnvDir>
-        <CodeEnvDir Condition ="$(CodeEnvDir) == ''">$(GameDevDir)CodeEnv1\</CodeEnvDir>
+        <UnityEnvDir Condition = "$(UnityEnvDir) == ''">$(GameDevDir)UnityEnv\</UnityEnvDir>
+        <CodeEnvDir Condition ="$(CodeEnvDir) == ''">$(GameDevDir)CodeEnv\</CodeEnvDir>
         <CustomToolsDir Condition="$(CustomToolsDir) == ''">$(GameDevDir)CustomTools\</CustomToolsDir>
-        <ContribDir Condition="$(ContribDir) == ''">$(GameDevDir)Contrib\</ContribDir>
-    </PropertyGroup>
-    <PropertyGroup>
+        <CommonOutputDir Condition ="$(CommonOutputDir) == ''">$(CodeEnvDir)BuildOutput\Latest\bin\</CommonOutputDir>
         <UnityProjectDir>$(UnityEnvDir)UnityEntry\</UnityProjectDir>
         <UnityCodeLibraryDir>$(UnityProjectDir)Assets\CodeLibrary\</UnityCodeLibraryDir>
-        <ExtensionTasksDir>$(ContribDir)MSBuildExtensionPack\4.0\</ExtensionTasksDir>
-        <CommunityTasksDir>$(ContribDir)MSBuildCommunityTasks\</CommunityTasksDir>
         <DebugEnvDir>$(CodeEnvDir)\MonoDebugEnv\</DebugEnvDir>
     </PropertyGroup>
 
-    <!-- These Items are dynamically defined inside a target. They are declared like this so they can be used in other targets. -->
-    <ItemDefinitionGroup>
-        <IncludedAssemblies></IncludedAssemblies>
-        <IncludedPdbFiles></IncludedPdbFiles>
-    </ItemDefinitionGroup>
+    <PropertyGroup>
+        <ContribDir Condition="$(ContribDir) == ''">$(GameDevDir)Contrib\</ContribDir>
+        <ExtensionTasksDir>$(ContribDir)MSBuildExtensionPack\4.0\</ExtensionTasksDir>
+        <CommunityTasksDir>$(ContribDir)MSBuildCommunityTasks\</CommunityTasksDir>
+    </PropertyGroup>
 
     <ItemGroup>
         <!-- All the .csproj files in my Game Code Development Environment -->
         <AllProjectFiles Include="$(CodeEnvDir)**\*.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <!-- Excluded .csproj files in my Game Code Development Environment -->
-        <ExcludedProjectFiles Include="$(CodeEnvDir)**\CoreMonoBehaviourLibrary\*.csproj" />
+        <!-- Those .csproj files I want to exclude from the build -->
         <ExcludedProjectFiles Include="$(DebugEnvDir)**\*.csproj" />
+        <!-- All the .csproj files that are included in this build -->
+        <IncludedProjectFiles Include="@(AllProjectFiles)" Exclude="@(ExcludedProjectFiles)" />
     </ItemGroup>
 
     <ItemGroup>
-        <!-- All the .csproj files that are included in my Game Code Development Environment -->
-        <IncludedProjectFiles Include="@(AllProjectFiles)" Exclude="@(ExcludedProjectFiles)" />
+        <AllConfigurations Include="Debug" />
+        <AllConfigurations Include="Release" />
     </ItemGroup>
 
     <Import Project="$(CustomToolsDir)BuildMgr.targets" />

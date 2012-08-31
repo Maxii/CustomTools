@@ -69,6 +69,7 @@
 doskey /macrofile=loggers\BuildMacro.doskey
 
 @echo Syntax of Build Command: build buildmgr.proj /t:[targetName]
+@echo Target Options:   UnityTest(default), CleanTest, Test, CleanAll, BuildAll, RebuildAll
 
 @goto end
 
