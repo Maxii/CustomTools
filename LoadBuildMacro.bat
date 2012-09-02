@@ -1,4 +1,4 @@
-@echo Using pasted code to set environment for using Microsoft Visual Studio 2010 x86 tools.
+@echo Using VS code to set environment for using Microsoft Visual Studio 2010 x86 tools.
 
 @call :GetVSCommonToolsDir
 @if "%VS100COMNTOOLS%"=="" goto error_no_VS100COMNTOOLSDIR
@@ -69,7 +69,7 @@
 doskey /macrofile=loggers\BuildMacro.doskey
 
 @echo Syntax of Build Command: build buildmgr.proj /t:[targetName]
-@echo Target Options:   UnityTest(default), CleanTest, Test, CleanAll, BuildAll, RebuildAll
+@echo Target Options:   UnityTest(default), CleanTest, Test, Clean, Build, Rebuild
 
 @goto end
 

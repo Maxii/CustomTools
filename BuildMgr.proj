@@ -4,25 +4,7 @@
     <!-- Desktop (but not Laptop) system has lost Intellisense for MSBuild due to an MSBuild bug -->
     <!-- NOTE: MSBuildStartupDirectory has no trailing \ -->
 
-    <PropertyGroup>
-        <NewLine>%0a%0d</NewLine>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <UnityEnvDir Condition = "$(UnityEnvDir) == ''">$(GameDevDir)UnityEnv\</UnityEnvDir>
-        <CodeEnvDir Condition ="$(CodeEnvDir) == ''">$(GameDevDir)CodeEnv\</CodeEnvDir>
-        <CustomToolsDir Condition="$(CustomToolsDir) == ''">$(GameDevDir)CustomTools\</CustomToolsDir>
-        <CommonOutputDir Condition ="$(CommonOutputDir) == ''">$(CodeEnvDir)BuildOutput\Latest\bin\</CommonOutputDir>
-        <UnityProjectDir>$(UnityEnvDir)UnityEntry\</UnityProjectDir>
-        <UnityCodeLibraryDir>$(UnityProjectDir)Assets\CodeLibrary\</UnityCodeLibraryDir>
-        <DebugEnvDir>$(CodeEnvDir)\MonoDebugEnv\</DebugEnvDir>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <ContribDir Condition="$(ContribDir) == ''">$(GameDevDir)Contrib\</ContribDir>
-        <ExtensionTasksDir>$(ContribDir)MSBuildExtensionPack\4.0\</ExtensionTasksDir>
-        <CommunityTasksDir>$(ContribDir)MSBuildCommunityTasks\</CommunityTasksDir>
-    </PropertyGroup>
+    <Import Project="$(CustomToolsDir)buildmgr.settings.targets" />
 
     <ItemGroup>
         <!-- All the .csproj files in my Game Code Development Environment -->
@@ -38,6 +20,51 @@
         <AllConfigurations Include="Release" />
     </ItemGroup>
 
-    <Import Project="$(CustomToolsDir)BuildMgr.targets" />
+    <Import Project="$(CustomToolsDir)buildmgr.targets" />
 
+    <!--____________________________FxCop begins here______________________ -->
+
+    <!-- Extension Pack required for fxcop.targets file -->
+    <Import Project="$(ExtensionTasksDir)MSBuild.ExtensionPack.tasks"/>
+    <Import Project="fxcop.targets"/>
+
+    <!-- FxCop Properties that need to be converted here -->
+    <PropertyGroup>
+        <FxCopContribRoot>C:\Program Files\Microsoft FxCop 1.36\</FxCopContribRoot>
+        <FxCopOutputRoot>$(CommonOutputDir)..\BuildTemp\FxCopTemp\</FxCopOutputRoot>
+        <FxCopCustomDictionaryPath>$(CustomToolsDir)FxCopCustomDictionary.xml</FxCopCustomDictionaryPath>
+    </PropertyGroup>
+
+    <!-- Controls to allow the build to continue even when FxCop Errors occur. Default is false. -->
+    <PropertyGroup>
+        <IgnoreFxCopCriticalErrors>true</IgnoreFxCopCriticalErrors>
+        <IgnoreFxCopErrors>true</IgnoreFxCopErrors>
+        <IgnroeFxCopCriticalWarnings></IgnroeFxCopCriticalWarnings>
+    </PropertyGroup>
+
+    <!-- Modify dependencies to run FxCop here -->
+    <PropertyGroup>
+        <BuildDependsOn>
+            $(BuildDependsOn);
+            _IdentifyFxCopAssemblies;
+            RunFxcop;
+        </BuildDependsOn>
+    </PropertyGroup>
+    <PropertyGroup>
+        <CleanDependsOn>
+            $(CleanDependsOn);
+            CleanFxcop;
+        </CleanDependsOn>
+    </PropertyGroup>
+
+    <!-- Assemblies to include in FxCop analysis -->
+    <ItemDefinitionGroup>
+        <FxCopAssemblies></FxCopAssemblies>
+    </ItemDefinitionGroup>
+
+    <Target Name="_IdentifyFxCopAssemblies" >
+        <ItemGroup>
+            <FxCopAssemblies Include="$(CommonOutputDir)Release\%(IncludedProjectFiles.Filename).dll" />
+        </ItemGroup>
+    </Target>
 </Project>

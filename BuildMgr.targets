@@ -4,6 +4,78 @@
     <!-- For the Attrib task -->
     <Import Project="$(CommunityTasksDir)MSBuild.community.tasks.targets" />
     
+    <!-- Clean - full clean of Included VS Projects and Unity's Code Library -->
+    <PropertyGroup>
+        <CleanDependsOn>
+            $(CleanDependsOn);
+            _CoreClean;
+            _ProjectClean;
+            _UnityClean;
+        </CleanDependsOn>
+    </PropertyGroup>
+    <Target Name="Clean" DependsOnTargets="$(CleanDependsOn)" />
+    <Target Name="_CoreClean" >        
+        <!-- Clean Outputs in the CommonOutputDir -->
+        <ItemGroup>
+            <AllFilesInCommonOutputDir Include="$(CommonOutputDir)\%(AllConfigurations.Identity)\**\*" />
+        </ItemGroup>
+        <Attrib Files="@(AllFilesInCommonOutputDir)" ReadOnly="false" />
+        <Delete Files="@(AllFilesInCommonOutputDir)" />
+        <!-- TODO RemoveDir Directories="$(...)" -->
+    </Target>
+    <Target Name="_ProjectClean">
+        <!-- Clean default project-specific outputs too as other Solution Builds can populate them -->
+        <MSBuild Projects="@(IncludedProjectFiles)"
+                 BuildInParallel="true"
+                 Properties="Configuration=%(AllConfigurations.Identity)"
+                 Targets="Clean">
+        </MSBuild>
+    </Target>
+    <Target Name="_UnityClean">
+        <!-- UNDONE Need to confirm Unity is not running as condition -->
+        <!-- UNDONE Need to account for more than 1 Unity Project -->
+        <ItemGroup>
+            <AllFilesInUnityCodeLibrary Include="$(UnityCodeLibraryDir)\**\*" />
+        </ItemGroup>
+        <Attrib Files="@(AllFilesInUnityCodeLibrary)" ReadOnly="false" />
+        <Delete Files="@(AllFilesInUnityCodeLibrary)" />
+        <!-- TODO RemoveDir Directories="$(UnityCodeLibraryDir)" -->
+    </Target>
+
+    <!-- Build - incremental build of ALL included Projects -->
+    <PropertyGroup>
+        <BuildDependsOn>
+            $(BuildDependsOn);
+            BeforeBuild;
+            _CoreBuild;
+            AfterBuild;
+        </BuildDependsOn>
+    </PropertyGroup>
+    <Target Name="Build" DependsOnTargets="$(BuildDependsOn)" />
+    <Target Name="BeforeBuild" />
+    <!-- _CoreBuild using Target batching to get incremental build behavior -->
+    <Target Name="_CoreBuild" Inputs="@(IncludedProjectFiles)" Outputs="%(AllConfigurations.Identity)" >
+        <MSBuild
+        Projects="@(IncludedProjectFiles)"
+        Targets="Build"
+        Properties="OutputPath=$(CommonOutputDir)%(AllConfigurations.Identity); Configuration=%(AllConfigurations.Identity)" >
+            <Output ItemName="BuildOutputs" TaskParameter="TargetOutputs" />
+        </MSBuild>
+        <!--<Message Text="Build Outputs: $(NewLine)@(BuildOutputs, '$(NewLine)')" Importance="high"/>-->
+    </Target>
+    <Target Name="AfterBuild" />
+
+    <!-- Rebuild - full clean followed by a new VS Build of Code -->
+    <PropertyGroup>
+        <RebuildDependsOn>
+            $(RebuildDependsOn);
+            Clean;
+            _IncrementAssemblyVersion;
+            Build;
+        </RebuildDependsOn>
+    </PropertyGroup>
+    <Target Name="Rebuild" DependsOnTargets="$(RebuildDependsOn)" />
+
     <!-- As a Rebuild of the AssemblyVersionInfo project generated from here currently doesn't generate 
     an increment of the version number (bug in Build Version Increment addin?), I need to manually Rebuild 
     that project before I Rebuild with this BuildMgr. -->
@@ -11,29 +83,49 @@
         <ItemGroup>
             <AssyVersionInfoProject Include="$(CustomToolsDir)CustomTools.AssemblyVersionInfo\CustomTools.AssemblyVersionInfo.csproj" />
         </ItemGroup>
-        <MSBuild Projects="@(AssyVersionInfoProject)"                  
-                 Properties="Configuration=%(AllConfigurations.Identity)" 
+        <MSBuild Projects="@(AssyVersionInfoProject)"
+                 Properties="Configuration=Release"
                  Targets="Rebuild" />
-        <Message Text="Auto Version Increment does not work. $(NewLine) Did you remember to increment the Assembly Version by rebuilding the AssemblyVersionInfo Project manually?" Importance="high"/>
-    </Target>    
-    
-    <!-- General approach to INCREMENTALLY copying files. Key is _DynamicallyFindFilesToCopy target must exit before 
-    FilesToCopySetupAsExternalProperty new content is visible to _CopyFilesCore -->
-    <!--
-    <Target Name="_DynamicallyFindFilesToCopy">
-        <ItemGroup>
-            <FilesToCopySetupAsExternalProperty Include="UseBatchingToGenerateListOfFiles" />
-        </ItemGroup>
+        <Warning Text="Auto Version Increment does not work. %0aDid you remember to increment the Assembly Version by rebuilding the AssemblyVersionInfo Project manually?" />
     </Target>
-    <Target Name="CopyFiles" DependsOnTargets="_DynamicallyFindFilesToCopy" >
-        <CallTarget Targets="_CopyFilesCore" />
+
+    <!-- Test - fills in any build gaps, then runs all Unit Tests -->
+    <PropertyGroup>
+        <TestDependsOn>
+            $(TestDependsOn);
+            Build;
+        </TestDependsOn>
+    </PropertyGroup>
+    <Target Name="Test" DependsOnTargets="$(TestDependsOn)">
+        <!-- TODO how to detect and call unit test projects -->
+        <!-- TODO Need notification of success or failure -->
+        <Message Text="Running Unit Tests which currently do nothing." Importance="high"/>
     </Target>
-    <Target Name="_CopyFilesCore" Inputs="@(FilesToCopySetupAsExternalProperty)"
-            Outputs="@(FilesToCopySetupAsExternalProperty->'$(DirToCopyTo)%(Filename)%(Extension)')" >
-        <MakeDir Directories="$(DirToCopyTo)" Condition="!Exists('$(DirToCopyTo)')"/>
-        <Copy SourceFiles="@(FilesToCopySetupAsExternalProperty)" DestinationFolder="$(DirToCopyTo)" OverwriteReadOnlyFiles="true" />
-    </Target>
-    -->
+
+    <!-- CleanTest - cleans, builds and runs Unit Tests -->
+    <PropertyGroup>
+        <CleanTestDependsOn>
+            $(CleanTestDependsOn);
+            Rebuild;
+            Test;
+        </CleanTestDependsOn>
+    </PropertyGroup>
+    <Target Name="CleanTest" DependsOnTargets="$(CleanTestDependsOn)" />
+
+    <!-- UnityTest - cleans, builds and sets up Unity for testing -->
+    <PropertyGroup>
+        <UnityTestDependsOn>
+            $(UnityTestDependsOn);
+            Rebuild;
+            _CopyOutputToUnity;
+            _GenerateMdbFiles;
+            <!-- Unity .pdb files are automatically cleaned after .mdb files are generated -->
+            _ConfirmDebugEnvReadiness;
+            _LaunchUnity;
+            _PromptMonoDebuggerLaunch;
+        </UnityTestDependsOn>
+    </PropertyGroup>
+    <Target Name="UnityTest" DependsOnTargets="$(UnityTestDependsOn)" />
 
     <!-- Copy all Output files from the CommonOutputDir 'Release' to Unity's CodeLibrary -->
     <Target Name="_CopyOutputToUnity" > <!-- No need for incremental copy as Unity is cleaned before this task is called -->
@@ -47,7 +139,7 @@
     </Target>
 
     <!-- Generate the .mdb debug file in Unity IFF the one that may already be there requires updating -->
-    <Target Name="_GenerateDebugFiles" >
+    <Target Name="_GenerateMdbFiles" >
         <!-- No need for incremental approach as Unity is cleaned before this task is called -->
         <PropertyGroup>
             <!-- pdb2mdb.exe does not work if copied to \contrib folder -->
@@ -57,7 +149,6 @@
         <ItemGroup>
             <AllProjectAssembliesInUnity Include="$(UnityCodeLibraryDir)%(IncludedProjectFiles.Filename).dll" />
         </ItemGroup>
-
         <Message Text="AllProjectAssembliesInUnity: $(NewLine)@(AllProjectAssembliesInUnity, '$(NewLine)')" Importance="high"/>
 
         <!--" or the hex %22 are not needed around the parameter as long as there are no spaces -->
@@ -65,7 +156,7 @@
     </Target>
     
     <!-- Delete the .pdb files from Unity -->
-    <Target Name="_CleanUnityPdbFiles" AfterTargets="_GenerateDebugFiles" >
+    <Target Name="_CleanUnityPdbFiles" AfterTargets="_GenerateMdbFiles" >
         <ItemGroup>
             <PdbFilesToDelete Include="$(UnityCodeLibraryDir)**\*.pdb" />
         </ItemGroup>
@@ -100,104 +191,22 @@
         <Message Text="Launch and attach the MonoDebugger." Importance="high" />
     </Target>
 
-    <!-- CleanTest - cleans, builds and runs Unit Tests -->
-    <PropertyGroup>
-        <CleanTestDependsOn>
-            Rebuild;
-            Test;
-        </CleanTestDependsOn>
-    </PropertyGroup>
-    <Target Name="CleanTest" DependsOnTargets="$(CleanTestDependsOn)" />
-
-    <!-- UnityTest - cleans, builds and sets up Unity for testing -->
-    <PropertyGroup>
-        <UnityTestDependsOn>
-            Rebuild;
-            _CopyOutputToUnity;
-            _GenerateDebugFiles;
-            <!-- Unity .pdb files are automatically cleaned after .mdb files are generated -->
-            _ConfirmDebugEnvReadiness;
-            _LaunchUnity;
-            _PromptMonoDebuggerLaunch;
-        </UnityTestDependsOn>
-    </PropertyGroup>
-    <Target Name="UnityTest" DependsOnTargets="$(UnityTestDependsOn)" />
-
-    <!-- Clean - full clean of Included VS Projects and Unity's Code Library -->
-    <PropertyGroup>
-        <CleanDependsOn>
-            _CoreClean;
-            _UnityClean;
-        </CleanDependsOn>
-    </PropertyGroup>
-    <Target Name="Clean" DependsOnTargets="$(CleanDependsOn)" />
-    <Target Name="_CoreClean">
-        <!-- Clean Outputs at the CommonOutputDir -->
-        <MSBuild Projects="@(IncludedProjectFiles)"
-                  BuildInParallel="true"
-                  Properties="Configuration=%(AllConfigurations.Identity); OutputPath=$(CommonOutputDir)%(AllConfigurations.Identity)"
-                  Targets="Clean">
-        </MSBuild>
-        <!-- Clean default project-specific outputs too as other Solution Builds can populate them -->
-        <MSBuild Projects="@(IncludedProjectFiles)"
-                 BuildInParallel="true"
-                 Properties="Configuration=%(AllConfigurations.Identity)" 
-                 Targets="Clean">
-        </MSBuild>
-    </Target>
-    <Target Name="_UnityClean">
-        <!-- UNDONE Need to confirm Unity is not running as condition -->
-        <!-- UNDONE Need to account for more than 1 Unity Project -->
+    <!-- General approach to INCREMENTALLY copying files. Key is _DynamicallyFindFilesToCopy target must exit before 
+    FilesToCopySetupAsExternalProperty new content is visible to _CopyFilesCore -->
+    <!--
+    <Target Name="_DynamicallyFindFilesToCopy">
         <ItemGroup>
-            <AllFilesInUnityCodeLibrary Include="$(UnityCodeLibraryDir)\**\*" />
+            <FilesToCopySetupAsExternalItemGroup Include="UseBatchingToGenerateListOfFiles" />
         </ItemGroup>
-        <Attrib Files="@(AllFilesInUnityCodeLibrary)" ReadOnly="false" />
-        <Delete Files="@(AllFilesInUnityCodeLibrary)" />
-        <!-- TODO RemoveDir Directories="$(UnityCodeLibraryDir)" -->
     </Target>
-
-    <!-- Build - incremental build of ALL included Projects -->
-    <PropertyGroup>
-        <BuildDependsOn>
-            BeforeBuild;
-            _CoreBuild;
-            AfterBuild;
-        </BuildDependsOn>
-    </PropertyGroup>
-    <Target Name="Build" DependsOnTargets="$(BuildDependsOn)" />
-    <Target Name="BeforeBuild" />
-    <Target Name="_CoreBuild" >
-        <!-- TODO Build should be incremental -->
-        <MSBuild
-                Projects="@(IncludedProjectFiles)"
-                Targets="Build"
-                Properties="OutputPath=$(CommonOutputDir)%(AllConfigurations.Identity); Configuration=%(AllConfigurations.Identity)" >
-            <Output ItemName="BuildOutputs" TaskParameter="TargetOutputs" />
-        </MSBuild>
-        <Message Text="Build Outputs: $(NewLine)@(BuildOutputs, '$(NewLine)')" Importance="high"/>
+    <Target Name="CopyFiles" DependsOnTargets="_DynamicallyFindFilesToCopy" >
+        <CallTarget Targets="_CopyFilesCore" />
     </Target>
-    <Target Name="AfterBuild" />
-    
-    <!-- Rebuild - full clean followed by a new VS Build of Code -->
-    <PropertyGroup>
-        <RebuildDependsOn>
-            Clean;
-            _IncrementAssemblyVersion;
-            Build;
-        </RebuildDependsOn>
-    </PropertyGroup>
-    <Target Name="Rebuild" DependsOnTargets="$(RebuildDependsOn)" />
-
-    <!-- Test - fills in any build gaps, then runs all Unit Tests -->
-    <PropertyGroup>
-        <TestDependsOn>
-            Build;
-        </TestDependsOn>
-    </PropertyGroup>
-    <Target Name="Test" DependsOnTargets="TestDependsOn">
-        <!-- TODO how to detect and call unit test projects -->
-        <!-- TODO Need notification of success or failure -->
-        <Message Text="Running Unit Tests which currently do nothing." Importance="high"/>
+    <Target Name="_CopyFilesCore" Inputs="@(FilesToCopySetupAsExternalProperty)"
+            Outputs="@(FilesToCopySetupAsExternalItemGroup->'$(DirToCopyTo)%(Filename)%(Extension)')" >
+        <MakeDir Directories="$(DirToCopyTo)" Condition="!Exists('$(DirToCopyTo)')"/>
+        <Copy SourceFiles="@(FilesToCopySetupAsExternalItemGroup)" DestinationFolder="$(DirToCopyTo)" OverwriteReadOnlyFiles="true" />
     </Target>
+    -->
 
 </Project>

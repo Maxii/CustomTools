@@ -5,8 +5,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		Loggers\BuildMacro.doskey = Loggers\BuildMacro.doskey
 		BuildMgr.proj = BuildMgr.proj
-		BuildMgr.targets = BuildMgr.targets
-		CustomDictionary.xml = CustomDictionary.xml
+		buildmgr.settings.targets = buildmgr.settings.targets
+		buildmgr.targets = buildmgr.targets
+		fxcop.targets = fxcop.targets
+		FxCopCustomDictionary.xml = FxCopCustomDictionary.xml
 		LoadBuildMacro.bat = LoadBuildMacro.bat
 	EndProjectSection
 EndProject

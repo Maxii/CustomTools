@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="UnityTest" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <!-- Multiple warnings from poorly designed MS Schema -->
+    <!-- Desktop (but not Laptop) system has lost Intellisense for MSBuild due to an MSBuild bug -->
+    <!-- NOTE: MSBuildStartupDirectory has no trailing \ -->
+
+    <PropertyGroup>
+        <NewLine>%0a%0d</NewLine>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <UnityEnvDir Condition = "$(UnityEnvDir) == ''">$(GameDevDir)UnityEnv\</UnityEnvDir>
+        <CodeEnvDir Condition ="$(CodeEnvDir) == ''">$(GameDevDir)CodeEnv\</CodeEnvDir>
+        <CustomToolsDir Condition="$(CustomToolsDir) == ''">$(GameDevDir)CustomTools\</CustomToolsDir>
+        <CommonOutputDir Condition ="$(CommonOutputDir) == ''">$(CodeEnvDir)BuildOutput\Latest\bin\</CommonOutputDir>
+        <UnityProjectDir>$(UnityEnvDir)UnityEntry\</UnityProjectDir>
+        <UnityCodeLibraryDir>$(UnityProjectDir)Assets\CodeLibrary\</UnityCodeLibraryDir>
+        <DebugEnvDir>$(CodeEnvDir)\MonoDebugEnv\</DebugEnvDir>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <ContribDir Condition="$(ContribDir) == ''">$(GameDevDir)Contrib\</ContribDir>
+        <ExtensionTasksDir>$(ContribDir)MSBuildExtensionPack\4.0\</ExtensionTasksDir>
+        <CommunityTasksDir>$(ContribDir)MSBuildCommunityTasks\</CommunityTasksDir>
+    </PropertyGroup>
+
+</Project>
