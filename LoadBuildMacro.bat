@@ -1,9 +1,9 @@
-@echo Using VS code to set environment for using Microsoft Visual Studio 2010 x86 tools.
+@echo Using VS code to set environment for using Microsoft Visual Studio 2012 x86 tools.
 
 @call :GetVSCommonToolsDir
-@if "%VS100COMNTOOLS%"=="" goto error_no_VS100COMNTOOLSDIR
+@if "%VS110COMNTOOLS%"=="" goto error_no_VS110COMNTOOLSDIR
 
-@call "%VS100COMNTOOLS%VCVarsQueryRegistry.bat" 32bit No64bit
+@call "%VS110COMNTOOLS%VCVarsQueryRegistry.bat" 32bit No64bit
 
 @if "%VSINSTALLDIR%"=="" goto error_no_VSINSTALLDIR
 @if "%FrameworkDir32%"=="" goto error_no_FrameworkDIR32
@@ -13,10 +13,15 @@
 @set FrameworkDir=%FrameworkDir32%
 @set FrameworkVersion=%FrameworkVersion32%
 
+@if not "%WindowsSdkDir_old%" == "" (
+	@set "PATH=%WindowsSdkDir_old%bin\NETFX 4.0 Tools;%WindowsSdkDir_35%;%PATH%"
+)
+
 @if not "%WindowsSdkDir%" == "" (
-	@set "PATH=%WindowsSdkDir%bin\NETFX 4.0 Tools;%WindowsSdkDir%bin;%PATH%"
-	@set "INCLUDE=%WindowsSdkDir%include;%INCLUDE%"
-	@set "LIB=%WindowsSdkDir%lib;%LIB%"
+	@set "PATH=%WindowsSdkDir%bin\x86;%PATH%"
+	@set "INCLUDE=%WindowsSdkDir%include\shared;%WindowsSdkDir%include\um;%WindowsSdkDir%include\winrt;%INCLUDE%"
+	@set "LIB=%WindowsSdkDir%lib\win8\um\x86;%LIB%"
+	@set "LIBPATH=%WindowsSdkDir%References\CommonConfiguration\Neutral;%ExtensionSDKDir%\Microsoft.VCLibs\11.0\References\CommonConfiguration\neutral;%LIBPATH%"
 )
 
 @rem
@@ -44,6 +49,10 @@
 
 @if not "%FSHARPINSTALLDIR%" == "" (
 	@set "PATH=%FSHARPINSTALLDIR%;%PATH%"
+)
+
+@if exist "%DevEnvDir%CommonExtensions\Microsoft\TestWindow" (
+	@set "PATH=%DevEnvDir%CommonExtensions\Microsoft\TestWindow;%PATH%"
 )
 
 @rem INCLUDE
@@ -75,7 +84,7 @@ doskey /macrofile=loggers\BuildMacro.doskey
 
 @REM -----------------------------------------------------------------------
 :GetVSCommonToolsDir
-@set VS100COMNTOOLS=
+@set VS110COMNTOOLS=
 @call :GetVSCommonToolsDirHelper32 HKLM > nul 2>&1
 @if errorlevel 1 call :GetVSCommonToolsDirHelper32 HKCU > nul 2>&1
 @if errorlevel 1 call :GetVSCommonToolsDirHelper64  HKLM > nul 2>&1
@@ -83,27 +92,27 @@ doskey /macrofile=loggers\BuildMacro.doskey
 @exit /B 0
 
 :GetVSCommonToolsDirHelper32
-@for /F "tokens=1,2*" %%i in ('reg query "%1\SOFTWARE\Microsoft\VisualStudio\SxS\VS7" /v "10.0"') DO (
-	@if "%%i"=="10.0" (
-		@SET "VS100COMNTOOLS=%%k"
+@for /F "tokens=1,2*" %%i in ('reg query "%1\SOFTWARE\Microsoft\VisualStudio\SxS\VS7" /v "11.0"') DO (
+	@if "%%i"=="11.0" (
+		@SET "VS110COMNTOOLS=%%k"
 	)
 )
-@if "%VS100COMNTOOLS%"=="" exit /B 1
-@SET "VS100COMNTOOLS=%VS100COMNTOOLS%Common7\Tools\"
+@if "%VS110COMNTOOLS%"=="" exit /B 1
+@SET "VS110COMNTOOLS=%VS110COMNTOOLS%Common7\Tools\"
 @exit /B 0
 
 :GetVSCommonToolsDirHelper64
-@for /F "tokens=1,2*" %%i in ('reg query "%1\SOFTWARE\Wow6432Node\Microsoft\VisualStudio\SxS\VS7" /v "10.0"') DO (
-	@if "%%i"=="10.0" (
-		@SET "VS100COMNTOOLS=%%k"
+@for /F "tokens=1,2*" %%i in ('reg query "%1\SOFTWARE\Wow6432Node\Microsoft\VisualStudio\SxS\VS7" /v "11.0"') DO (
+	@if "%%i"=="11.0" (
+		@SET "VS110COMNTOOLS=%%k"
 	)
 )
-@if "%VS100COMNTOOLS%"=="" exit /B 1
-@SET "VS100COMNTOOLS=%VS100COMNTOOLS%Common7\Tools\"
+@if "%VS110COMNTOOLS%"=="" exit /B 1
+@SET "VS110COMNTOOLS=%VS110COMNTOOLS%Common7\Tools\"
 @exit /B 0
 
 @REM -----------------------------------------------------------------------
-:error_no_VS100COMNTOOLSDIR
+:error_no_VS110COMNTOOLSDIR
 @echo ERROR: Cannot determine the location of the VS Common Tools folder.
 @goto end
 
@@ -124,4 +133,3 @@ doskey /macrofile=loggers\BuildMacro.doskey
 @goto end
 
 :end
-
