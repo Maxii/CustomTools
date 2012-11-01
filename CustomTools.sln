@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E20D30F5-50A3-4827-8516-A7A104523212}"
 	ProjectSection(SolutionItems) = preProject
 		Loggers\BuildMacro.doskey = Loggers\BuildMacro.doskey
@@ -16,13 +16,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.AssemblyVersion
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CustomTools.Templates", "CustomTools.Templates", "{A0F5F452-9515-4D92-BE94-1A8CA603BB39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.StdClasses", "CustomTools.Templates\Class\CustomTools.Templates.StdClasses.csproj", "{3F641F1C-1D9C-49F6-A7C9-FF627AA0306D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.StdClasses", "CustomTools.Templates\CustomTools.Templates.StdClasses\CustomTools.Templates.StdClasses.csproj", "{3F641F1C-1D9C-49F6-A7C9-FF627AA0306D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.StdClassLibraryProject", "CustomTools.Templates\ClassLibrary\CustomTools.Templates.StdClassLibraryProject.csproj", "{4EA04B29-89F8-4568-AECB-163D1593F525}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.UnityClassLibrary", "CustomTools.Templates\CustomTools.Templates.UnityClassLibrary\CustomTools.Templates.UnityClassLibrary.csproj", "{129DCF86-4FC5-4CAF-AAFE-911EFC560E10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.UnityClassLibraryProject", "CustomTools.Templates\ClassLibraryUnity\CustomTools.Templates.UnityClassLibraryProject.csproj", "{129DCF86-4FC5-4CAF-AAFE-911EFC560E10}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.MonoBehaviourClasses", "CustomTools.Templates\ClassMonoBehaviour\CustomTools.Templates.MonoBehaviourClasses.csproj", "{ECD5528F-AB9B-4FEA-AF4D-6DC3384A9596}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.MonoBehaviourClasses", "CustomTools.Templates\CustomTools.Templates.MonoBehaviourClasses\CustomTools.Templates.MonoBehaviourClasses.csproj", "{ECD5528F-AB9B-4FEA-AF4D-6DC3384A9596}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSBuildCommunityTasks", "MSBuildCommunityTasks", "{0100BB8F-B650-4B24-A453-0962E103F2F8}"
 	ProjectSection(SolutionItems) = preProject
@@ -32,6 +30,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSBuildCommunityTasks", "MS
 		..\Contrib\MSBuildCommunityTasks\MSBuild.Community.Tasks.xsd = ..\Contrib\MSBuildCommunityTasks\MSBuild.Community.Tasks.xsd
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.Console Application", "CustomTools.Templates\CustomTools.Templates.Console Application\CustomTools.Templates.Console Application.csproj", "{49546F74-0C1F-491A-8197-C403C082E59D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.WpfApplication", "CustomTools.Templates\CustomTools.Templates.WpfApplication\CustomTools.Templates.WpfApplication.csproj", "{47FFAD02-FC0F-408D-9F8D-1E18F057C19B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.StdClassLibrary", "CustomTools.Templates\CustomTools.Templates.StdClassLibrary\CustomTools.Templates.StdClassLibrary.csproj", "{30988A11-A4F0-4FDC-82D5-41B87EA410BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,16 +43,24 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{AFB15244-A569-4180-A8F2-00A3A6BE6C87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFB15244-A569-4180-A8F2-00A3A6BE6C87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFB15244-A569-4180-A8F2-00A3A6BE6C87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFB15244-A569-4180-A8F2-00A3A6BE6C87}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3F641F1C-1D9C-49F6-A7C9-FF627AA0306D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3F641F1C-1D9C-49F6-A7C9-FF627AA0306D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4EA04B29-89F8-4568-AECB-163D1593F525}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4EA04B29-89F8-4568-AECB-163D1593F525}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{129DCF86-4FC5-4CAF-AAFE-911EFC560E10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{129DCF86-4FC5-4CAF-AAFE-911EFC560E10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECD5528F-AB9B-4FEA-AF4D-6DC3384A9596}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ECD5528F-AB9B-4FEA-AF4D-6DC3384A9596}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49546F74-0C1F-491A-8197-C403C082E59D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49546F74-0C1F-491A-8197-C403C082E59D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49546F74-0C1F-491A-8197-C403C082E59D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47FFAD02-FC0F-408D-9F8D-1E18F057C19B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47FFAD02-FC0F-408D-9F8D-1E18F057C19B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47FFAD02-FC0F-408D-9F8D-1E18F057C19B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30988A11-A4F0-4FDC-82D5-41B87EA410BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30988A11-A4F0-4FDC-82D5-41B87EA410BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30988A11-A4F0-4FDC-82D5-41B87EA410BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,9 +68,11 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{0100BB8F-B650-4B24-A453-0962E103F2F8} = {E20D30F5-50A3-4827-8516-A7A104523212}
 		{3F641F1C-1D9C-49F6-A7C9-FF627AA0306D} = {A0F5F452-9515-4D92-BE94-1A8CA603BB39}
-		{4EA04B29-89F8-4568-AECB-163D1593F525} = {A0F5F452-9515-4D92-BE94-1A8CA603BB39}
 		{129DCF86-4FC5-4CAF-AAFE-911EFC560E10} = {A0F5F452-9515-4D92-BE94-1A8CA603BB39}
 		{ECD5528F-AB9B-4FEA-AF4D-6DC3384A9596} = {A0F5F452-9515-4D92-BE94-1A8CA603BB39}
+		{49546F74-0C1F-491A-8197-C403C082E59D} = {A0F5F452-9515-4D92-BE94-1A8CA603BB39}
+		{47FFAD02-FC0F-408D-9F8D-1E18F057C19B} = {A0F5F452-9515-4D92-BE94-1A8CA603BB39}
+		{30988A11-A4F0-4FDC-82D5-41B87EA410BE} = {A0F5F452-9515-4D92-BE94-1A8CA603BB39}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		BuildVersion_UseGlobalSettings = True

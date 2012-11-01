@@ -13,6 +13,8 @@
 namespace $rootnamespace$ {
 
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// SingletonPattern. TODO

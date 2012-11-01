@@ -6,34 +6,22 @@
 // </copyright> 
 // <summary> 
 // File: $safeitemname$.$fileinputextension$
-// TODO - one line to give a brief idea of what this file does.
+// TODO - one line to give a brief idea of what the file does.
 // </summary> 
 // -------------------------------------------------------------------------------------------------------------------- 
 
 namespace $rootnamespace$ {
 
     using System;
-    using UnityEngine;
-    using UnityEditor;
+    using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// TODO 
     /// </summary>
-    public class $safeitemname$ : MonoBehaviour {
+    public class $safeitemname$ {
 
-        private void Awake() {
-
-        }
-
-        private void Start() {
-
-        }
-
-        private void Update() {
-
-        }
-
-        private void LateUpdate() {
+        public $safeitemname$() {
 
         }
 

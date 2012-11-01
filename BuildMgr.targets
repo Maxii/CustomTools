@@ -144,7 +144,8 @@
         <PropertyGroup>
             <!-- pdb2mdb.exe does not work if copied to \contrib folder -->
             <!-- <MdbGeneratorPath>$(ContribDir)MdbGenerator\pdb2mdb.exe</MdbGeneratorPath> -->
-            <MdbGeneratorPath>C:\Program Files\Unity\Editor\Data\Mono\lib\mono\2.0\pdb2mdb.exe</MdbGeneratorPath>
+            <!-- $(ProgramFiles) required to accommodate C:\Program Files(x86)\ on 64 bit machines -->
+            <MdbGeneratorPath>$(ProgramFiles)\Unity\Editor\Data\Mono\lib\mono\2.0\pdb2mdb.exe</MdbGeneratorPath>
         </PropertyGroup>
         <ItemGroup>
             <AllProjectAssembliesInUnity Include="$(UnityCodeLibraryDir)%(IncludedProjectFiles.Filename).dll" />
