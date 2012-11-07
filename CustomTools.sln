@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E20D30F5-50A3-4827-8516-A7A104523212}"
 	ProjectSection(SolutionItems) = preProject
 		Loggers\BuildMacro.doskey = Loggers\BuildMacro.doskey
@@ -61,7 +61,7 @@ Global
 		{ECD5528F-AB9B-4FEA-AF4D-6DC3384A9596} = {A0F5F452-9515-4D92-BE94-1A8CA603BB39}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_UseGlobalSettings = True
 		BuildVersion_DetectChanges = True
+		BuildVersion_UseGlobalSettings = True
 	EndGlobalSection
 EndGlobal
