@@ -30,7 +30,7 @@
 
     <!-- FxCop Properties that need to be converted here -->
     <PropertyGroup>
-        <FxCopContribRoot>C:\Program Files\Microsoft FxCop 1.36\</FxCopContribRoot>
+        <FxCopContribRoot>$(ProgramFiles)\Microsoft FxCop 10.0\</FxCopContribRoot>
         <FxCopOutputRoot>$(CommonOutputDir)..\BuildTemp\FxCopTemp\</FxCopOutputRoot>
         <FxCopCustomDictionaryPath>$(CustomToolsDir)FxCopCustomDictionary.xml</FxCopCustomDictionaryPath>
     </PropertyGroup>
