@@ -7,7 +7,8 @@
     <ProjectGuid>{47FFAD02-FC0F-408D-9F8D-1E18F057C19B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>$safeprojectname$</RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <AssemblyName>$safeprojectname$</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -87,9 +88,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="App.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

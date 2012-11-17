@@ -7,6 +7,8 @@
         <Recognized>
             <Word>Evans</Word>
             <Word>Env</Word>
+            <Word>rng</Word>
+            <Word>resx</Word>
         </Recognized>
         <Deprecated>
             <Term PreferredAlternate=""></Term>

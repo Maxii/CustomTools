@@ -8,8 +8,8 @@
     <ProjectGuid>{ECD5528F-AB9B-4FEA-AF4D-6DC3384A9596}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TemplateDeleteMe</RootNamespace>
-    <AssemblyName>TemplateDeleteMe</AssemblyName>
+    <RootNamespace>NotApplicable</RootNamespace>
+    <AssemblyName>NotApplicable</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

@@ -46,9 +46,6 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <Content Include="Instructions.htm" />
-  </ItemGroup>
   <!-- Sets the AssemblyFileVersion Major and Minor values to those manually adjusted in 
     AssemblyVersionInfo.cs and automatically increments
     the Build and Revision values. The AssemblyFileVersion managed by this project is 
@@ -58,7 +55,7 @@
   <!-- Automatically added by the Build Version Increment Addin -->
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_DetectChanges="False" BuildVersion_AssemblyInfoFilename="Properties\AssemblyVersionInfo.cs" BuildVersion_ReplaceNonNumerics="False" BuildVersion_StartDate="2012/7/1" BuildVersion_BuildAction="ReBuild" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.DeltaBaseDate.Increment" BuildVersion_UseGlobalSettings="True" BuildVersion_IncrementBeforeBuild="True" />
+      <UserProperties BuildVersion_IncrementBeforeBuild="True" BuildVersion_UseGlobalSettings="True" BuildVersion_BuildVersioningStyle="None.None.DeltaBaseDate.Increment" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildAction="ReBuild" BuildVersion_StartDate="2012/7/1" BuildVersion_ReplaceNonNumerics="False" BuildVersion_AssemblyInfoFilename="Properties\AssemblyVersionInfo.cs" BuildVersion_DetectChanges="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

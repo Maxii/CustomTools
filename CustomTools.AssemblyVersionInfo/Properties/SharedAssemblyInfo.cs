@@ -49,7 +49,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 
 // By default, the "Product version" shown in the file properties window is
-// the same as the value specified for AssemblyFileVersionAttribute.
+// the same as the enumConstant specified for AssemblyFileVersionAttribute.
 // Set AssemblyInformationalVersionAttribute to be the same as
 // AssemblyVersionAttribute so that the "Product version" in the file
 // properties window matches the version displayed in the GAC shell extension.

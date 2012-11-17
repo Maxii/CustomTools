@@ -28,7 +28,7 @@
     <Target Name="CoreFxcop"
             Inputs="@(FxCopAssemblies)"
             Outputs="$(FxCopReportFile)">
-        <Message Text="FxCop begin analysis on: @(FxCopAssemblies)"
+        <Message Text="FxCop begin analysis on: $(NewLine)@(FxCopAssemblies, '$(NewLine)')"
                  Importance="high"/>
         <Message Text="FxCopReportFile: $(FxCopReportFile)"
                  Importance="low"/>
@@ -41,7 +41,9 @@
           FxCopPath="$(FxCopContribRoot)FxCopCmd.exe"
           OutputFile="$(FxCopReportFile)"
         
-          Dictionary="$(FxCopCustomDictionaryPath)" />
+          Dictionary="$(FxCopCustomDictionaryPath)" 
+          AssemblyCompareMode="StrongName" />    <!-- Default = StrongName; Others = None, StrongNameIgnoringVersion -->
+          <!-- AssemblyCompareMode is my addition. see code at https://msbuildextensionpack.svn.codeplex.com/svn/Solutions/Main3.5/Framework/CodeQuality/FxCop.cs -->
           <!-- FailOnError="false" is not supported by this FxCop task -->
 
 
@@ -159,7 +161,7 @@
             <IgnoreFxCopErrors Condition="'$(IgnoreFxCopErrors)'==''">false</IgnoreFxCopErrors>
             <IgnoreFxCopCriticalWarnings Condition="'$(IgnoreFxCopCriticalWarnings)'==''">false</IgnoreFxCopCriticalWarnings>
             <FxCopTempFolderName Condition="'$(FxCopTempFolderName)'==''">__FxCopTemp</FxCopTempFolderName>
-            <FxCopContribRoot Condition="'$(FxCopContribRoot)'==''">C:\Program Files\Microsoft FxCop 1.36\</FxCopContribRoot>
+            <FxCopContribRoot Condition="'$(FxCopContribRoot)'==''">C:\Program Files\Microsoft FxCop 10.0\</FxCopContribRoot>
             <FxCopOutputRoot Condition="'$(FxCopOutputRoot)'==''">$(OutputRoot)$(FxCopTempFolderName)\</FxCopOutputRoot>
             <FxCopReportFile Condition="'$(FxCopReportFile)'==''">$(FxCopOutputRoot)fxcopResult.xml</FxCopReportFile>
             <FxCopCreateHtmlReport Condition="'$(FxCopCreateHtmlReport)'==''">true</FxCopCreateHtmlReport>

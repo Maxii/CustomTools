@@ -10,7 +10,7 @@
     <ProjectGuid>{129DCF86-4FC5-4CAF-AAFE-911EFC560E10}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>$safeprojectname$</RootNamespace>
+    <RootNamespace></RootNamespace>
     <AssemblyName>$safeprojectname$</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

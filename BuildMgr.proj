@@ -11,6 +11,7 @@
         <AllProjectFiles Include="$(CodeEnvDir)**\*.csproj" />
         <!-- Those .csproj files I want to exclude from the build -->
         <ExcludedProjectFiles Include="$(DebugEnvDir)**\*.csproj" />
+        <ExcludedProjectFiles Include="$(CodeEnvDir)BuildOutput\**\*.csproj" />
         <!-- All the .csproj files that are included in this build -->
         <IncludedProjectFiles Include="@(AllProjectFiles)" Exclude="@(ExcludedProjectFiles)" />
     </ItemGroup>
@@ -39,7 +40,7 @@
     <PropertyGroup>
         <IgnoreFxCopCriticalErrors>true</IgnoreFxCopCriticalErrors>
         <IgnoreFxCopErrors>true</IgnoreFxCopErrors>
-        <IgnroeFxCopCriticalWarnings></IgnroeFxCopCriticalWarnings>
+        <IgnoreFxCopCriticalWarnings>true</IgnoreFxCopCriticalWarnings>
     </PropertyGroup>
 
     <!-- Modify dependencies to run FxCop here -->
@@ -64,7 +65,13 @@
 
     <Target Name="_IdentifyFxCopAssemblies" >
         <ItemGroup>
-            <FxCopAssemblies Include="$(CommonOutputDir)Release\%(IncludedProjectFiles.Filename).dll" />
+            <AllReleaseAssemblies Include="$(CommonOutputDir)Release\**\*.dll; $(CommonOutputDir)Release\**\*.exe" />
+            <ExcludedReleaseAssemblies Include="$(CommonOutputDir)Release\**\*.Tests.*" />
+            <FxCopAssemblies Include="@(AllReleaseAssemblies)" Exclude="@(ExcludedReleaseAssemblies)" />
+            <!-- Alternative implementation below using @(BuildOutputs) -->
+            <!--<ExcludedAssemblies Include="$(CommonOutputDir)Debug\**\*.*" />-->
+            <!--<ExcludedAssemblies Include="$(CommonOutputDir)Release\**\*.Tests.dll" />-->
+            <!--<FxCopAssemblies Include="@(BuildOutputs)" Exclude="@(ExcludedAssemblies)" />-->
         </ItemGroup>
     </Target>
 </Project>
