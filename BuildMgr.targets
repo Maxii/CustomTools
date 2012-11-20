@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" DefaultTargets="UnityTest" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
     <!-- For the Attrib task that removes readonly flags -->
-    <Import Project="$(CommunityTasksDir)MSBuild.community.tasks.targets" />
+    <Import Project="$(MSBuildCommunityTasksPath)MSBuild.Community.Tasks.Targets" />
     
     <!-- Clean - full clean of Included VS Projects and Unity's Code Library -->
     <PropertyGroup>

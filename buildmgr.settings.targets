@@ -19,9 +19,17 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <ContribDir Condition="$(ContribDir) == ''">$(GameDevDir)Contrib\</ContribDir>
-        <ExtensionTasksDir>$(ContribDir)MSBuildExtensionPack\4.0\</ExtensionTasksDir>
-        <CommunityTasksDir>$(ContribDir)MSBuildCommunityTasks\</CommunityTasksDir>
+        <ContribDir Condition="$(ContribDir) == ''">$(CustomToolsDir)Contrib\</ContribDir>
+        <!-- MSBuildExtensionsPath is the path where ALL extensions to MSBuild are located. -->
+        <!-- As a reserved property, it is automatically setup by MSBuild programatically. However, it can be overridden. -->
+        <!-- I'm overriding it so I can put selected ExtensionTasks and CommunityTasks under source control. -->
+        <!-- MSBuildExtensionsPath normally points to $(ProgramFiles)MSBuild\ by default. -->
+        <MSBuildExtensionsPath>$(ContribDir)</MSBuildExtensionsPath>        
+        <!-- ExtensionTasksPath is set to $(MSBuildExtensionsPath)ExtensionPack\4.0\ in MSBuild.ExtensionPack.tasks,
+        but I must set it here to import the it. -->
+        <ExtensionTasksPath>$(MSBuildExtensionsPath)ExtensionPack\4.0\</ExtensionTasksPath>
+        <!-- MSBuildCommunityTasksPath is set to $(MSBuildExtensionsPath)MSBuildCommunityTasks\ in MSBuild.Community.Tasks.Targets
+        but I must set it here to import it. -->
+        <MSBuildCommunityTasksPath>$(MSBuildExtensionsPath)MSBuildCommunityTasks\</MSBuildCommunityTasksPath>
     </PropertyGroup>
-
 </Project>

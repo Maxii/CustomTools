@@ -37,10 +37,10 @@
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="UnityEditor">
-      <HintPath>$(ContribDir)Unity\UnityEditor.dll</HintPath>
+      <HintPath>..\..\..\CodeEnv\Contrib\Unity\UnityEditor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>$(ContribDir)Unity\UnityEngine.dll</HintPath>
+      <HintPath>..\..\..\CodeEnv\Contrib\Unity\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

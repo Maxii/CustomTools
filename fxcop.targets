@@ -2,6 +2,7 @@
   Demonstrates FxCop integration.
   © Copyright 2008, Sayed Ibrahim Hashimi (sayed.hashimi@gmail.com)
 -->
+<!-- Modified by Jim Evans as my custom FxCop.targets file -->
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
     <!-- Prerequisites:
   1) The MSBuild Extension Pack is required to have been imported to use this file.

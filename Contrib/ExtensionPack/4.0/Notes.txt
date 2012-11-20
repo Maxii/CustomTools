@@ -1,0 +1,5 @@
+ExtensionPack\4.0 Notes:
+
+In general, place all ExtensionPack tasks used and assemblies required by .tasks here
+
+Ionic.Zip.dll needed by FxCop task in .tasks

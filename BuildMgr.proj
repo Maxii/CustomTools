@@ -26,7 +26,7 @@
     <!--____________________________FxCop begins here______________________ -->
 
     <!-- Extension Pack required for fxcop.targets file -->
-    <Import Project="$(ExtensionTasksDir)MSBuild.ExtensionPack.tasks"/>
+    <Import Project="$(ExtensionTasksPath)MSBuild.ExtensionPack.tasks"/>
     <Import Project="fxcop.targets"/>
 
     <!-- FxCop Properties that need to be converted here -->

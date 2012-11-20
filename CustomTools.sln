@@ -22,13 +22,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.Unity
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.MonoBehaviourClasses", "CustomTools.Templates\CustomTools.Templates.MonoBehaviourClasses\CustomTools.Templates.MonoBehaviourClasses.csproj", "{ECD5528F-AB9B-4FEA-AF4D-6DC3384A9596}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSBuildCommunityTasks", "MSBuildCommunityTasks", "{0100BB8F-B650-4B24-A453-0962E103F2F8}"
-	ProjectSection(SolutionItems) = preProject
-		..\Contrib\MSBuildCommunityTasks\MSBuild.Community.Tasks.dll = ..\Contrib\MSBuildCommunityTasks\MSBuild.Community.Tasks.dll
-		..\Contrib\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets = ..\Contrib\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets
-		..\Contrib\MSBuildCommunityTasks\MSBuild.Community.Tasks.xml = ..\Contrib\MSBuildCommunityTasks\MSBuild.Community.Tasks.xml
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.Console Application", "CustomTools.Templates\CustomTools.Templates.Console Application\CustomTools.Templates.Console Application.csproj", "{49546F74-0C1F-491A-8197-C403C082E59D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.WpfApplication", "CustomTools.Templates\CustomTools.Templates.WpfApplication\CustomTools.Templates.WpfApplication.csproj", "{47FFAD02-FC0F-408D-9F8D-1E18F057C19B}"
@@ -38,6 +31,25 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.TestProject", "CustomTools.Templates\CustomTools.Templates.TestProject\CustomTools.Templates.TestProject.csproj", "{67D035D3-27EE-47C3-B3DF-96D43139DB9A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.FormatUtility", "CustomTools.FormatUtility\CustomTools.FormatUtility.csproj", "{13E67FA6-3522-4CC5-A809-1FE498B962C6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contrib", "Contrib", "{0ED89569-396E-4281-8FE6-0A0AA83CEC4C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExtensionPack", "ExtensionPack", "{B50FA6CA-A2CC-4B23-84EF-FC6634957B45}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSBuildCommunityTasks", "MSBuildCommunityTasks", "{5C245C2B-2E56-4F99-9AF1-22127EF8C351}"
+	ProjectSection(SolutionItems) = preProject
+		Contrib\MSBuildCommunityTasks\MSBuild.Community.Tasks.dll = Contrib\MSBuildCommunityTasks\MSBuild.Community.Tasks.dll
+		Contrib\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets = Contrib\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets
+		Contrib\MSBuildCommunityTasks\MSBuild.Community.Tasks.xml = Contrib\MSBuildCommunityTasks\MSBuild.Community.Tasks.xml
+		Contrib\MSBuildCommunityTasks\MSBuild.Community.Tasks.xsd = Contrib\MSBuildCommunityTasks\MSBuild.Community.Tasks.xsd
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.0", "4.0", "{EC98A928-9A0F-496B-8EE2-587E39F9BBED}"
+	ProjectSection(SolutionItems) = preProject
+		Contrib\ExtensionPack\4.0\Ionic.Zip.DLL = Contrib\ExtensionPack\4.0\Ionic.Zip.DLL
+		Contrib\ExtensionPack\4.0\MSBuild.ExtensionPack.dll = Contrib\ExtensionPack\4.0\MSBuild.ExtensionPack.dll
+		Contrib\ExtensionPack\4.0\MSBuild.ExtensionPack.tasks = Contrib\ExtensionPack\4.0\MSBuild.ExtensionPack.tasks
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -114,7 +126,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{0100BB8F-B650-4B24-A453-0962E103F2F8} = {E20D30F5-50A3-4827-8516-A7A104523212}
+		{0ED89569-396E-4281-8FE6-0A0AA83CEC4C} = {E20D30F5-50A3-4827-8516-A7A104523212}
 		{3F641F1C-1D9C-49F6-A7C9-FF627AA0306D} = {A0F5F452-9515-4D92-BE94-1A8CA603BB39}
 		{129DCF86-4FC5-4CAF-AAFE-911EFC560E10} = {A0F5F452-9515-4D92-BE94-1A8CA603BB39}
 		{ECD5528F-AB9B-4FEA-AF4D-6DC3384A9596} = {A0F5F452-9515-4D92-BE94-1A8CA603BB39}
@@ -122,6 +134,9 @@ Global
 		{47FFAD02-FC0F-408D-9F8D-1E18F057C19B} = {A0F5F452-9515-4D92-BE94-1A8CA603BB39}
 		{30988A11-A4F0-4FDC-82D5-41B87EA410BE} = {A0F5F452-9515-4D92-BE94-1A8CA603BB39}
 		{67D035D3-27EE-47C3-B3DF-96D43139DB9A} = {A0F5F452-9515-4D92-BE94-1A8CA603BB39}
+		{B50FA6CA-A2CC-4B23-84EF-FC6634957B45} = {0ED89569-396E-4281-8FE6-0A0AA83CEC4C}
+		{5C245C2B-2E56-4F99-9AF1-22127EF8C351} = {0ED89569-396E-4281-8FE6-0A0AA83CEC4C}
+		{EC98A928-9A0F-496B-8EE2-587E39F9BBED} = {B50FA6CA-A2CC-4B23-84EF-FC6634957B45}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		BuildVersion_DetectChanges = True
