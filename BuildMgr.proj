@@ -8,10 +8,10 @@
 
     <ItemGroup>
         <!-- All the .csproj files in my Game Code Development Environment -->
-        <AllProjectFiles Include="$(CodeEnvDir)**\*.csproj" />
+        <AllProjectFiles Include="$(SolutionDir)**\*.csproj" />
         <!-- Those .csproj files I want to exclude from the build -->
         <ExcludedProjectFiles Include="$(DebugEnvDir)**\*.csproj" />
-        <ExcludedProjectFiles Include="$(CodeEnvDir)BuildOutput\**\*.csproj" />
+        <ExcludedProjectFiles Include="$(SolutionRootDir)BuildOutput\**\*.csproj" /> <!-- Not necessary -->
         <!-- All the .csproj files that are included in this build -->
         <IncludedProjectFiles Include="@(AllProjectFiles)" Exclude="@(ExcludedProjectFiles)" />
     </ItemGroup>
@@ -21,57 +21,13 @@
         <AllConfigurations Include="Release" />
     </ItemGroup>
 
-    <Import Project="$(CustomToolsDir)buildmgr.targets" />
+  <!-- This doesn't appear to be required as FxCopAssemblies is already declared in fxcop.targets? -->
+  <!-- Assemblies to include in FxCop analysis -->
+ <!--<ItemDefinitionGroup>
+    <FxCopAssemblies></FxCopAssemblies>
+  </ItemDefinitionGroup>-->
 
-    <!--____________________________FxCop begins here______________________ -->
 
-    <!-- Extension Pack required for fxcop.targets file -->
-    <Import Project="$(ExtensionTasksPath)MSBuild.ExtensionPack.tasks"/>
-    <Import Project="fxcop.targets"/>
+  <Import Project="$(CustomToolsDir)buildmgr.targets" />
 
-    <!-- FxCop Properties that need to be converted here -->
-    <PropertyGroup>
-        <FxCopContribRoot>$(ProgramFiles)\Microsoft FxCop 10.0\</FxCopContribRoot>
-        <FxCopOutputRoot>$(CommonOutputDir)..\BuildTemp\FxCopTemp\</FxCopOutputRoot>
-        <FxCopCustomDictionaryPath>$(CustomToolsDir)FxCopCustomDictionary.xml</FxCopCustomDictionaryPath>
-    </PropertyGroup>
-
-    <!-- Controls to allow the build to continue even when FxCop Errors occur. Default is false. -->
-    <PropertyGroup>
-        <IgnoreFxCopCriticalErrors>true</IgnoreFxCopCriticalErrors>
-        <IgnoreFxCopErrors>true</IgnoreFxCopErrors>
-        <IgnoreFxCopCriticalWarnings>true</IgnoreFxCopCriticalWarnings>
-    </PropertyGroup>
-
-    <!-- Modify dependencies to run FxCop here -->
-    <PropertyGroup>
-        <BuildDependsOn>
-            $(BuildDependsOn);
-            _IdentifyFxCopAssemblies;
-            RunFxcop;
-        </BuildDependsOn>
-    </PropertyGroup>
-    <PropertyGroup>
-        <CleanDependsOn>
-            $(CleanDependsOn);
-            CleanFxcop;
-        </CleanDependsOn>
-    </PropertyGroup>
-
-    <!-- Assemblies to include in FxCop analysis -->
-    <ItemDefinitionGroup>
-        <FxCopAssemblies></FxCopAssemblies>
-    </ItemDefinitionGroup>
-
-    <Target Name="_IdentifyFxCopAssemblies" >
-        <ItemGroup>
-            <AllReleaseAssemblies Include="$(CommonOutputDir)Release\**\*.dll; $(CommonOutputDir)Release\**\*.exe" />
-            <ExcludedReleaseAssemblies Include="$(CommonOutputDir)Release\**\*.Tests.*" />
-            <FxCopAssemblies Include="@(AllReleaseAssemblies)" Exclude="@(ExcludedReleaseAssemblies)" />
-            <!-- Alternative implementation below using @(BuildOutputs) -->
-            <!--<ExcludedAssemblies Include="$(CommonOutputDir)Debug\**\*.*" />-->
-            <!--<ExcludedAssemblies Include="$(CommonOutputDir)Release\**\*.Tests.dll" />-->
-            <!--<FxCopAssemblies Include="@(BuildOutputs)" Exclude="@(ExcludedAssemblies)" />-->
-        </ItemGroup>
-    </Target>
 </Project>

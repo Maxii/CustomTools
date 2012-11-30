@@ -6,7 +6,7 @@
 // </copyright> 
 // <summary> 
 // File: $safeitemname$.$fileinputextension$
-// TODO - one line to give a brief idea of what this file does.
+// COMMENT - one line to give a brief idea of what this file does.
 // </summary> 
 // -------------------------------------------------------------------------------------------------------------------- 
 
@@ -20,7 +20,7 @@ namespace $rootnamespace$ {
     using UnityEditor;
 
     /// <summary>
-    /// TODO 
+    /// COMMENT 
     /// </summary>
     public class $safeitemname$ : MonoBehaviour {
 
@@ -38,6 +38,10 @@ namespace $rootnamespace$ {
 
         private void LateUpdate() {
 
+        }
+
+        public override string ToString() {
+            return new ObjectAnalyzer.ToString(this);
         }
 
     }

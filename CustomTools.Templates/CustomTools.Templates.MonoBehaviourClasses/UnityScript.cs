@@ -6,7 +6,7 @@
 // </copyright> 
 // <summary> 
 // File: $safeitemname$.$fileinputextension$
-// TODO - one line to give a brief idea of what this Unity Script does.
+// COMMENT - one line to give a brief idea of what this Unity Script does.
 // </summary> 
 // -------------------------------------------------------------------------------------------------------------------- 
 
@@ -18,7 +18,7 @@ using UnityEngine;
 using UnityEditor;
 
 /// <summary>
-/// TODO: Update summary.
+/// COMMENT: Update summary.
 /// </summary>
 public class $safeitemname$ : MonoBehaviour {
 
@@ -37,6 +37,11 @@ public class $safeitemname$ : MonoBehaviour {
     private void LateUpdate() {
 
     }
+
+    public override string ToString() {
+        return new ObjectAnalyzer.ToString(this);
+    }
+
 
 }
 

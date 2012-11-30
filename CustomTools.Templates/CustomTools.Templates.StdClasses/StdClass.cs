@@ -6,7 +6,7 @@
 // </copyright> 
 // <summary> 
 // File: $safeitemname$.$fileinputextension$
-// TODO - one line to give a brief idea of what the file does.
+// COMMENT - one line to give a brief idea of what the file does.
 // </summary> 
 // -------------------------------------------------------------------------------------------------------------------- 
 
@@ -16,13 +16,14 @@ namespace $rootnamespace$ {
     using System.Collections.Generic;
     using System.Linq;
 
-    /// <summary>
-    /// TODO 
-    /// </summary>
     public class $safeitemname$ {
 
         public $safeitemname$() {
 
+        }
+
+        public override string ToString() {
+            return new ObjectAnalyzer.ToString(this);
         }
 
     }

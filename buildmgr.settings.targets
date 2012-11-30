@@ -1,35 +1,65 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="UnityTest" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <!-- Multiple warnings from poorly designed MS Schema -->
-    <!-- Desktop (but not Laptop) system has lost Intellisense for MSBuild due to an MSBuild bug -->
-    <!-- NOTE: MSBuildStartupDirectory has no trailing \ -->
+  <!-- Multiple warnings from poorly designed MS Schema -->
+  <!-- Desktop (but not Laptop) system has lost Intellisense for MSBuild due to an MSBuild bug -->
+  <!-- NOTE: MSBuildStartupDirectory has no trailing \ -->
 
-    <PropertyGroup>
-        <NewLine>%0a%0d</NewLine>
-    </PropertyGroup>
+  <PropertyGroup>
+    <NewLine>%0a%0d</NewLine>
+  </PropertyGroup>
 
-    <PropertyGroup>
-        <UnityEnvDir Condition = "$(UnityEnvDir) == ''">$(GameDevDir)UnityEnv\</UnityEnvDir>
-        <CodeEnvDir Condition ="$(CodeEnvDir) == ''">$(GameDevDir)CodeEnv\</CodeEnvDir>
-        <CustomToolsDir Condition="$(CustomToolsDir) == ''">$(GameDevDir)CustomTools\</CustomToolsDir>
-        <CommonOutputDir Condition ="$(CommonOutputDir) == ''">$(CodeEnvDir)BuildOutput\Latest\bin\</CommonOutputDir>
-        <UnityProjectDir>$(UnityEnvDir)UnityEntry\</UnityProjectDir>
-        <UnityCodeLibraryDir>$(UnityProjectDir)Assets\CodeLibrary\</UnityCodeLibraryDir>
-        <DebugEnvDir>$(CodeEnvDir)\MonoDebugEnv\</DebugEnvDir>
-    </PropertyGroup>
+  <!-- Default Solution is CodeEnv\CodeEnv.Master. For Trials\Trials.ToUnity use /p:SolutionName=Trials.ToUnity -->
+  <PropertyGroup>    
+    <CodeEnvDir Condition ="$(CodeEnvDir) == ''">$(GameDevDir)CodeEnv\</CodeEnvDir>
+    <TrialsDir Condition ="$(TrialsDir) == ''">$(GameDevDir)Trials\</TrialsDir>
+    <SolutionName>CodeEnv.Master</SolutionName>
+    <SolutionRootDir>$(CodeEnvDir)</SolutionRootDir>
+    <SolutionRootDir Condition ="$(SolutionName) == 'Trials.ToUnity'">$(TrialsDir)</SolutionRootDir>
+    <SolutionDir>$(SolutionRootDir)$(SolutionName)\</SolutionDir>
+  </PropertyGroup>
 
-    <PropertyGroup>
-        <ContribDir Condition="$(ContribDir) == ''">$(CustomToolsDir)Contrib\</ContribDir>
-        <!-- MSBuildExtensionsPath is the path where ALL extensions to MSBuild are located. -->
-        <!-- As a reserved property, it is automatically setup by MSBuild programatically. However, it can be overridden. -->
-        <!-- I'm overriding it so I can put selected ExtensionTasks and CommunityTasks under source control. -->
-        <!-- MSBuildExtensionsPath normally points to $(ProgramFiles)MSBuild\ by default. -->
-        <MSBuildExtensionsPath>$(ContribDir)</MSBuildExtensionsPath>        
-        <!-- ExtensionTasksPath is set to $(MSBuildExtensionsPath)ExtensionPack\4.0\ in MSBuild.ExtensionPack.tasks,
-        but I must set it here to import the it. -->
-        <ExtensionTasksPath>$(MSBuildExtensionsPath)ExtensionPack\4.0\</ExtensionTasksPath>
-        <!-- MSBuildCommunityTasksPath is set to $(MSBuildExtensionsPath)MSBuildCommunityTasks\ in MSBuild.Community.Tasks.Targets
-        but I must set it here to import it. -->
-        <MSBuildCommunityTasksPath>$(MSBuildExtensionsPath)MSBuildCommunityTasks\</MSBuildCommunityTasksPath>
-    </PropertyGroup>
+  <PropertyGroup>
+    <UnityEnvDir Condition = "$(UnityEnvDir) == ''">$(GameDevDir)UnityEnv\</UnityEnvDir>
+    <CustomToolsDir Condition="$(CustomToolsDir) == ''">$(GameDevDir)CustomTools\</CustomToolsDir>
+    <CommonOutputDir Condition ="$(CommonOutputDir) == ''">$(SolutionRootDir)BuildOutput\Latest\bin\</CommonOutputDir>
+    <UnityProjectDir>$(UnityEnvDir)UnityEntry\</UnityProjectDir>
+    <UnityCodeLibraryDir>$(UnityProjectDir)Assets\CodeLibrary\</UnityCodeLibraryDir>
+    <DebugEnvDir>$(SolutionRootDir)MonoDebugEnv\</DebugEnvDir>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <ContribDir Condition="$(ContribDir) == ''">$(CustomToolsDir)Contrib\</ContribDir>
+    <!-- MSBuildExtensionsPath is the path where ALL extensions to MSBuild are located. As a reserved property, it 
+        is automatically setup by MSBuild programatically. However, it can be overridden.  I'm overriding it so I can 
+        put selected ExtensionTasks and CommunityTasks under source control. MSBuildExtensionsPath normally points to 
+        $(ProgramFiles)MSBuild\ by default. -->
+    <MSBuildExtensionsPath>$(ContribDir)</MSBuildExtensionsPath>
+    <!-- ExtensionTasksPath is set to $(MSBuildExtensionsPath)ExtensionPack\4.0\ in MSBuild.ExtensionPack.tasks,
+        but I must set it here to import the .tasks file. -->
+    <ExtensionTasksPath>$(MSBuildExtensionsPath)ExtensionPack\4.0\</ExtensionTasksPath>
+    <!-- MSBuildCommunityTasksPath is set to $(MSBuildExtensionsPath)MSBuildCommunityTasks\ in 
+        MSBuild.Community.Tasks.Targets but I must set it here to import the .Targets file. -->
+    <MSBuildCommunityTasksPath>$(MSBuildExtensionsPath)MSBuildCommunityTasks\</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+
+  <!--____________________________FxCop definitions begin here______________________ -->
+
+  <!-- Extension Pack required for fxcop.targets file -->
+  <Import Project="$(ExtensionTasksPath)MSBuild.ExtensionPack.tasks"/>
+  <Import Project="fxcop.targets"/>
+
+  <!-- FxCop Properties in fxcop.targets that need to be overridden -->
+  <PropertyGroup>
+    <FxCopContribRoot>$(ProgramFiles)\Microsoft FxCop 10.0\</FxCopContribRoot>
+    <FxCopOutputRoot>$(CommonOutputDir)..\BuildTemp\FxCopTemp\</FxCopOutputRoot>
+    <FxCopCustomDictionaryPath>$(CustomToolsDir)FxCopCustomDictionary.xml</FxCopCustomDictionaryPath>
+  </PropertyGroup>
+
+  <!-- Controls to allow the build to continue even when FxCop Errors occur. Default is false. -->
+  <PropertyGroup>
+    <IgnoreFxCopCriticalErrors>true</IgnoreFxCopCriticalErrors>
+    <IgnoreFxCopErrors>true</IgnoreFxCopErrors>
+    <IgnoreFxCopCriticalWarnings>true</IgnoreFxCopCriticalWarnings>
+  </PropertyGroup>
+
 </Project>

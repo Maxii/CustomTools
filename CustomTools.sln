@@ -2,15 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E20D30F5-50A3-4827-8516-A7A104523212}"
-	ProjectSection(SolutionItems) = preProject
-		Loggers\BuildMacro.doskey = Loggers\BuildMacro.doskey
-		BuildMgr.proj = BuildMgr.proj
-		buildmgr.settings.targets = buildmgr.settings.targets
-		buildmgr.targets = buildmgr.targets
-		fxcop.targets = fxcop.targets
-		FxCopCustomDictionary.xml = FxCopCustomDictionary.xml
-		LoadBuildMacro.bat = LoadBuildMacro.bat
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.AssemblyVersionInfo", "CustomTools.AssemblyVersionInfo\CustomTools.AssemblyVersionInfo.csproj", "{AFB15244-A569-4180-A8F2-00A3A6BE6C87}"
 EndProject
@@ -49,6 +40,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.0", "4.0", "{EC98A928-9A0
 		Contrib\ExtensionPack\4.0\Ionic.Zip.DLL = Contrib\ExtensionPack\4.0\Ionic.Zip.DLL
 		Contrib\ExtensionPack\4.0\MSBuild.ExtensionPack.dll = Contrib\ExtensionPack\4.0\MSBuild.ExtensionPack.dll
 		Contrib\ExtensionPack\4.0\MSBuild.ExtensionPack.tasks = Contrib\ExtensionPack\4.0\MSBuild.ExtensionPack.tasks
+		Contrib\ExtensionPack\4.0\Notes.txt = Contrib\ExtensionPack\4.0\Notes.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Game Build Tools", "Game Build Tools", "{713F29FA-17A9-427D-873D-D113E0DF912A}"
+	ProjectSection(SolutionItems) = preProject
+		Loggers\BuildMacro.doskey = Loggers\BuildMacro.doskey
+		BuildMgr.proj = BuildMgr.proj
+		buildmgr.settings.targets = buildmgr.settings.targets
+		buildmgr.targets = buildmgr.targets
+		fxcop.targets = fxcop.targets
+		FxCopCustomDictionary.xml = FxCopCustomDictionary.xml
+		LoadBuildMacro.bat = LoadBuildMacro.bat
 	EndProjectSection
 EndProject
 Global
@@ -127,6 +130,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0ED89569-396E-4281-8FE6-0A0AA83CEC4C} = {E20D30F5-50A3-4827-8516-A7A104523212}
+		{713F29FA-17A9-427D-873D-D113E0DF912A} = {E20D30F5-50A3-4827-8516-A7A104523212}
 		{3F641F1C-1D9C-49F6-A7C9-FF627AA0306D} = {A0F5F452-9515-4D92-BE94-1A8CA603BB39}
 		{129DCF86-4FC5-4CAF-AAFE-911EFC560E10} = {A0F5F452-9515-4D92-BE94-1A8CA603BB39}
 		{ECD5528F-AB9B-4FEA-AF4D-6DC3384A9596} = {A0F5F452-9515-4D92-BE94-1A8CA603BB39}

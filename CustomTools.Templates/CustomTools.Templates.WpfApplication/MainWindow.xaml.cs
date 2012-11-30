@@ -6,7 +6,7 @@
 // </copyright> 
 // <summary> 
 // File: $safeitemname$.xaml.cs
-// TODO - one line to give a brief idea of what this file does.
+// COMMENT - one line to give a brief idea of what this file does.
 // </summary> 
 // -------------------------------------------------------------------------------------------------------------------- 
 
@@ -35,5 +35,13 @@ namespace $safeprojectname$ {
             InitializeComponent();
         }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e) {
+            // a Windows.Loaded event has arrived
+            // STUB
+        }
+
+        public override string ToString() {
+            return new ObjectAnalyzer.ToString(this);
+        }
     }
 }

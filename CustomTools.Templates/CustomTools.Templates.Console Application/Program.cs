@@ -6,7 +6,7 @@
 // </copyright> 
 // <summary> 
 // File: $safeitemname$.cs
-// TODO - one line to give a brief idea of what this file does.
+// COMMENT - one line to give a brief idea of what this file does.
 // </summary> 
 // -------------------------------------------------------------------------------------------------------------------- 
 
@@ -20,6 +20,10 @@ namespace $safeprojectname$ {
     class Program {
 
         static void Main(string[] args) {
+        }
+
+        public override string ToString() {
+            return new ObjectAnalyzer.ToString(this);
         }
 
     }

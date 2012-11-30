@@ -1,206 +1,267 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="UnityTest" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-    <!-- For the Attrib task that removes readonly flags -->
-    <Import Project="$(MSBuildCommunityTasksPath)MSBuild.Community.Tasks.Targets" />
-    
-    <!-- Clean - full clean of Included VS Projects and Unity's Code Library -->
-    <PropertyGroup>
-        <CleanDependsOn>
-            $(CleanDependsOn);
-            _CoreClean;
-            _ProjectClean;
-            _UnityClean;
-        </CleanDependsOn>
-    </PropertyGroup>
-    <Target Name="Clean" DependsOnTargets="$(CleanDependsOn)" />
-    <Target Name="_CoreClean" >        
-        <!-- Clean Outputs in the CommonOutputDir -->
-        <ItemGroup>
-            <AllFilesInCommonOutputDir Include="$(CommonOutputDir)\%(AllConfigurations.Identity)\**\*" />
-        </ItemGroup>
-        <Attrib Files="@(AllFilesInCommonOutputDir)" ReadOnly="false" />
-        <Delete Files="@(AllFilesInCommonOutputDir)" />
-        <!-- IMPROVE RemoveDir Directories="$(...)" -->
-    </Target>
-    <Target Name="_ProjectClean">
-        <!-- Clean default project-specific outputs too as other Solution Builds can populate them -->
-        <MSBuild Projects="@(IncludedProjectFiles)"
-                 BuildInParallel="true"
-                 Properties="Configuration=%(AllConfigurations.Identity)"
-                 Targets="Clean">
-        </MSBuild>
-    </Target>
-    <Target Name="_UnityClean">
-        <!-- UNDONE Need to confirm Unity is not running as condition -->
-        <!-- UNDONE Need to account for more than 1 Unity Project -->
-        <ItemGroup>
-            <AllFilesInUnityCodeLibrary Include="$(UnityCodeLibraryDir)\**\*" />
-        </ItemGroup>
-        <Attrib Files="@(AllFilesInUnityCodeLibrary)" ReadOnly="false" />
-        <Delete Files="@(AllFilesInUnityCodeLibrary)" />
-        <!-- IMPROVE RemoveDir Directories="$(UnityCodeLibraryDir)" -->
-    </Target>
+  <!-- For the Attrib task that removes readonly flags -->
+  <Import Project="$(MSBuildCommunityTasksPath)MSBuild.Community.Tasks.Targets" />
 
-    <!-- Build - incremental build of ALL included Projects -->
-    <PropertyGroup>
-        <BuildDependsOn>
-            $(BuildDependsOn);
-            BeforeBuild;
-            _CoreBuild;
-            AfterBuild;
-        </BuildDependsOn>
-    </PropertyGroup>
-    <Target Name="Build" DependsOnTargets="$(BuildDependsOn)" />
-    <Target Name="BeforeBuild" />
-    <!-- _CoreBuild using Target batching to get incremental build behavior -->
-    <Target Name="_CoreBuild" Inputs="@(IncludedProjectFiles)" Outputs="%(AllConfigurations.Identity)" >
-        <MSBuild
-        Projects="@(IncludedProjectFiles)"
-        Targets="Build"
-        Properties="OutputPath=$(CommonOutputDir)%(AllConfigurations.Identity); Configuration=%(AllConfigurations.Identity)" >
-            <Output ItemName="BuildOutputs" TaskParameter="TargetOutputs" />
-        </MSBuild>
-        <Message Text="Build Outputs: $(NewLine)@(BuildOutputs, '$(NewLine)')" Importance="high"/>
-    </Target>
-    <Target Name="AfterBuild" />
 
-    <!-- Rebuild - full clean followed by a new VS Build of Code -->
-    <PropertyGroup>
-        <RebuildDependsOn>
-            $(RebuildDependsOn);
-            Clean;
-            _IncrementAssemblyVersion;
-            Build;
-        </RebuildDependsOn>
-    </PropertyGroup>
-    <Target Name="Rebuild" DependsOnTargets="$(RebuildDependsOn)" />
+  <!-- Clean - full clean of FxCop Output, Included Project's output and Unity's Code Library -->
+  <PropertyGroup>
+    <CleanDependsOn>
+      $(CleanDependsOn);
+      CleanFxCop; <!-- Clean FxCop first before the FxCopAssemblies are cleaned to avoid fxcop.targets error -->
+      _CoreClean;
+      _ProjectClean;
+      _UnityClean;
+    </CleanDependsOn>
+  </PropertyGroup>
 
-    <!-- As a Rebuild of the AssemblyVersionInfo project generated from here currently doesn't generate 
+  <Target Name="Clean" DependsOnTargets="$(CleanDependsOn)" />
+  <Target Name="_CoreClean" >
+    <!-- Clean Outputs in the CommonOutputDir -->
+    <ItemGroup>
+      <AllFilesInCommonOutputDir Include="$(CommonOutputDir)\%(AllConfigurations.Identity)\**\*" />
+    </ItemGroup>
+
+    <Attrib Files="@(AllFilesInCommonOutputDir)" ReadOnly="false" />
+    <Delete Files="@(AllFilesInCommonOutputDir)" />
+    <!-- IMPROVE RemoveDir Directories="$(...)" -->
+  </Target>
+
+  <Target Name="_ProjectClean">
+    <!-- Clean default project-specific outputs too as other Solution Builds can populate them -->
+    <MSBuild Projects="@(IncludedProjectFiles)"
+             BuildInParallel="true"
+             Properties="Configuration=%(AllConfigurations.Identity)"
+             Targets="Clean">
+    </MSBuild>
+  </Target>
+
+  <Target Name="_UnityClean">
+    <!-- UNDONE Need to confirm Unity is not running as condition -->
+    <!-- UNDONE Need to account for more than 1 Unity Project -->
+    <ItemGroup>
+      <AllFilesInUnityCodeLibrary Include="$(UnityCodeLibraryDir)\**\*" />
+    </ItemGroup>
+
+    <Attrib Files="@(AllFilesInUnityCodeLibrary)" ReadOnly="false" />
+    <Delete Files="@(AllFilesInUnityCodeLibrary)" />
+    <!-- IMPROVE RemoveDir Directories="$(UnityCodeLibraryDir)" -->
+  </Target>
+
+
+  <!-- Build - incremental build of ALL included Projects -->
+  <PropertyGroup>
+    <BuildDependsOn>
+      $(BuildDependsOn);
+      BeforeBuild;
+      _CoreBuild;
+      AfterBuild;
+    </BuildDependsOn>
+  </PropertyGroup>
+
+  <Target Name="Build" DependsOnTargets="$(BuildDependsOn)" />
+  <Target Name="BeforeBuild" />
+  <!-- _CoreBuild using Target batching to get incremental build behavior -->
+  <Target Name="_CoreBuild" Inputs="@(IncludedProjectFiles)" Outputs="%(AllConfigurations.Identity)" >
+    <MSBuild
+    Projects="@(IncludedProjectFiles)"
+    Targets="Build"
+    Properties="OutputPath=$(CommonOutputDir)%(AllConfigurations.Identity); Configuration=%(AllConfigurations.Identity)" >
+      <Output ItemName="BuildOutputs" TaskParameter="TargetOutputs" />
+    </MSBuild>
+    <Message Text="Build Outputs: $(NewLine)@(BuildOutputs, '$(NewLine)')" Importance="high"/>
+  </Target>
+  <Target Name="AfterBuild" />
+
+
+  <!-- Rebuild - full clean followed by a new VS Build of Code -->
+  <PropertyGroup>
+    <RebuildDependsOn>
+      $(RebuildDependsOn);
+      Clean;
+      _IncrementAssemblyVersion;
+      Build;
+    </RebuildDependsOn>
+  </PropertyGroup>
+
+  <Target Name="Rebuild" DependsOnTargets="$(RebuildDependsOn)" />
+
+  <!-- As a Rebuild of the AssemblyVersionInfo project generated from here currently doesn't generate 
     an increment of the version number (bug in Build Version Increment addin?), I need to manually Rebuild 
     that project before I Rebuild with this BuildMgr. -->
-    <Target Name="_IncrementAssemblyVersion" >
-        <ItemGroup>
-            <AssyVersionInfoProject Include="$(CustomToolsDir)CustomTools.AssemblyVersionInfo\CustomTools.AssemblyVersionInfo.csproj" />
-        </ItemGroup>
-        <MSBuild Projects="@(AssyVersionInfoProject)"
-                 Properties="Configuration=Release"
-                 Targets="Rebuild" />
-        <Warning Text="Auto Version Increment does not work. %0aDid you remember to increment the Assembly Version by rebuilding the AssemblyVersionInfo Project manually?" />
-    </Target>
+  <Target Name="_IncrementAssemblyVersion" >
+    <ItemGroup>
+      <AssyVersionInfoProject Include="$(CustomToolsDir)CustomTools.AssemblyVersionInfo\CustomTools.AssemblyVersionInfo.csproj" />
+    </ItemGroup>
 
-    <!-- Test - fills in any build gaps, then runs all Unit Tests -->
+    <MSBuild Projects="@(AssyVersionInfoProject)"
+             Properties="Configuration=Release"
+             Targets="Rebuild" />
+    <Warning Text="Auto Version Increment does not work. %0aDid you remember to increment the Assembly Version by rebuilding the AssemblyVersionInfo Project manually?" />
+  </Target>
+
+
+  <!-- Test - fills in any build gaps, then runs all Unit Tests -->
+  <PropertyGroup>
+    <TestDependsOn>
+      $(TestDependsOn);
+      Build;
+    </TestDependsOn>
+  </PropertyGroup>
+
+  <Target Name="Test" DependsOnTargets="$(TestDependsOn)">
+    <!-- TODO how to detect and call unit test project, see http://knot.org/scottlaw/blog/?p=400#comments -->
+    <!-- Need notification of success or failure -->
+    <Message Text="Running Unit Tests which currently do nothing." Importance="high"/>
+  </Target>
+
+
+  <!-- FxCopAndUnitTest - cleans, builds and runs FxCop and then Unit Tests -->
+  <PropertyGroup>
+    <RunFxCopDependsOn>
+      <!-- Overwrites same in fxcop.targets so must be defined before it is used in following property -->
+      _IdentifyFxCopAssemblies;
+      $(RunFxCopDependsOn);
+    </RunFxCopDependsOn>
+
+    <FxCopAndUnitTestDependsOn>
+      $(FxCopAndUnitTestDependsOn);
+      Rebuild;
+      $(RunFxCopDependsOn);
+      Test;
+    </FxCopAndUnitTestDependsOn>
+  </PropertyGroup>
+
+  <Target Name="FxCopAndUnitTest" DependsOnTargets="$(FxCopAndUnitTestDependsOn)" />
+
+  <!-- FxCop - insert identity of FxCop Assemblies prior to cleaning or running FxCop -->
+  <Target Name="_IdentifyFxCopAssemblies">
+    <ItemGroup>
+      <AllReleaseAssemblies Include="$(CommonOutputDir)Release\**\*.dll; $(CommonOutputDir)Release\**\*.exe" />
+      <ExcludedReleaseAssemblies Include="$(CommonOutputDir)Release\**\*.Tests.*" />
+      <ExcludedReleaseAssemblies Include="$(CommonOutputDir)Release\**\UnityEngine.dll" />
+      <ExcludedReleaseAssemblies Include="$(CommonOutputDir)Release\**\UnityEditor.dll" />
+      <FxCopAssemblies Include="@(AllReleaseAssemblies)" Exclude="@(ExcludedReleaseAssemblies)" />
+      <!-- Alternative implementation below using @(BuildOutputs) -->
+      <!--<ExcludedAssemblies Include="$(CommonOutputDir)Debug\**\*.*" />-->
+      <!--<ExcludedAssemblies Include="$(CommonOutputDir)Release\**\*.Tests.dll" />-->
+      <!--<FxCopAssemblies Include="@(BuildOutputs)" Exclude="@(ExcludedAssemblies)" />-->
+    </ItemGroup>
+  </Target>
+
+
+  <!-- UnityTest - cleans, builds and sets up Unity for testing -->
+  <PropertyGroup>
+    <UnityTestDependsOn>
+      $(UnityTestDependsOn);
+      FxCopAndUnitTest;
+      _CopyOutputToUnity;
+      _GenerateMdbFiles;
+      <!-- Unity .pdb files are automatically cleaned after .mdb files are generated -->
+      _ConfirmDebugEnvReadiness;
+      _LaunchUnity;
+      _PromptMonoDebuggerLaunch;
+    </UnityTestDependsOn>
+  </PropertyGroup>
+
+  <Target Name="UnityTest" DependsOnTargets="$(UnityTestDependsOn)" />
+
+  <!-- Copy all Output files (except Test-related) from the CommonOutputDir 'Release' to Unity's CodeLibrary -->
+  <Target Name="_CopyOutputToUnity" >
+    <!-- No need for incremental copy as Unity is cleaned before this task is called -->
+    <ItemGroup>
+      <AllReleaseOutputFiles Include="$(CommonOutputDir)Release\**\*.*" />
+      <!-- None of the output file types below have any use inside of the Unity Engine -->
+      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)Release\**\*.exe" />
+      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)Release\**\*.Tests.*; $(CommonOutputDir)Release\**\*.config" />
+      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)Release\en-US\**\*.*" />
+      <!-- FIXME Temporary workaround for Resource Files-->
+      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)Release\en-CA\**\*.*" />
+      <!-- FIXME Temporary workaround for Resource Files-->
+      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)Release\fr-FR\**\*.*" />
+      <!-- FIXME Temporary workaround for Resource Files-->
+
+      <OutputFilesToCopy Include="@(AllReleaseOutputFIles)" Exclude="@(ExcludedReleaseOutputFiles)" />
+      <!-- UNCLEAR what about .config files and copy local references? -->
+    </ItemGroup>
+
+    <!-- If the Unity CodeLibrary directory doesn't exist then create it -->
+    <MakeDir Directories="$(UnityCodeLibraryDir)" Condition="!Exists('$(UnityCodeLibraryDir)')"/>
+    <Message Text="Output files copied to Unity Code Library: $(NewLine)@(OutputFilesToCopy, '$(NewLine)')" Importance="high"/>
+    <!-- The Well-known Item Metadata ".RecursiveDir" also copies the satellite directory structure along with the files  -->
+    <Copy SourceFiles="@(OutputFilesToCopy)" DestinationFolder="$(UnityCodeLibraryDir)%(OutputFilesToCopy.RecursiveDir)" OverwriteReadOnlyFiles="true" />
+  </Target>
+
+  <!-- Generate the .mdb debug file in Unity IFF the one that may already be there requires updating -->
+  <Target Name="_GenerateMdbFiles" >
+    <!-- No need for incremental approach as Unity is cleaned before this task is called -->
     <PropertyGroup>
-        <TestDependsOn>
-            $(TestDependsOn);
-            Build;
-        </TestDependsOn>
+      <!-- pdb2mdb.exe does not work if copied to \contrib folder -->
+      <!-- <MdbGeneratorPath>$(ContribDir)MdbGenerator\pdb2mdb.exe</MdbGeneratorPath> -->
+      <!-- $(ProgramFiles) required to accommodate C:\Program Files(x86)\ on 64 bit machines -->
+      <MdbGeneratorPath>$(ProgramFiles)\Unity\Editor\Data\Mono\lib\mono\2.0\pdb2mdb.exe</MdbGeneratorPath>
     </PropertyGroup>
-    <Target Name="Test" DependsOnTargets="$(TestDependsOn)">
-        <!-- TODO how to detect and call unit test project, see http://knot.org/scottlaw/blog/?p=400#comments -->
-        <!-- Need notification of success or failure -->
-        <Message Text="Running Unit Tests which currently do nothing." Importance="high"/>
-    </Target>
 
-    <!-- CleanTest - cleans, builds and runs Unit Tests -->
+    <ItemGroup>
+      <!--<AllAssembliesInUnity Include="$(UnityCodeLibraryDir)**\*.dll; $(UnityCodeLibraryDir)**\*.exe" />-->
+      <!-- Above includes satellite assemblies and .exe, neither of which are useful in Unity. -->
+      <AllAssembliesInUnity Include="$(UnityCodeLibraryDir)**\*.dll" />
+      <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\UnityEngine.dll; $(UnityCodeLibraryDir)**\UnityEditor.dll" />
+      <MdbAssemblies Include="@(AllAssembliesInUnity)" Exclude="@(ExcludedAssembliesInUnity)" />
+    </ItemGroup>
+
+    <Message Text="MdbAssemblies: $(NewLine)@(MdbAssemblies, '$(NewLine)')" Importance="high"/>
+
+    <!-- pdb2mdb.exe will only work if called from the directory containing the .dll and .pdb files -->
+    <Exec WorkingDirectory="$(UnityCodeLibraryDir)" Command='"$(MdbGeneratorPath)" %(MdbAssemblies.Identity)' />
+  </Target>
+
+
+  <!-- Delete the .pdb files from Unity -->
+  <Target Name="_CleanUnityPdbFiles" AfterTargets="_GenerateMdbFiles" >
+    <ItemGroup>
+      <PdbFilesToDelete Include="$(UnityCodeLibraryDir)**\*.pdb" />
+    </ItemGroup>
+
+    <Attrib Files="@(PdbFilesToDelete)" ReadOnly="false" />
+    <Delete Files="@(PdbFilesToDelete)">
+      <!-- <Delete Files="$(UnityCodeLibraryDir)**\*.pdb" /> doesn't work as it isn't a list, ala ItemGroup? -->
+      <Output ItemName="FilesDeleted" TaskParameter="DeletedFiles" />
+    </Delete>
+    <Message Text="Pdb Files Deleted: $(NewLine)@(FilesDeleted, '$(NewLine)')" Importance="high"/>
+  </Target>
+
+
+  <!-- TODO Confirm that the Mono Debug Environment has all the projects it needs -->
+  <Target Name="_ConfirmDebugEnvReadiness" >
+    <Message Text="WARNING! Confirm MonoDebugger includes all non-Test projects." Importance="high" />
+    <Message Text="Procedure for adding an Existing Project to the Debug Environment." Importance="high"/>
+    <Message Text="     1. Use OpenWith to open UnityDebugEnv.sln with MonoD, NOT with VS." Importance="high"/>
+    <Message Text="     2. Add appropriate, existing Project(s) that are not Tests." Importance="high"/>
+    <Message Text="     3. Uncheck the Build checkbox found in Solution Properties for each Project." Importance="high"/>
+  </Target>
+
+
+  <!-- Launch Unity -->
+  <Target Name="_LaunchUnity" >
     <PropertyGroup>
-        <CleanTestDependsOn>
-            $(CleanTestDependsOn);
-            Rebuild;
-            Test;
-        </CleanTestDependsOn>
+      <UnityProjectScenePath>$(UnityProjectDir)Assets\Scenes\MainLoadScene.unity</UnityProjectScenePath>
     </PropertyGroup>
-    <Target Name="CleanTest" DependsOnTargets="$(CleanTestDependsOn)" />
 
-    <!-- UnityTest - cleans, builds and sets up Unity for testing -->
-    <PropertyGroup>
-        <UnityTestDependsOn>
-            $(UnityTestDependsOn);
-            CleanTest;
-            _CopyOutputToUnity;
-            _GenerateMdbFiles;
-            <!-- Unity .pdb files are automatically cleaned after .mdb files are generated -->
-            _ConfirmDebugEnvReadiness;
-            _LaunchUnity;
-            _PromptMonoDebuggerLaunch;
-        </UnityTestDependsOn>
-    </PropertyGroup>
-    <Target Name="UnityTest" DependsOnTargets="$(UnityTestDependsOn)" />
+    <!-- <Exec Command="$(UnityProjectScenePath)" /> Confirmed working. -->
+    <Message Text="Dummy _LaunchUnity Target called." Importance="high"/>
+  </Target>
 
-    <!-- Copy all Output files (except Test-related) from the CommonOutputDir 'Release' to Unity's CodeLibrary -->
-    <Target Name="_CopyOutputToUnity" > <!-- No need for incremental copy as Unity is cleaned before this task is called -->
-        <ItemGroup>
-            <AllReleaseOutputFiles Include="$(CommonOutputDir)Release\**\*.*" />
-            <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)Release\**\*.Tests.*; $(CommonOutputDir)Release\**\*.config" />
-            <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)Release\en-US\**\*.*" /> <!-- FIXME Temporary workaround -->
-            
-            <OutputFilesToCopy Include="@(AllReleaseOutputFIles)" Exclude="@(ExcludedReleaseOutputFiles)" />
-            <!-- TODO what about .config files and copy local references? -->
-        </ItemGroup>
-        <!-- If the Unity CodeLibrary directory doesn't exist then create it -->
-        <MakeDir Directories="$(UnityCodeLibraryDir)" Condition="!Exists('$(UnityCodeLibraryDir)')"/>
-        <Message Text="Output files copied to Unity Code Library: $(NewLine)@(OutputFilesToCopy, '$(NewLine)')" Importance="high"/>
-        <Copy SourceFiles="@(OutputFilesToCopy)" DestinationFolder="$(UnityCodeLibraryDir)" OverwriteReadOnlyFiles="true" />
-    </Target>
 
-    <!-- Generate the .mdb debug file in Unity IFF the one that may already be there requires updating -->
-    <Target Name="_GenerateMdbFiles" >
-        <!-- No need for incremental approach as Unity is cleaned before this task is called -->
-        <PropertyGroup>
-            <!-- pdb2mdb.exe does not work if copied to \contrib folder -->
-            <!-- <MdbGeneratorPath>$(ContribDir)MdbGenerator\pdb2mdb.exe</MdbGeneratorPath> -->
-            <!-- $(ProgramFiles) required to accommodate C:\Program Files(x86)\ on 64 bit machines -->
-            <MdbGeneratorPath>$(ProgramFiles)\Unity\Editor\Data\Mono\lib\mono\2.0\pdb2mdb.exe</MdbGeneratorPath>
-        </PropertyGroup>
-        <ItemGroup>
-            <AllAssembliesInUnity Include="$(UnityCodeLibraryDir)**\*.dll; $(UnityCodeLibraryDir)**\*.exe" />
-            <MdbAssemblies Include="@(AllAssembliesInUnity)" />
-        </ItemGroup>
-        <Message Text="MdbAssemblies: $(NewLine)@(MdbAssemblies, '$(NewLine)')" Importance="high"/>
+  <!-- Operator is prompted to manually launch and attach MonoD to Unity -->
+  <Target Name="_PromptMonoDebuggerLaunch" >
+    <Message Text="Launch and attach the MonoDebugger." Importance="high" />
+  </Target>
 
-        <!--" or the hex %22 are not needed around the parameter as long as there are no spaces -->
-        <Exec WorkingDirectory="$(UnityCodeLibraryDir)" Command='"$(MdbGeneratorPath)" %(MdbAssemblies.Identity)' />
-    </Target>
-    
-    <!-- Delete the .pdb files from Unity -->
-    <Target Name="_CleanUnityPdbFiles" AfterTargets="_GenerateMdbFiles" >
-        <ItemGroup>
-            <PdbFilesToDelete Include="$(UnityCodeLibraryDir)**\*.pdb" />
-        </ItemGroup>
-        <Attrib Files="@(PdbFilesToDelete)" ReadOnly="false" />
-        <Delete Files="@(PdbFilesToDelete)">
-            <!-- <Delete Files="$(UnityCodeLibraryDir)**\*.pdb" /> doesn't work as it isn't a list, ala ItemGroup? -->
-            <Output ItemName="FilesDeleted" TaskParameter="DeletedFiles" />
-        </Delete>
-        <Message Text="FilesDeleted: $(NewLine)@(FilesDeleted, '$(NewLine)')" Importance="high"/>
-    </Target>
-
-    <!-- TODO Confirm that the Mono Debug Environment has all the projects it needs -->
-    <Target Name="_ConfirmDebugEnvReadiness" >
-        <Message Text="WARNING! Confirm MonoDebugger includes all non-Test projects." Importance="high" />
-        <Message Text="Procedure for adding an Existing Project to the Debug Environment." Importance="high"/>
-        <Message Text="     1. Use OpenWith to open UnityDebugEnv.sln with MonoD, NOT with VS." Importance="high"/>
-        <Message Text="     2. Add appropriate, existing Project(s) that are not Tests." Importance="high"/>
-        <Message Text="     3. Uncheck the Build checkbox found in Solution Properties for each Project." Importance="high"/>
-    </Target>
-
-    <!-- Launch Unity -->
-    <Target Name="_LaunchUnity" >
-        <PropertyGroup>
-            <UnityProjectScenePath>$(UnityProjectDir)Assets\Scenes\MainLoadScene.unity</UnityProjectScenePath>
-        </PropertyGroup>
-        <!-- <Exec Command="$(UnityProjectScenePath)" /> Confirmed working. -->
-        <Message Text="Dummy _LaunchUnity Target called." Importance="high"/>
-    </Target>
-
-    <!-- Operator is prompted to manually launch and attach MonoD to Unity -->
-    <Target Name="_PromptMonoDebuggerLaunch" >
-        <Message Text="Launch and attach the MonoDebugger." Importance="high" />
-    </Target>
-
-    <!-- General approach to INCREMENTALLY copying files. Key is _DynamicallyFindFilesToCopy target must exit before 
+  <!-- General approach to INCREMENTALLY copying files. Key is _DynamicallyFindFilesToCopy target must exit before 
     FilesToCopySetupAsExternalProperty new content is visible to _CopyFilesCore -->
-    <!--
+  <!--
     <Target Name="_DynamicallyFindFilesToCopy">
         <ItemGroup>
             <FilesToCopySetupAsExternalItemGroup Include="UseBatchingToGenerateListOfFiles" />
@@ -213,6 +274,9 @@
             Outputs="@(FilesToCopySetupAsExternalItemGroup->'$(DirToCopyTo)%(Filename)%(Extension)')" >
         <MakeDir Directories="$(DirToCopyTo)" Condition="!Exists('$(DirToCopyTo)')"/>
         <Copy SourceFiles="@(FilesToCopySetupAsExternalItemGroup)" DestinationFolder="$(DirToCopyTo)" OverwriteReadOnlyFiles="true" />
+                    above ignores any nested directories, below also copies the nested directory structure 
+        <Copy SourceFiles="@(FilesToCopySetupAsExternalItemGroup)" DestinationFolder="$(DirToCopyTo)%(FilesToCopySetupAsExternalItemGroup.RecursiveDir)" OverwriteReadOnlyFiles="true" />
+
     </Target>
     -->
 
