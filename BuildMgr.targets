@@ -139,9 +139,21 @@
   <Target Name="_IdentifyFxCopAssemblies">
     <ItemGroup>
       <AllReleaseAssemblies Include="$(CommonOutputDir)Release\**\*.dll; $(CommonOutputDir)Release\**\*.exe" />
+      
       <ExcludedReleaseAssemblies Include="$(CommonOutputDir)Release\**\*.Tests.*" />
-      <ExcludedReleaseAssemblies Include="$(CommonOutputDir)Release\**\UnityEngine.dll" />
-      <ExcludedReleaseAssemblies Include="$(CommonOutputDir)Release\**\UnityEditor.dll" />
+      <!-- FxCop requires the presence of any .dll references not in the GAC (ie. Unity Assys). nunit.framework is dragged along with
+      the unity references probably because they reference it. None of these need to be analyzed. -->
+      <ExcludedReleaseAssemblies Include="$(CommonOutputDir)Release\**\UnityEngine.dll; $(CommonOutputDir)Release\**\UnityEditor.dll" />
+      <ExcludedReleaseAssemblies Include="$(CommonOutputDir)Release\**\nunit.framework.dll" />
+
+      <ExcludedReleaseAssemblies Include="$(CommonOutputDir)Release\en-US\**\*.*" />
+      <!-- FIXME Temporary workaround for Resource Files-->
+      <ExcludedReleaseAssemblies Include="$(CommonOutputDir)Release\en-CA\**\*.*" />
+      <!-- FIXME Temporary workaround for Resource Files-->
+      <ExcludedReleaseAssemblies Include="$(CommonOutputDir)Release\fr-FR\**\*.*" />
+      <!-- FIXME Temporary workaround for Resource Files-->
+
+
       <FxCopAssemblies Include="@(AllReleaseAssemblies)" Exclude="@(ExcludedReleaseAssemblies)" />
       <!-- Alternative implementation below using @(BuildOutputs) -->
       <!--<ExcludedAssemblies Include="$(CommonOutputDir)Debug\**\*.*" />-->
@@ -173,14 +185,19 @@
     <ItemGroup>
       <AllReleaseOutputFiles Include="$(CommonOutputDir)Release\**\*.*" />
       <!-- None of the output file types below have any use inside of the Unity Engine -->
-      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)Release\**\*.exe" />
       <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)Release\**\*.Tests.*; $(CommonOutputDir)Release\**\*.config" />
+      <!-- The Unity Engine/Editor and nunit Assemblies are not needed in the Unity CodeLibrary -->
+      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)Release\**\UnityEngine.dll; $(CommonOutputDir)Release\**\UnityEditor.dll" />
+      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)Release\**\nunit.framework.dll" />
+
+
       <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)Release\en-US\**\*.*" />
       <!-- FIXME Temporary workaround for Resource Files-->
       <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)Release\en-CA\**\*.*" />
       <!-- FIXME Temporary workaround for Resource Files-->
       <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)Release\fr-FR\**\*.*" />
       <!-- FIXME Temporary workaround for Resource Files-->
+      
 
       <OutputFilesToCopy Include="@(AllReleaseOutputFIles)" Exclude="@(ExcludedReleaseOutputFiles)" />
       <!-- UNCLEAR what about .config files and copy local references? -->
@@ -197,21 +214,23 @@
   <Target Name="_GenerateMdbFiles" >
     <!-- No need for incremental approach as Unity is cleaned before this task is called -->
     <PropertyGroup>
-      <!-- pdb2mdb.exe does not work if copied to \contrib folder -->
-      <!-- <MdbGeneratorPath>$(ContribDir)MdbGenerator\pdb2mdb.exe</MdbGeneratorPath> -->
+      <!-- pdb2mdb.exe does not work if copied to a \contrib folder -->
       <!-- $(ProgramFiles) required to accommodate C:\Program Files(x86)\ on 64 bit machines -->
-      <MdbGeneratorPath>$(ProgramFiles)\Unity\Editor\Data\Mono\lib\mono\2.0\pdb2mdb.exe</MdbGeneratorPath>
+      <UnityInstallDir>$([System.IO.Path]::GetDirectoryName($(registry:HKEY_CURRENT_USER\Software\Unity Technologies\Unity Editor 3.x\Location)))\</UnityInstallDir>
+      <MdbGeneratorPath>$(UnityInstallDir)Data\Mono\lib\mono\2.0\pdb2mdb.exe</MdbGeneratorPath>
+      <!--<MdbGeneratorPath>$(ProgramFiles)\Unity\Editor\Data\Mono\lib\mono\2.0\pdb2mdb.exe</MdbGeneratorPath>-->
     </PropertyGroup>
 
     <ItemGroup>
       <!--<AllAssembliesInUnity Include="$(UnityCodeLibraryDir)**\*.dll; $(UnityCodeLibraryDir)**\*.exe" />-->
-      <!-- Above includes satellite assemblies and .exe, neither of which are useful in Unity. -->
-      <AllAssembliesInUnity Include="$(UnityCodeLibraryDir)**\*.dll" />
+      <!-- AllAssembliesInUnity would erroneously include satellite assemblies with the definition below if they were copied there. -->
+      <AllAssembliesInUnity Include="$(UnityCodeLibraryDir)**\*.dll; $(UnityCodeLibraryDir)**\*.exe" />
       <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\UnityEngine.dll; $(UnityCodeLibraryDir)**\UnityEditor.dll" />
+      <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\nunit.framework.dll" />
       <MdbAssemblies Include="@(AllAssembliesInUnity)" Exclude="@(ExcludedAssembliesInUnity)" />
     </ItemGroup>
 
-    <Message Text="MdbAssemblies: $(NewLine)@(MdbAssemblies, '$(NewLine)')" Importance="high"/>
+    <Message Text="Assemblies used to produce .mdb files: $(NewLine)@(MdbAssemblies, '$(NewLine)')" Importance="high"/>
 
     <!-- pdb2mdb.exe will only work if called from the directory containing the .dll and .pdb files -->
     <Exec WorkingDirectory="$(UnityCodeLibraryDir)" Command='"$(MdbGeneratorPath)" %(MdbAssemblies.Identity)' />

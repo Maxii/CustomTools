@@ -75,11 +75,11 @@
 @REM -----------------------------------------------------------------------
 @echo Now using my code to load the Doskey Build Macro
 
-doskey /macrofile=loggers\BuildMacro.doskey
+doskey /macrofile=buildlogoutput\BuildMacro.doskey
 
 @echo Syntax of Build Command: build buildmgr.proj /t:[targetName] /p:[propertyName]=[value]
 @echo Target Options:   UnityTest(default), FxCopAndUnitTest, Test, Clean, Build, Rebuild
-@echo Property Options: SolutionName=CodeEnv.Master(default), =Trials.ToUnity
+@echo Property Options: SolutionName=CodeEnv.Master(default), =Trials.ToUnity; =POC.ToUnity
 
 @goto end
 

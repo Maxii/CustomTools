@@ -8,21 +8,40 @@
     <NewLine>%0a%0d</NewLine>
   </PropertyGroup>
 
-  <!-- Default Solution is CodeEnv\CodeEnv.Master. For Trials\Trials.ToUnity use /p:SolutionName=Trials.ToUnity -->
-  <PropertyGroup>    
+  <PropertyGroup>
     <CodeEnvDir Condition ="$(CodeEnvDir) == ''">$(GameDevDir)CodeEnv\</CodeEnvDir>
     <TrialsDir Condition ="$(TrialsDir) == ''">$(GameDevDir)Trials\</TrialsDir>
+    <PocDir Condition ="$(PocDir) == ''">$(GameDevDir)POC\</PocDir>
+    <UnityEnvDir Condition = "$(UnityEnvDir) == ''">$(GameDevDir)UnityEnv\</UnityEnvDir>
+    <CustomToolsDir Condition="$(CustomToolsDir) == ''">$(GameDevDir)CustomTools\</CustomToolsDir>
+  </PropertyGroup>
+
+  <!-- Default Solution is CodeEnv\CodeEnv.Master. For Trials\Trials.ToUnity use /p:SolutionName=Trials.ToUnity 
+  For POC\POC.ToUnity use /p:SolutionName=POC.ToUnity -->
+  <PropertyGroup>
     <SolutionName>CodeEnv.Master</SolutionName>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <SolutionRootDir>$(CodeEnvDir)</SolutionRootDir>
     <SolutionRootDir Condition ="$(SolutionName) == 'Trials.ToUnity'">$(TrialsDir)</SolutionRootDir>
+    <SolutionRootDir Condition ="$(SolutionName) == 'POC.ToUnity'">$(PocDir)</SolutionRootDir>
+  </PropertyGroup>
+  <PropertyGroup>
     <SolutionDir>$(SolutionRootDir)$(SolutionName)\</SolutionDir>
   </PropertyGroup>
 
   <PropertyGroup>
-    <UnityEnvDir Condition = "$(UnityEnvDir) == ''">$(GameDevDir)UnityEnv\</UnityEnvDir>
-    <CustomToolsDir Condition="$(CustomToolsDir) == ''">$(GameDevDir)CustomTools\</CustomToolsDir>
+    <UnityProjectName>UnityEntry</UnityProjectName>
+    <UnityProjectName Condition="$(SolutionName) == 'Trials.ToUnity'">UnityTrials</UnityProjectName>
+    <UnityProjectName Condition="$(SolutionName) == 'POC.ToUnity'">UnityPOC</UnityProjectName>
+  </PropertyGroup>
+  <PropertyGroup>
+    <UnityProjectDir>$(UnityEnvDir)$(UnityProjectName)\</UnityProjectDir>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <CommonOutputDir Condition ="$(CommonOutputDir) == ''">$(SolutionRootDir)BuildOutput\Latest\bin\</CommonOutputDir>
-    <UnityProjectDir>$(UnityEnvDir)UnityEntry\</UnityProjectDir>
     <UnityCodeLibraryDir>$(UnityProjectDir)Assets\CodeLibrary\</UnityCodeLibraryDir>
     <DebugEnvDir>$(SolutionRootDir)MonoDebugEnv\</DebugEnvDir>
   </PropertyGroup>
@@ -51,7 +70,8 @@
   <!-- FxCop Properties in fxcop.targets that need to be overridden -->
   <PropertyGroup>
     <FxCopContribRoot>$(ProgramFiles)\Microsoft FxCop 10.0\</FxCopContribRoot>
-    <FxCopOutputRoot>$(CommonOutputDir)..\BuildTemp\FxCopTemp\</FxCopOutputRoot>
+    <!-- FxCopOutputRoot changed to one common location for all builds -->
+    <FxCopOutputRoot>$(CustomToolsDir)FxCopOutput\</FxCopOutputRoot>
     <FxCopCustomDictionaryPath>$(CustomToolsDir)FxCopCustomDictionary.xml</FxCopCustomDictionaryPath>
   </PropertyGroup>
 

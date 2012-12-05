@@ -10,7 +10,7 @@
         <!-- All the .csproj files in my Game Code Development Environment -->
         <AllProjectFiles Include="$(SolutionDir)**\*.csproj" />
         <!-- Those .csproj files I want to exclude from the build -->
-        <ExcludedProjectFiles Include="$(DebugEnvDir)**\*.csproj" />
+        <ExcludedProjectFiles Include="$(DebugEnvDir)**\*.csproj" />  <!-- Not necessary -->
         <ExcludedProjectFiles Include="$(SolutionRootDir)BuildOutput\**\*.csproj" /> <!-- Not necessary -->
         <!-- All the .csproj files that are included in this build -->
         <IncludedProjectFiles Include="@(AllProjectFiles)" Exclude="@(ExcludedProjectFiles)" />

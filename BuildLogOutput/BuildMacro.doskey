@@ -1,0 +1,1 @@
+build=msbuild.exe /clp:verbosity=minimal /clp:summary /flp:verbosity=detailed;logfile=buildlogoutput\build.detailed.log /flp1:errorsonly;logfile=buildlogoutput\build.errors.log /flp2:warningsonly;logfile=buildlogoutput\build.warnings.log /m /p:BuildInParallel=true $*

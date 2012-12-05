@@ -41,13 +41,10 @@
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="UnityEditor">
-      <HintPath>C:\Users\Jim\GameDev\CodeEnv\Contrib\Unity\UnityEditor.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>$(ProgramFiles)\Unity\Editor\Data\Managed\UnityEditor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>C:\Users\Jim\GameDev\CodeEnv\Contrib\Unity\UnityEngine.dll</HintPath>
-      <Private>True</Private>
-      <!-- I have been unable to make relative paths work for a HintPath -->
+      <HintPath>$(ProgramFiles)\Unity\Editor\Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

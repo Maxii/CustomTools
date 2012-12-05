@@ -45,7 +45,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.0", "4.0", "{EC98A928-9A0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Game Build Tools", "Game Build Tools", "{713F29FA-17A9-427D-873D-D113E0DF912A}"
 	ProjectSection(SolutionItems) = preProject
-		Loggers\BuildMacro.doskey = Loggers\BuildMacro.doskey
+		BuildLogOutput\BuildMacro.doskey = BuildLogOutput\BuildMacro.doskey
 		BuildMgr.proj = BuildMgr.proj
 		buildmgr.settings.targets = buildmgr.settings.targets
 		buildmgr.targets = buildmgr.targets
@@ -143,7 +143,7 @@ Global
 		{EC98A928-9A0F-496B-8EE2-587E39F9BBED} = {B50FA6CA-A2CC-4B23-84EF-FC6634957B45}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_DetectChanges = True
 		BuildVersion_UseGlobalSettings = True
+		BuildVersion_DetectChanges = True
 	EndGlobalSection
 EndGlobal
