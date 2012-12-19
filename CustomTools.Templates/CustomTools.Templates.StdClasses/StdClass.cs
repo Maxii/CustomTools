@@ -15,15 +15,15 @@ namespace $rootnamespace$ {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using CodeEnv.Master.Common;
+    using CodeEnv.Master.Resources;
 
     public class $safeitemname$ {
 
-        public $safeitemname$() {
-
-        }
+        public $safeitemname$() { }
 
         public override string ToString() {
-            return new ObjectAnalyzer.ToString(this);
+            return new ObjectAnalyzer().ToString(this);
         }
 
     }

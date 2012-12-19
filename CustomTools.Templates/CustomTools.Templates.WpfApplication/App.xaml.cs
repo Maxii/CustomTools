@@ -19,6 +19,9 @@ namespace $safeprojectname$ {
     using System.Linq;
     using System.Windows;
 
+    using CodeEnv.Master.Common;
+    using CodeEnv.Master.Resources;
+
     /// <summary>
     /// The main entry point extending the Application class, implementing code behind logic for App.xaml
     /// </summary>
@@ -128,7 +131,7 @@ namespace $safeprojectname$ {
         }
 
         public override string ToString() {
-            return new ObjectAnalyzer.ToString(this);
+            return new ObjectAnalyzer().ToString(this);
         }
     }
 }

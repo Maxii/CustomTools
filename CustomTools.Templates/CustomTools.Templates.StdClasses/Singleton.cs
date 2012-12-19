@@ -15,6 +15,8 @@ namespace $rootnamespace$ {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using CodeEnv.Master.Common;
+    using CodeEnv.Master.Resources;
 
     /// <summary>
     /// SingletonPattern. COMMENT
@@ -54,7 +56,7 @@ namespace $rootnamespace$ {
         }
 
         public override string ToString() {
-            return new ObjectAnalyzer.ToString(this);
+            return new ObjectAnalyzer().ToString(this);
         }
 
     }

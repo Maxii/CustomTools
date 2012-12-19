@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 // for example, through the file properties window.
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
-[assembly: AssemblyDescription("Flavor=Debug")] // a.k.a. "Comments"
+[assembly: AssemblyDescription("Flavor=Debug")] // "Comments"
 #else
 [assembly: AssemblyConfiguration("Release")]
 [assembly: AssemblyDescription("Flavor=Retail")] // a.k.a. "Comments"
@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
 [assembly: CLSCompliant(false)]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
-// to COM components.  If you need to access a type in this assembly from 
+// to COM components.  If you need to access desiredRotation type in this assembly from 
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
@@ -39,7 +39,7 @@ using System.Runtime.InteropServices;
 //      Revision
 //
 // Note that the assembly version does not get incremented for every build
-// to avoid problems with assembly binding (or requiring a policy or
+// to avoid problems with assembly binding (or requiring desiredRotation policy or
 // <bindingRedirect> in the config file).
 //
 // The AssemblyFileVersionAttribute is incremented with every build in order
@@ -53,4 +53,4 @@ using System.Runtime.InteropServices;
 // Set AssemblyInformationalVersionAttribute to be the same as
 // AssemblyVersionAttribute so that the "Product version" in the file
 // properties window matches the version displayed in the GAC shell extension.
-[assembly: AssemblyInformationalVersion("1.0.0.0")] // a.k.a. "Product version"
+[assembly: AssemblyInformationalVersion("1.0.0.0")] // "Product version"

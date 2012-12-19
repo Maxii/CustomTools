@@ -1,16 +1,16 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-// General Information about an assembly is controlled through the following 
+/// General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ClassMonoBehaviour")]
+[assembly: AssemblyTitle("NotApplicable")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Strategic Forge")]
-[assembly: AssemblyProduct("ClassMonoBehaviour")]
-[assembly: AssemblyCopyright("Copyright © Strategic Forge 2012")]
+[assembly: AssemblyProduct("")]
+[assembly: AssemblyCopyright("Copyright � Strategic Forge 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("79c9fa28-7833-46e5-ac3a-c08242aaba24")]
+[assembly: Guid("8fbef9fd-5d98-47bb-8d43-d35b7fad347d")]
 
 // Version information for an assembly consists of the following four values:
 //

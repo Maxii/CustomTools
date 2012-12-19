@@ -26,6 +26,10 @@ namespace $safeprojectname$ {
     using System.Windows.Navigation;
     using System.Windows.Shapes;
 
+    using CodeEnv.Master.Common;
+    using CodeEnv.Master.Resources;
+
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -41,7 +45,7 @@ namespace $safeprojectname$ {
         }
 
         public override string ToString() {
-            return new ObjectAnalyzer.ToString(this);
+            return new ObjectAnalyzer().ToString(this);
         }
     }
 }

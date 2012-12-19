@@ -217,7 +217,7 @@
       <!-- pdb2mdb.exe does not work if copied to a \contrib folder -->
       <!-- $(ProgramFiles) required to accommodate C:\Program Files(x86)\ on 64 bit machines -->
       <UnityInstallDir>$([System.IO.Path]::GetDirectoryName($(registry:HKEY_CURRENT_USER\Software\Unity Technologies\Unity Editor 3.x\Location)))\</UnityInstallDir>
-      <MdbGeneratorPath>$(UnityInstallDir)Data\Mono\lib\mono\2.0\pdb2mdb.exe</MdbGeneratorPath>
+      <MdbGeneratorPath>$(UnityInstallDir)Data\MonoBleedingEdge\lib\mono\4.0\pdb2mdb.exe</MdbGeneratorPath>
       <!--<MdbGeneratorPath>$(ProgramFiles)\Unity\Editor\Data\Mono\lib\mono\2.0\pdb2mdb.exe</MdbGeneratorPath>-->
     </PropertyGroup>
 

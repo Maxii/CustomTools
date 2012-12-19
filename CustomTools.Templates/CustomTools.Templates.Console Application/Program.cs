@@ -23,7 +23,7 @@ namespace $safeprojectname$ {
         }
 
         public override string ToString() {
-            return new ObjectAnalyzer.ToString(this);
+            return new ObjectAnalyzer().ToString(this);
         }
 
     }
