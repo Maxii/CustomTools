@@ -18,9 +18,10 @@ namespace $safeprojectname$ {
     using System.Data;
     using System.Linq;
     using System.Windows;
+    using System.Windows.Threading;
 
     using CodeEnv.Master.Common;
-    using CodeEnv.Master.Resources;
+    using CodeEnv.Master.Common.Resources;
 
     /// <summary>
     /// The main entry point extending the Application class, implementing code behind logic for App.xaml

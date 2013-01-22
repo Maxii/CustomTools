@@ -4,10 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{60D1CABD-3132-49A7-ACD5-9095ED787B2F}</ProjectGuid>
+    <ProjectGuid>{9C73E4E7-7A2A-4329-89A0-1BE47C203698}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <AssemblyName>$safeprojectname$</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -47,13 +48,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\CodeEnv\CodeEnv.Master\CodeEnv.Master.Common.Resources\CodeEnv.Master.Common.Resources.csproj">
+      <Project>{30988a11-a4f0-4fdc-82d5-41b87ea410be}</Project>
+      <Name>CodeEnv.Master.Common.Resources</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\CodeEnv\CodeEnv.Master\CodeEnv.Master.Common\CodeEnv.Master.Common.csproj">
       <Project>{1557c03e-56ee-4c70-9bd8-ab637d3191cf}</Project>
       <Name>CodeEnv.Master.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\CodeEnv\CodeEnv.Master\CodeEnv.Master.Resources\CodeEnv.Master.Resources.csproj">
-      <Project>{30988a11-a4f0-4fdc-82d5-41b87ea410be}</Project>
-      <Name>CodeEnv.Master.Resources</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -16,7 +16,7 @@ namespace $rootnamespace$ {
     using System.Collections.Generic;
     using System.Linq;
     using CodeEnv.Master.Common;
-    using CodeEnv.Master.Resources;
+    using CodeEnv.Master.Common.Resources;
 
     /// <summary>
     /// SingletonPattern. COMMENT

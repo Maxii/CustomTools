@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © Strategic Forge 2012")]
 [assembly: AssemblyTrademark("")]
 
-// Make it easy to distinguish Debug and Release (i.e. Retail) builds;
+// Make it easy to distinguish Debug and Release (i.gameEvent. Retail) builds;
 // for example, through the file properties window.
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]

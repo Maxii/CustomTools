@@ -49,13 +49,14 @@
   <!-- Sets the AssemblyFileVersion Major and Minor values to those manually adjusted in 
     AssemblyVersionInfo.cs and automatically increments
     the Build and Revision values. The AssemblyFileVersion managed by this project is 
-    a shared value used by all Projects in the Game. TODO - The Build and Revision values
-    are not incremented if this project is built from within Visual Studio, only when
-    it is built by MSBuild called outside of VS. -->
-  <!-- Automatically added by the Build Version Increment Addin -->
+    a shared value used by all Projects in the Game. By setting the solution to NOT build the project
+    the Build and Revision values can be kept from incrementing when built from within Visual Studio.
+    Now all I need to do is figure out why it won't increment when built from outside VS. -->
+  
+  <!-- The following was automatically added by the Build Version Increment Addin -->
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_IncrementBeforeBuild="True" BuildVersion_UseGlobalSettings="True" BuildVersion_BuildVersioningStyle="None.None.DeltaBaseDate.Increment" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildAction="ReBuild" BuildVersion_StartDate="2012/7/1" BuildVersion_ReplaceNonNumerics="False" BuildVersion_AssemblyInfoFilename="Properties\AssemblyVersionInfo.cs" BuildVersion_DetectChanges="False" />
+      <UserProperties BuildVersion_DetectChanges="False" BuildVersion_AssemblyInfoFilename="Properties\AssemblyVersionInfo.cs" BuildVersion_ReplaceNonNumerics="False" BuildVersion_StartDate="2012/7/1" BuildVersion_BuildAction="ReBuild" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.DeltaBaseDate.Increment" BuildVersion_UseGlobalSettings="False" BuildVersion_IncrementBeforeBuild="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

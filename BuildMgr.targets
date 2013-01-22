@@ -18,9 +18,9 @@
 
   <Target Name="Clean" DependsOnTargets="$(CleanDependsOn)" />
   <Target Name="_CoreClean" >
-    <!-- Clean Outputs in the CommonOutputDir -->
+    <!-- Clean Outputs from all configurations in the CommonOutputDir -->
     <ItemGroup>
-      <AllFilesInCommonOutputDir Include="$(CommonOutputDir)\%(AllConfigurations.Identity)\**\*" />
+      <AllFilesInCommonOutputDir Include="$(CommonOutputDir)\%(AllConfigurations.Identity)\**\*" /> <!-- FIXME extra \? -->
     </ItemGroup>
 
     <Attrib Files="@(AllFilesInCommonOutputDir)" ReadOnly="false" />
@@ -30,7 +30,7 @@
 
   <Target Name="_ProjectClean">
     <!-- Clean default project-specific outputs too as other Solution Builds can populate them -->
-    <MSBuild Projects="@(IncludedProjectFiles)"
+    <MSBuild Projects="@(ProjectFilesToBuild)"
              BuildInParallel="true"
              Properties="Configuration=%(AllConfigurations.Identity)"
              Targets="Clean">
@@ -38,14 +38,19 @@
   </Target>
 
   <Target Name="_UnityClean">
-    <!-- UNDONE Need to confirm Unity is not running as condition -->
     <!-- UNDONE Need to account for more than 1 Unity Project -->
     <ItemGroup>
-      <AllFilesInUnityCodeLibrary Include="$(UnityCodeLibraryDir)\**\*" />
+      <IncludedFilesToClean Include="$(UnityCodeLibraryDir)**\*" />
+      <IncludedFilesToClean Include="$(UnityScriptsDir)**\*" /> <!-- IMPROVE limit deletions to only those that are coming from the ScriptsFactory? -->
+      <IncludedFilesToClean Include="$(UnityEditorDir)**\*.cs" /> <!-- UNCLEAR if there is anything else in the Editor folder besides scripts -->
+      <IncludedFilesToClean Include="$(UnityCodeLibrarySourceDir)**\*" />
+      <ExcludedFilesToClean></ExcludedFilesToClean>
+
+      <UnityFilesToClean Include="@(IncludedFilesToClean)" Exclude="@(ExcludedFilesToClean)" />
     </ItemGroup>
 
-    <Attrib Files="@(AllFilesInUnityCodeLibrary)" ReadOnly="false" />
-    <Delete Files="@(AllFilesInUnityCodeLibrary)" />
+    <Attrib Files="@(UnityFilesToClean)" ReadOnly="false" />
+    <Delete Files="@(UnityFilesToClean)" />
     <!-- IMPROVE RemoveDir Directories="$(UnityCodeLibraryDir)" -->
   </Target>
 
@@ -63,11 +68,11 @@
   <Target Name="Build" DependsOnTargets="$(BuildDependsOn)" />
   <Target Name="BeforeBuild" />
   <!-- _CoreBuild using Target batching to get incremental build behavior -->
-  <Target Name="_CoreBuild" Inputs="@(IncludedProjectFiles)" Outputs="%(AllConfigurations.Identity)" >
+  <Target Name="_CoreBuild" Inputs="@(ProjectFilesToBuild)" Outputs="%(ConfigurationList.Identity)" >
     <MSBuild
-    Projects="@(IncludedProjectFiles)"
+    Projects="@(ProjectFilesToBuild)"
     Targets="Build"
-    Properties="OutputPath=$(CommonOutputDir)%(AllConfigurations.Identity); Configuration=%(AllConfigurations.Identity)" >
+    Properties="OutputPath=$(CommonOutputDir)%(ConfigurationList.Identity); Configuration=%(ConfigurationList.Identity)" >
       <Output ItemName="BuildOutputs" TaskParameter="TargetOutputs" />
     </MSBuild>
     <Message Text="Build Outputs: $(NewLine)@(BuildOutputs, '$(NewLine)')" Importance="high"/>
@@ -92,12 +97,16 @@
     that project before I Rebuild with this BuildMgr. -->
   <Target Name="_IncrementAssemblyVersion" >
     <ItemGroup>
-      <AssyVersionInfoProject Include="$(CustomToolsDir)CustomTools.AssemblyVersionInfo\CustomTools.AssemblyVersionInfo.csproj" />
+      <AssyVersionInfoProject Include="$(CustomToolsSolutionDir)CustomTools.AssemblyVersionInfo\CustomTools.AssemblyVersionInfo.csproj" />
     </ItemGroup>
 
     <MSBuild Projects="@(AssyVersionInfoProject)"
-             Properties="Configuration=Release"
-             Targets="Rebuild" />
+             Properties="OutputPath=bin\%(ConfigurationList.Identity); Configuration=%(ConfigurationList.Identity)"
+             Targets="Rebuild" >
+      <Output ItemName="AssemblyVersionBuildOutput" TaskParameter="TargetOutputs"/>   
+    </MSBuild>
+    <!--<Message Text="Configuration= @(ConfigurationList)" Importance="high" />-->
+    <!--<Message Text="Assembly Version Output: $(NewLine)@(AssemblyVersionBuildOutput, '$(NewLine)')" Importance="high" />-->
     <Warning Text="Auto Version Increment does not work. %0aDid you remember to increment the Assembly Version by rebuilding the AssemblyVersionInfo Project manually?" />
   </Target>
 
@@ -138,20 +147,16 @@
   <!-- FxCop - insert identity of FxCop Assemblies prior to cleaning or running FxCop -->
   <Target Name="_IdentifyFxCopAssemblies">
     <ItemGroup>
-      <AllReleaseAssemblies Include="$(CommonOutputDir)Release\**\*.dll; $(CommonOutputDir)Release\**\*.exe" />
+      <AllReleaseAssemblies Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\*.dll; $(CommonOutputDir)%(ConfigurationList.Identity)\**\*.exe" />
       
-      <ExcludedReleaseAssemblies Include="$(CommonOutputDir)Release\**\*.Tests.*" />
+      <ExcludedReleaseAssemblies Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\*.Tests.*" />
       <!-- FxCop requires the presence of any .dll references not in the GAC (ie. Unity Assys). nunit.framework is dragged along with
       the unity references probably because they reference it. None of these need to be analyzed. -->
-      <ExcludedReleaseAssemblies Include="$(CommonOutputDir)Release\**\UnityEngine.dll; $(CommonOutputDir)Release\**\UnityEditor.dll" />
-      <ExcludedReleaseAssemblies Include="$(CommonOutputDir)Release\**\nunit.framework.dll" />
-
-      <ExcludedReleaseAssemblies Include="$(CommonOutputDir)Release\en-US\**\*.*" />
-      <!-- FIXME Temporary workaround for Resource Files-->
-      <ExcludedReleaseAssemblies Include="$(CommonOutputDir)Release\en-CA\**\*.*" />
-      <!-- FIXME Temporary workaround for Resource Files-->
-      <ExcludedReleaseAssemblies Include="$(CommonOutputDir)Release\fr-FR\**\*.*" />
-      <!-- FIXME Temporary workaround for Resource Files-->
+      <ExcludedReleaseAssemblies Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEngine.dll" />
+                                 <ExcludedReleaseAssemblies Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEditor.dll" />
+      <ExcludedReleaseAssemblies Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\nunit.framework.dll" />
+      <!-- Resource Satellite files -->
+      <ExcludedReleaseAssemblies Include="$(CommonOutputDir)%(ConfigurationList.Identity)\*-*\**\*.*" />
 
 
       <FxCopAssemblies Include="@(AllReleaseAssemblies)" Exclude="@(ExcludedReleaseAssemblies)" />
@@ -167,11 +172,12 @@
   <PropertyGroup>
     <UnityTestDependsOn>
       $(UnityTestDependsOn);
-      FxCopAndUnitTest;
+      Rebuild;  <!-- Replaced FxCopAndUnitTest with Rebuild to shorten build cycle -->
       _CopyOutputToUnity;
+      _CopySourceToUnity;
       _GenerateMdbFiles;
       <!-- Unity .pdb files are automatically cleaned after .mdb files are generated -->
-      _ConfirmDebugEnvReadiness;
+      CopyScriptsToUnity;
       _LaunchUnity;
       _PromptMonoDebuggerLaunch;
     </UnityTestDependsOn>
@@ -179,27 +185,21 @@
 
   <Target Name="UnityTest" DependsOnTargets="$(UnityTestDependsOn)" />
 
-  <!-- Copy all Output files (except Test-related) from the CommonOutputDir 'Release' to Unity's CodeLibrary -->
+  <!-- Copy all Output files (except Test-related) from the CommonOutputDir to Unity's CodeLibrary -->
   <Target Name="_CopyOutputToUnity" >
     <!-- No need for incremental copy as Unity is cleaned before this task is called -->
     <ItemGroup>
-      <AllReleaseOutputFiles Include="$(CommonOutputDir)Release\**\*.*" />
+      <AllReleaseOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\*.*" />
       <!-- None of the output file types below have any use inside of the Unity Engine -->
-      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)Release\**\*.Tests.*; $(CommonOutputDir)Release\**\*.config" />
+      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\*.Tests.*" />
+      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\*.config" />
       <!-- The Unity Engine/Editor and nunit Assemblies are not needed in the Unity CodeLibrary -->
-      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)Release\**\UnityEngine.dll; $(CommonOutputDir)Release\**\UnityEditor.dll" />
-      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)Release\**\nunit.framework.dll" />
-
-
-      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)Release\en-US\**\*.*" />
-      <!-- FIXME Temporary workaround for Resource Files-->
-      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)Release\en-CA\**\*.*" />
-      <!-- FIXME Temporary workaround for Resource Files-->
-      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)Release\fr-FR\**\*.*" />
-      <!-- FIXME Temporary workaround for Resource Files-->
+      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEngine.dll" />
+      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEditor.dll" />
+      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\nunit.framework.dll" />    
+      <!--<ExcludedReleaseOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\*-*\**\*.*" /> Would exclude Resource Satellite files -->
       
-
-      <OutputFilesToCopy Include="@(AllReleaseOutputFIles)" Exclude="@(ExcludedReleaseOutputFiles)" />
+      <OutputFilesToCopy Include="@(AllReleaseOutputFiles)" Exclude="@(ExcludedReleaseOutputFiles)" />
       <!-- UNCLEAR what about .config files and copy local references? -->
     </ItemGroup>
 
@@ -208,6 +208,36 @@
     <Message Text="Output files copied to Unity Code Library: $(NewLine)@(OutputFilesToCopy, '$(NewLine)')" Importance="high"/>
     <!-- The Well-known Item Metadata ".RecursiveDir" also copies the satellite directory structure along with the files  -->
     <Copy SourceFiles="@(OutputFilesToCopy)" DestinationFolder="$(UnityCodeLibraryDir)%(OutputFilesToCopy.RecursiveDir)" OverwriteReadOnlyFiles="true" />
+  </Target>
+
+  <Target Name="_CopySourceToUnity" AfterTargets="_CopyOutputToUnity">
+    <ItemGroup>
+      <!-- Include every .cs file in the Master Solution and the targeted Solution -->
+      <IncludedSource Include="$(SolutionDir)**\*.cs" />
+      <IncludedSource Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)**\*.cs" />
+      <!-- Exclude anything in ScriptsFactory projects -->
+      <ExcludedSource Include="$(SolutionDir)$(SolutionName).*ScriptsFactory\**\*" />
+      <ExcludedSource Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)$(MasterSolutionName).*ScriptsFactory\**\*" />
+      <!-- Exclude anything in Properties folders -->
+      <ExcludedSource Include="$(SolutionDir)**\Properties\*" />
+      <ExcludedSource Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)**\Properties\*" />
+      <!-- Exclude anything in a Test project -->
+      <ExcludedSource Include="$(SolutionDir)**\*.Tests\**\*" />
+      <ExcludedSource Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)**\*.Tests\**\*" />
+      <!-- Exclude anything (autogenerated *.g.cs files) in \obj -->
+      <ExcludedSource Include="$(SolutionDir)**\obj\**\*" />
+      <ExcludedSource Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)**\obj\**\*" />
+      <!-- Exclude anything from the Projects that are explicitly excluded from the build -->
+      <ExcludedSource Include="@(ExcludedProjectList -> '%(RootDir)%(Directory)**\*.cs')" />
+
+      <SourceToCopy Include="@(IncludedSource)" Exclude="@(ExcludedSource)" />
+    </ItemGroup>
+
+    <!-- If the Unity CodeLibrarySource directory doesn't exist then create it -->
+    <MakeDir Directories="$(UnityCodeLibrarySourceDir)" Condition="!Exists('$(UnityCodeLibrarySourceDir)')"/>
+    <Message Text="CodeLibrary source (.cs) files copied to Unity CodeLibrarySource Folder: $(NewLine)@(SourceToCopy, '$(NewLine)')" Importance="high"/>
+    <!-- The Well-known Item Metadata ".RecursiveDir" also copies source in deeper nested folders inside their projects.  -->
+    <Copy SourceFiles="@(SourceToCopy)" DestinationFolder="$(UnityCodeLibrarySourceDir)%(SourceToCopy.RecursiveDir)" OverwriteReadOnlyFiles="true" />
   </Target>
 
   <!-- Generate the .mdb debug file in Unity IFF the one that may already be there requires updating -->
@@ -222,18 +252,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <!--<AllAssembliesInUnity Include="$(UnityCodeLibraryDir)**\*.dll; $(UnityCodeLibraryDir)**\*.exe" />-->
-      <!-- AllAssembliesInUnity would erroneously include satellite assemblies with the definition below if they were copied there. -->
       <AllAssembliesInUnity Include="$(UnityCodeLibraryDir)**\*.dll; $(UnityCodeLibraryDir)**\*.exe" />
       <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\UnityEngine.dll; $(UnityCodeLibraryDir)**\UnityEditor.dll" />
       <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\nunit.framework.dll" />
+      <!-- Pdb2Mdb throws up on resource satellite assemblies so they are excluded below -->
+      <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)*-*\**\*.*" />  
+
       <MdbAssemblies Include="@(AllAssembliesInUnity)" Exclude="@(ExcludedAssembliesInUnity)" />
     </ItemGroup>
 
     <Message Text="Assemblies used to produce .mdb files: $(NewLine)@(MdbAssemblies, '$(NewLine)')" Importance="high"/>
 
     <!-- pdb2mdb.exe will only work if called from the directory containing the .dll and .pdb files -->
-    <Exec WorkingDirectory="$(UnityCodeLibraryDir)" Command='"$(MdbGeneratorPath)" %(MdbAssemblies.Identity)' />
+    <Exec Condition=" @(MdbAssemblies) != ''" WorkingDirectory="$(UnityCodeLibraryDir)" Command='"$(MdbGeneratorPath)" %(MdbAssemblies.Identity)' />
   </Target>
 
 
@@ -251,23 +282,58 @@
     <Message Text="Pdb Files Deleted: $(NewLine)@(FilesDeleted, '$(NewLine)')" Importance="high"/>
   </Target>
 
+  <!-- Copy Scripts .cs files to Unity's Scripts Folder -->
+  <PropertyGroup>
+    <CopyScriptsToUnityDependsOn>
+      $(CopyScriptsToUnityDependsOn);    
+      _CopyGameScriptsToUnity;
+      _CopyEditorScriptsToUnity;
+    </CopyScriptsToUnityDependsOn>
+  </PropertyGroup>
+  <Target Name="CopyScriptsToUnity" DependsOnTargets="$(CopyScriptsToUnityDependsOn)" AfterTargets="_CopyOutputToUnity" />
+  <Target Name="_CopyGameScriptsToUnity" >
+    <ItemGroup>
+      <IncludedGameScripts Include="$(SolutionDir)$(SolutionName).GameScriptsFactory\**\*.cs" />
+      <IncludedGameScripts Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)$(MasterSolutionName).GameScriptsFactory\**\*.cs" />
+      <!--Exclude AssemblyInfo.cs -->
+      <ExcludedGameScripts Include="$(SolutionDir)$(SolutionName).GameScriptsFactory\Properties\*" />  
+      <ExcludedGameScripts Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)$(MasterSolutionName).GameScriptsFactory\Properties\*" />
+      
+      <GameScriptsToCopy Include="@(IncludedGameScripts)" Exclude="@(ExcludedGameScripts)" />
+    </ItemGroup>
 
-  <!-- TODO Confirm that the Mono Debug Environment has all the projects it needs -->
-  <Target Name="_ConfirmDebugEnvReadiness" >
-    <Message Text="WARNING! Confirm MonoDebugger includes all non-Test projects." Importance="high" />
-    <Message Text="Procedure for adding an Existing Project to the Debug Environment." Importance="high"/>
-    <Message Text="     1. Use OpenWith to open UnityDebugEnv.sln with MonoD, NOT with VS." Importance="high"/>
-    <Message Text="     2. Add appropriate, existing Project(s) that are not Tests." Importance="high"/>
-    <Message Text="     3. Uncheck the Build checkbox found in Solution Properties for each Project." Importance="high"/>
+    <!-- If the Unity Scripts directory doesn't exist then create it -->
+    <MakeDir Directories="$(UnityScriptsDir)" Condition="!Exists('$(UnityScriptsDir)')"/>
+    <Message Text="Script (.cs) files copied to Unity Scripts Folder: $(NewLine)@(GameScriptsToCopy, '$(NewLine)')" Importance="high"/>
+    <!-- The Well-known Item Metadata ".RecursiveDir" also copies scripts in deeper nested folders in the ScriptsFactory project.  -->
+    <Copy SourceFiles="@(GameScriptsToCopy)" DestinationFolder="$(UnityScriptsDir)%(GameScriptsToCopy.RecursiveDir)" OverwriteReadOnlyFiles="true" />
+  </Target>
+  <Target Name="_CopyEditorScriptsToUnity" >
+    <ItemGroup>
+      <IncludedEditorScripts Include="$(SolutionDir)$(SolutionName).EditorScriptsFactory\**\*.cs" />
+      <IncludedEditorScripts Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)$(MasterSolutionName).EditorScriptsFactory\**\*.cs" />
+      <!--Exclude AssemblyInfo.cs -->
+      <ExcludedEditorScripts Include="$(SolutionDir)$(SolutionName).EditorScriptsFactory\Properties\*" />
+      <ExcludedEditorScripts Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)$(MasterSolutionName).EditorScriptsFactory\Properties\*" />
+
+      <EditorScriptsToCopy Include="@(IncludedEditorScripts)" Exclude="@(ExcludedEditorScripts)" />
+    </ItemGroup>
+
+    <!-- If the Unity Editor directory doesn't exist then create it -->
+    <MakeDir Directories="$(UnityEditorDir)" Condition="!Exists('$(UnityEditorDir)')"/>
+    <Message Text="Script (.cs) files copied to Unity Editor Folder: $(NewLine)@(EditorScriptsToCopy, '$(NewLine)')" Importance="high"/>
+    <!-- The Well-known Item Metadata ".RecursiveDir" also copies scripts in deeper nested folders in the EditorScriptsFactory project.  -->
+    <Copy SourceFiles="@(EditorScriptsToCopy)" DestinationFolder="$(UnityEditorDir)%(EditorScriptsToCopy.RecursiveDir)" OverwriteReadOnlyFiles="true" />
   </Target>
 
 
   <!-- Launch Unity -->
   <Target Name="_LaunchUnity" >
     <PropertyGroup>
-      <UnityProjectScenePath>$(UnityProjectDir)Assets\Scenes\MainLoadScene.unity</UnityProjectScenePath>
+      <UnityProjectScenePath>$(UnityProjectDir)Assets\Scenes\DefaultScene.unity</UnityProjectScenePath>
     </PropertyGroup>
 
+    <!--  TODO Use EditorApplication.isPlaying = true; -->
     <!-- <Exec Command="$(UnityProjectScenePath)" /> Confirmed working. -->
     <Message Text="Dummy _LaunchUnity Target called." Importance="high"/>
   </Target>

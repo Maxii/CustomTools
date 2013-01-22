@@ -77,10 +77,22 @@
 
 doskey /macrofile=buildlogoutput\BuildMacro.doskey
 
-@echo Syntax of Build Command: build buildmgr.proj /t:[targetName] /p:[propertyName]=[value]
-@echo Target Options:   UnityTest(default), FxCopAndUnitTest, Test, Clean, Build, Rebuild
-@echo Property Options: SolutionName=CodeEnv.Master(default), =Trials.ToUnity; =POC.ToUnity
-
+@echo Syntax of Build Command: build buildmgr.proj /t:[targetName] /p:[propertyName]=[value];[propertyName]=[value]
+@echo Target Options:   UnityTest(default), 
+@echo                   FxCopAndUnitTest, 
+@echo                   CopyScriptsToUnity, 
+@echo                   Test, 
+@echo                   Clean, 
+@echo                   Build, 
+@echo                   Rebuild
+@echo
+@echo Property Options: SolutionName=CodeEnv.Master(default), 
+@echo                               =Trials.ToUnity; 
+@echo                               =POC.ToUnity
+@echo
+@echo                        Config=Debug(default),
+@echo                              =Release,
+@echo                              =Debug+Release
 @goto end
 
 @REM -----------------------------------------------------------------------

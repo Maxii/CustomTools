@@ -1,29 +1,48 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="UnityTest" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <!-- Multiple warnings from poorly designed MS Schema -->
-    <!-- Desktop (but not Laptop) system has lost Intellisense for MSBuild due to an MSBuild bug -->
-    <!-- NOTE: MSBuildStartupDirectory has no trailing \ -->
+  <!-- Multiple warnings from poorly designed MS Schema -->
+  <!-- Desktop (but not Laptop) system has lost Intellisense for MSBuild due to an MSBuild bug -->
+  <!-- NOTE: MSBuildStartupDirectory has no trailing \ -->
 
-    <Import Project="$(CustomToolsDir)buildmgr.settings.targets" />
+  <Import Project="$(CustomToolsDir)buildmgr.settings.targets" />
 
-    <ItemGroup>
-        <!-- All the .csproj files in my Game Code Development Environment -->
-        <AllProjectFiles Include="$(SolutionDir)**\*.csproj" />
-        <!-- Those .csproj files I want to exclude from the build -->
-        <ExcludedProjectFiles Include="$(DebugEnvDir)**\*.csproj" />  <!-- Not necessary -->
-        <ExcludedProjectFiles Include="$(SolutionRootDir)BuildOutput\**\*.csproj" /> <!-- Not necessary -->
-        <!-- All the .csproj files that are included in this build -->
-        <IncludedProjectFiles Include="@(AllProjectFiles)" Exclude="@(ExcludedProjectFiles)" />
-    </ItemGroup>
+  <!-- The excluded projects that will neither be built, nor have their source code copied -->
+  <ItemGroup>
+    <ExcludedProjectList Include="$(PocToUnitySolutionDir)$(PocToUnitySolutionName).SunScripts\*.csproj" />
+    <ExcludedProjectList Include="$(PocToUnitySolutionDir)$(PocToUnitySolutionName).NamespaceTalker\*.csproj" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <AllConfigurations Include="Debug" />
-        <AllConfigurations Include="Release" />
-    </ItemGroup>
+  <ItemGroup>
+    <!-- The initial .csproj files to include in the build -->
+    <IncludedProjectFiles Include="$(SolutionDir)**\*.csproj" />
+    <IncludedProjectFiles Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)**\*.csproj" />
+
+    <!-- Those .csproj files I want to exclude from the build -->
+    <ExcludedProjectFiles Include="$(SolutionDir)*ScriptsFactory\*.csproj" />
+    <ExcludedProjectFiles Include="$(MasterSolutionDir)*ScriptsFactory\*.csproj" />
+    <ExcludedProjectFiles Include="$(SolutionRootDir)BuildOutput\**\*.csproj" />
+    <!-- Not necessary. TODO exclude Master Solution BuildOutput too?-->
+    <ExcludedProjectFiles Include="@(ExcludedProjectList)" />
+    <!-- All the .csproj files that are included in this build -->
+    <ProjectFilesToBuild Include="@(IncludedProjectFiles)" Exclude="@(ExcludedProjectFiles)" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <AllConfigurations Include="Debug" />
+    <AllConfigurations Include="Release" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Parse all requested configurations from the command line (if any) into a list -->
+    <ConfigurationList Condition=" '@(ConfigurationList)' == '' and $(Config) != ''" Include="$(Config.Split('+'))" />
+    <ConfigurationList Condition=" '@(ConfigurationList)' == '' " Include="Debug" />
+    <!-- Default to Debug if not specified -->
+  </ItemGroup>
 
   <!-- This doesn't appear to be required as FxCopAssemblies is already declared in fxcop.targets? -->
   <!-- Assemblies to include in FxCop analysis -->
- <!--<ItemDefinitionGroup>
+  <!--<ItemDefinitionGroup>
     <FxCopAssemblies></FxCopAssemblies>
   </ItemDefinitionGroup>-->
 

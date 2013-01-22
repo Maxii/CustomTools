@@ -19,27 +19,28 @@ using System.Text;
 using UnityEngine;
 using UnityEditor;
 using CodeEnv.Master.Common;
-using CodeEnv.Master.Resources;
-using CodeEnv.Master.CommonUnity;
+using CodeEnv.Master.Common.Resources;
+using CodeEnv.Master.Common.Unity;
+
 
 /// <summary>
 /// COMMENT 
 /// </summary>
 public class $safeitemname$ : MonoBehaviour {
 
-    private void Awake() {
+    void Awake() {
 
     }
 
-    private void Start() {
+    void Start() {
     // Keep at a minimum, an empty Start method so that instances receive the OnDestroy event
     }
 
-    private void Update() {
+    void Update() {
 
     }
 
-    private void LateUpdate() {
+    void LateUpdate() {
 
     }
 

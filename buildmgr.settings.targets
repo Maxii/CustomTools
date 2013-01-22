@@ -16,16 +16,39 @@
     <CustomToolsDir Condition="$(CustomToolsDir) == ''">$(GameDevDir)CustomTools\</CustomToolsDir>
   </PropertyGroup>
 
-  <!-- Default Solution is CodeEnv\CodeEnv.Master. For Trials\Trials.ToUnity use /p:SolutionName=Trials.ToUnity 
-  For POC\POC.ToUnity use /p:SolutionName=POC.ToUnity -->
   <PropertyGroup>
-    <SolutionName>CodeEnv.Master</SolutionName>
+    <MasterSolutionRootDir>$(CodeEnvDir)</MasterSolutionRootDir>
+    <PocSolutionRootDir>$(PocDir)</PocSolutionRootDir>
+    <TrialsSolutionRootDir>$(TrialsDir)</TrialsSolutionRootDir>
+    <CustomToolsSolutionRootDir>$(CustomToolsDir)</CustomToolsSolutionRootDir>
   </PropertyGroup>
 
   <PropertyGroup>
-    <SolutionRootDir>$(CodeEnvDir)</SolutionRootDir>
-    <SolutionRootDir Condition ="$(SolutionName) == 'Trials.ToUnity'">$(TrialsDir)</SolutionRootDir>
-    <SolutionRootDir Condition ="$(SolutionName) == 'POC.ToUnity'">$(PocDir)</SolutionRootDir>
+    <MasterSolutionName>CodeEnv.Master</MasterSolutionName>
+    <PocToUnitySolutionName>POC.ToUnity</PocToUnitySolutionName>
+    <TrialsToUnitySolutionName>Trials.ToUnity</TrialsToUnitySolutionName>
+    <PocNetSolutionName>POC.Net</PocNetSolutionName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <MasterSolutionDir>$(MasterSolutionRootDir)$(MasterSolutionName)\</MasterSolutionDir>
+    <PocToUnitySolutionDir>$(PocSolutionRootDir)$(PocToUnitySolutionName)\</PocToUnitySolutionDir>
+    <TrialsToUnitySolutionDir>$(TrialsSolutionRootDir)$(TrialsToUnitySolutionName)\</TrialsToUnitySolutionDir>
+    <PocNetSolutionDir>$(PocSolutionRootDir)$(PocNetSolutionName)\</PocNetSolutionDir>
+    <CustomToolsSolutionDir>$(CustomToolsSolutionRootDir)</CustomToolsSolutionDir>
+  </PropertyGroup>
+
+  <!-- Default Solution Name, overriden by command line parameter switch. 
+  For Trials\Trials.ToUnity use /p:SolutionName=Trials.ToUnity, for POC\POC.ToUnity use /p:SolutionName=POC.ToUnity -->
+  <PropertyGroup>
+    <SolutionName>$(MasterSolutionName)</SolutionName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <SolutionRootDir>$(MasterSolutionRootDir)</SolutionRootDir>
+    <SolutionRootDir Condition ="$(SolutionName) == $(TrialsToUnitySolutionName)">$(TrialsSolutionRootDir)</SolutionRootDir>
+    <SolutionRootDir Condition ="$(SolutionName) == $(PocToUnitySolutionName)">$(PocSolutionRootDir)</SolutionRootDir>
+    <SolutionRootDir Condition ="$(SolutionName) == $(PocNetSolutionName)" >$(PocSolutionRootDir)</SolutionRootDir>
   </PropertyGroup>
   <PropertyGroup>
     <SolutionDir>$(SolutionRootDir)$(SolutionName)\</SolutionDir>
@@ -33,8 +56,8 @@
 
   <PropertyGroup>
     <UnityProjectName>UnityEntry</UnityProjectName>
-    <UnityProjectName Condition="$(SolutionName) == 'Trials.ToUnity'">UnityTrials</UnityProjectName>
-    <UnityProjectName Condition="$(SolutionName) == 'POC.ToUnity'">UnityPOC</UnityProjectName>
+    <UnityProjectName Condition="$(SolutionName) == $(TrialsToUnitySolutionName)">UnityTrials</UnityProjectName>
+    <UnityProjectName Condition="$(SolutionName) == $(PocToUnitySolutionName)">UnityPOC</UnityProjectName>
   </PropertyGroup>
   <PropertyGroup>
     <UnityProjectDir>$(UnityEnvDir)$(UnityProjectName)\</UnityProjectDir>
@@ -43,7 +66,9 @@
   <PropertyGroup>
     <CommonOutputDir Condition ="$(CommonOutputDir) == ''">$(SolutionRootDir)BuildOutput\Latest\bin\</CommonOutputDir>
     <UnityCodeLibraryDir>$(UnityProjectDir)Assets\CodeLibrary\</UnityCodeLibraryDir>
-    <DebugEnvDir>$(SolutionRootDir)MonoDebugEnv\</DebugEnvDir>
+    <UnityScriptsDir>$(UnityProjectDir)Assets\Scripts\</UnityScriptsDir>
+    <UnityEditorDir>$(UnityProjectDir)Assets\Editor\</UnityEditorDir>
+    <UnityCodeLibrarySourceDir>$(UnityProjectDir)CodeLibrarySource\</UnityCodeLibrarySourceDir>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -59,6 +84,12 @@
     <!-- MSBuildCommunityTasksPath is set to $(MSBuildExtensionsPath)MSBuildCommunityTasks\ in 
         MSBuild.Community.Tasks.Targets but I must set it here to import the .Targets file. -->
     <MSBuildCommunityTasksPath>$(MSBuildExtensionsPath)MSBuildCommunityTasks\</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Normally empty. For use from the CommandLine to specify multiple configurations. Configurations 
+    to build is actually constructed and held by @(ConfigurationList) -->
+    <Config></Config>
   </PropertyGroup>
 
   <!--____________________________FxCop definitions begin here______________________ -->
