@@ -27,7 +27,7 @@ namespace $safeprojectname$ {
     using System.Windows.Shapes;
 
     using CodeEnv.Master.Common;
-    using CodeEnv.Master.Common.Resources;
+    using CodeEnv.Master.Common.LocalResources;
 
 
     /// <summary>
@@ -44,6 +44,7 @@ namespace $safeprojectname$ {
         private void Window_Loaded(object sender, RoutedEventArgs e) {
             // a Windows.Loaded event has arrived
             // STUB
+            // In XAML, <Grid Loaded=Window_Loaded> specifying the handler for 'Grid' loaded event
         }
         ///<summary>
         ///Initializes event handlers for the WPF Components defined in the attached XAML.

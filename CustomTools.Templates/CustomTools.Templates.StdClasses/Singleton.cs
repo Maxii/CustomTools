@@ -16,7 +16,7 @@ namespace $rootnamespace$ {
     using System.Collections.Generic;
     using System.Linq;
     using CodeEnv.Master.Common;
-    using CodeEnv.Master.Common.Resources;
+    using CodeEnv.Master.Common.LocalResources;
 
     /// <summary>
     /// SingletonPattern. COMMENT
@@ -24,7 +24,7 @@ namespace $rootnamespace$ {
     public sealed class $safeitemname$ {
 
         #region SingletonPattern
-        private static readonly $safeitemname$ _instance;
+        private static readonly $safeitemname$ instance;
 
         /// <summary>
         /// Explicit static constructor that enables lazy instantiation by telling C# compiler
@@ -32,7 +32,7 @@ namespace $rootnamespace$ {
         /// </summary>
         static $safeitemname$() {
             // try, catch and resolve any possible exceptions here
-            _instance = new $safeitemname$();
+            instance = new $safeitemname$();
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace $rootnamespace$ {
         
         /// <summary>Returns the singleton instance of this class.</summary>
         public static $safeitemname$ Instance {
-            get {return _instance;}
+            get {return instance;}
         }
         #endregion
 

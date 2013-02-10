@@ -6,10 +6,13 @@
 
   <Import Project="$(CustomToolsDir)buildmgr.settings.targets" />
 
-  <!-- The excluded projects that will neither be built, nor have their source code copied -->
+  <!-- The excluded projects that will neither be built, nor have their source code copied. -->
+  <!-- Note: All projects contained within the CustomTools solution are excluded as this 
+       BuildMgr does not do builds from CustomTools to Unity. -->
   <ItemGroup>
     <ExcludedProjectList Include="$(PocToUnitySolutionDir)$(PocToUnitySolutionName).SunScripts\*.csproj" />
     <ExcludedProjectList Include="$(PocToUnitySolutionDir)$(PocToUnitySolutionName).NamespaceTalker\*.csproj" />
+    <ExcludedProjectList Include="$(MasterSolutionDir)$(MasterSolutionName).Zonked\*.csproj" />
   </ItemGroup>
 
   <ItemGroup>
