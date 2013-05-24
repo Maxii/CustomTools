@@ -41,6 +41,7 @@
     <!-- UNDONE Need to account for more than 1 Unity Project -->
     <ItemGroup>
       <IncludedFilesToClean Include="$(UnityCodeLibraryDir)**\*" />
+      <IncludedFilesToClean Include="$(UnityDataLibraryDir)**\*" /> <!--ADDED!!!!!!!!-->
       <IncludedFilesToClean Include="$(UnityScriptsDir)**\*" /> <!-- IMPROVE limit deletions to only those that are coming from the ScriptsFactory? -->
       <IncludedFilesToClean Include="$(UnityEditorDir)**\*.cs" /> <!-- UNCLEAR if there is anything else in the Editor folder besides scripts -->
       <IncludedFilesToClean Include="$(UnityCodeLibrarySourceDir)**\*" />
@@ -178,6 +179,7 @@
       _GenerateMdbFiles;
       <!-- Unity .pdb files are automatically cleaned after .mdb files are generated -->
       CopyScriptsToUnity;
+      _CopyXmlDataToUnity;  <!--ADDED!!!!!!!!!-->
       _LaunchUnity;
       _PromptMonoDebuggerLaunch;
     </UnityTestDependsOn>
@@ -198,7 +200,9 @@
       <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEditor.dll" />
       <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\nunit.framework.dll" />    
       <!--<ExcludedReleaseOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\*-*\**\*.*" /> Would exclude Resource Satellite files -->
-      
+      <!-- No need for any Unity Script Assemblies used as references in support of VS -->                          <!--ADDED!!!!!!-->
+      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\*CSharp*.dll" />      <!--ADDED!!!!!!-->
+
       <OutputFilesToCopy Include="@(AllReleaseOutputFiles)" Exclude="@(ExcludedReleaseOutputFiles)" />
       <!-- UNCLEAR what about .config files and copy local references? -->
     </ItemGroup>
@@ -246,6 +250,8 @@
     <PropertyGroup>
       <!-- pdb2mdb.exe does not work if copied to a \contrib folder -->
       <!-- $(ProgramFiles) required to accommodate C:\Program Files(x86)\ on 64 bit machines -->
+      
+      <!-- Registry's Unity Editor 4.x\Location does not exist so stick with 3.x-->      <!-- ADDED Comment!!!!!! -->
       <UnityInstallDir>$([System.IO.Path]::GetDirectoryName($(registry:HKEY_CURRENT_USER\Software\Unity Technologies\Unity Editor 3.x\Location)))\</UnityInstallDir>
       <MdbGeneratorPath>$(UnityInstallDir)Data\MonoBleedingEdge\lib\mono\4.0\pdb2mdb.exe</MdbGeneratorPath>
       <!--<MdbGeneratorPath>$(ProgramFiles)\Unity\Editor\Data\Mono\lib\mono\2.0\pdb2mdb.exe</MdbGeneratorPath>-->
@@ -326,7 +332,25 @@
     <Copy SourceFiles="@(EditorScriptsToCopy)" DestinationFolder="$(UnityEditorDir)%(EditorScriptsToCopy.RecursiveDir)" OverwriteReadOnlyFiles="true" />
   </Target>
 
+  <!-- Copy Data .xml files to Unity's DataLibrary Folder -->  <!-- ADDED ENTIRE TARGET!!!!!! -->
+  <Target Name="_CopyXmlDataToUnity" AfterTargets="CopyScriptsToUnity">
+    <ItemGroup>
+      <!-- Include every .xml file in the Master Solution and the targeted Solution's DataLibrary -->
+      <IncludedData Include="$(SolutionDir)DataLibrary\**\*.xml" />
+      <IncludedData Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)DataLibrary\**\*.xml" />
+      <ExcludedData></ExcludedData> 
 
+      <DataToCopy Include="@(IncludedData)" Exclude="@(ExcludedData)" />
+    </ItemGroup>
+    
+    <!-- If the Unity DataLibrary directory doesn't exist then create it -->
+    <MakeDir Directories="$(UnityDataLibraryDir)" Condition="!Exists('$(UnityDataLibraryDir)')"/>
+    <Message Text="DataLibrary (.xml) files copied to Unity DataLibrary Folder: $(NewLine)@(DataToCopy, '$(NewLine)')" Importance="high"/>
+    <!-- The Well-known Item Metadata ".RecursiveDir" also copies from deeper nested folders inside the top level directory.  -->
+    <Copy SourceFiles="@(DataToCopy)" DestinationFolder="$(UnityDataLibraryDir)%(DataToCopy.RecursiveDir)" OverwriteReadOnlyFiles="true" />
+  </Target>
+  
+  
   <!-- Launch Unity -->
   <Target Name="_LaunchUnity" >
     <PropertyGroup>
