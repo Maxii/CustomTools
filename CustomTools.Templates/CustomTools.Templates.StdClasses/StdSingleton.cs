@@ -10,6 +10,10 @@
 // </summary> 
 // -------------------------------------------------------------------------------------------------------------------- 
 
+#define DEBUG_LOG
+#define DEBUG_LEVEL_WARN
+#define DEBUG_LEVEL_ERROR
+
 namespace $rootnamespace$ {
 
     using System;
@@ -23,7 +27,7 @@ namespace $rootnamespace$ {
     /// </summary>
     public sealed class $safeitemname$ {
 
-        #region SingletonPattern
+        #region Singleton Pattern
         private static readonly $safeitemname$ instance;
 
         /// <summary>

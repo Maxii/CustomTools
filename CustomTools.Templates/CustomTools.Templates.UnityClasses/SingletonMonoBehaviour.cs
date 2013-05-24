@@ -19,8 +19,8 @@
     using CodeEnv.Master.Common;
     using CodeEnv.Master.Common.LocalResources;
     using UnityEngine;
-    using UnityEditor;
 
+[Obsolete]
     public class $safeitemname$ : MonoBehaviour {
 
         #region MonoBehaviour Singleton Pattern

@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © Strategic Forge 2012")]
 [assembly: AssemblyTrademark("")]
 
-// Make it easy to distinguish Debug and Release (i.gameEvent. Retail) builds;
+// Make it easy to distinguish Debug and Release (ifh.gameEvent. Retail) builds;
 // for example, through the file properties window.
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
@@ -26,7 +26,7 @@ using System.Runtime.InteropServices;
 // and UnityEditor.dll are not CSLCompliant.
 [assembly: CLSCompliant(false)]
 
-// Setting ComVisible to false makes the types in this assembly not visible 
+// Setting ComVisible to false makes the types in this assembly not isTargetVisibleThisFrame 
 // to COM components.  If you need to access desiredRotation type in this assembly from 
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]

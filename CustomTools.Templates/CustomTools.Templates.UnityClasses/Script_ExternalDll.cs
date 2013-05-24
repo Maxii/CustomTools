@@ -10,18 +10,19 @@
 // </summary> 
 // -------------------------------------------------------------------------------------------------------------------- 
 
+#define DEBUG_LOG
+#define DEBUG_LEVEL_WARN
+#define DEBUG_LEVEL_ERROR
+
 // default namespace
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
-using UnityEditor;
 using CodeEnv.Master.Common;
 using CodeEnv.Master.Common.LocalResources;
 using CodeEnv.Master.Common.Unity;
-
 
 /// <summary>
 /// COMMENT 
