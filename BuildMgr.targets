@@ -5,14 +5,13 @@
   <Import Project="$(MSBuildCommunityTasksPath)MSBuild.Community.Tasks.Targets" />
 
 
-  <!-- Clean - full clean of FxCop Output, Included Project's output and Unity's Code Library -->
+  <!-- Clean - full clean of everything except Unity -->
   <PropertyGroup>
     <CleanDependsOn>
       $(CleanDependsOn);
       CleanFxCop; <!-- Clean FxCop first before the FxCopAssemblies are cleaned to avoid fxcop.targets error -->
       _CoreClean;
       _ProjectClean;
-      _UnityClean;
     </CleanDependsOn>
   </PropertyGroup>
 
@@ -27,7 +26,7 @@
     <Delete Files="@(AllFilesInCommonOutputDir)" />
     <!-- IMPROVE RemoveDir Directories="$(...)" -->
   </Target>
-
+  
   <Target Name="_ProjectClean">
     <!-- Clean default project-specific outputs too as other Solution Builds can populate them -->
     <MSBuild Projects="@(ProjectFilesToBuild)"
@@ -37,24 +36,47 @@
     </MSBuild>
   </Target>
 
-  <Target Name="_UnityClean">
-    <!-- UNDONE Need to account for more than 1 Unity Project -->
+  <Target Name="_UnityAssyClean">
     <ItemGroup>
-      <IncludedFilesToClean Include="$(UnityCodeLibraryDir)**\*" />
-      <IncludedFilesToClean Include="$(UnityDataLibraryDir)**\*" /> <!--ADDED!!!!!!!!-->
-      <IncludedFilesToClean Include="$(UnityScriptsDir)**\*" /> <!-- IMPROVE limit deletions to only those that are coming from the ScriptsFactory? -->
-      <IncludedFilesToClean Include="$(UnityEditorDir)**\*.cs" /> <!-- UNCLEAR if there is anything else in the Editor folder besides scripts -->
-      <IncludedFilesToClean Include="$(UnityCodeLibrarySourceDir)**\*" />
-      <ExcludedFilesToClean></ExcludedFilesToClean>
+      <IncludedAssyFilesToClean Include="$(UnityCodeLibraryDir)**\*" />
+      <IncludedAssyFilesToClean Include="$(UnityCodeLibrarySourceDir)**\*" />
+      <ExcludedAssyFilesToClean></ExcludedAssyFilesToClean>
 
-      <UnityFilesToClean Include="@(IncludedFilesToClean)" Exclude="@(ExcludedFilesToClean)" />
+      <UnityAssyFilesToClean Include="@(IncludedAssyFilesToClean)" Exclude="@(ExcludedAssyFilesToClean)" />
     </ItemGroup>
 
-    <Attrib Files="@(UnityFilesToClean)" ReadOnly="false" />
-    <Delete Files="@(UnityFilesToClean)" />
+    <Attrib Files="@(UnityAssyFilesToClean)" ReadOnly="false" />
+    <Delete Files="@(UnityAssyFilesToClean)" />
     <!-- IMPROVE RemoveDir Directories="$(UnityCodeLibraryDir)" -->
   </Target>
 
+  <Target Name="_UnityXmlDataClean">
+    <ItemGroup>
+      <IncludedDataFilesToClean Include="$(UnityDataLibraryDir)**\*" />
+      <ExcludedDataFilesToClean></ExcludedDataFilesToClean>
+
+      <UnityDataFilesToClean Include="@(IncludedDataFilesToClean)" Exclude="@(ExcludedDataFilesToClean)" />
+    </ItemGroup>
+
+    <Attrib Files="@(UnityDataFilesToClean)" ReadOnly="false" />
+    <Delete Files="@(UnityDataFilesToClean)" />
+    <!-- IMPROVE RemoveDir Directories="$(UnityDataLibraryDir)" -->
+  </Target>
+
+  <Target Name="_UnityScriptClean">
+    <ItemGroup>
+      <IncludedScriptFilesToClean Include="$(UnityScriptsDir)**\*" />
+      <!-- IMPROVE limit deletions to only those that are coming from the ScriptsFactory? -->
+      <IncludedScriptFilesToClean Include="$(UnityEditorDir)**\*" />
+      <ExcludedScriptFilesToClean></ExcludedScriptFilesToClean>
+
+      <UnityScriptFilesToClean Include="@(IncludedScriptFilesToClean)" Exclude="@(ExcludedScriptFilesToClean)" />
+    </ItemGroup>
+
+    <Attrib Files="@(UnityScriptFilesToClean)" ReadOnly="false" />
+    <Delete Files="@(UnityScriptFilesToClean)" />
+    <!-- IMPROVE RemoveDir Directories="$(UnityCodeLibraryDir)" -->
+  </Target>
 
   <!-- Build - incremental build of ALL included Projects -->
   <PropertyGroup>
@@ -79,7 +101,6 @@
     <Message Text="Build Outputs: $(NewLine)@(BuildOutputs, '$(NewLine)')" Importance="high"/>
   </Target>
   <Target Name="AfterBuild" />
-
 
   <!-- Rebuild - full clean followed by a new VS Build of Code -->
   <PropertyGroup>
@@ -111,7 +132,6 @@
     <Warning Text="Auto Version Increment does not work. %0aDid you remember to increment the Assembly Version by rebuilding the AssemblyVersionInfo Project manually?" />
   </Target>
 
-
   <!-- Test - fills in any build gaps, then runs all Unit Tests -->
   <PropertyGroup>
     <TestDependsOn>
@@ -125,7 +145,6 @@
     <!-- Need notification of success or failure -->
     <Message Text="Running Unit Tests which currently do nothing." Importance="high"/>
   </Target>
-
 
   <!-- FxCopAndUnitTest - cleans, builds and runs FxCop and then Unit Tests -->
   <PropertyGroup>
@@ -159,7 +178,6 @@
       <!-- Resource Satellite files -->
       <ExcludedReleaseAssemblies Include="$(CommonOutputDir)%(ConfigurationList.Identity)\*-*\**\*.*" />
 
-
       <FxCopAssemblies Include="@(AllReleaseAssemblies)" Exclude="@(ExcludedReleaseAssemblies)" />
       <!-- Alternative implementation below using @(BuildOutputs) -->
       <!--<ExcludedAssemblies Include="$(CommonOutputDir)Debug\**\*.*" />-->
@@ -168,18 +186,20 @@
     </ItemGroup>
   </Target>
 
-
   <!-- UnityTest - cleans, builds and sets up Unity for testing -->
   <PropertyGroup>
     <UnityTestDependsOn>
       $(UnityTestDependsOn);
       Rebuild;  <!-- Replaced FxCopAndUnitTest with Rebuild to shorten build cycle -->
+      _UnityAssyClean;  <!-- Don't clean Unity until the build is successful -->
       _CopyOutputToUnity;
       _CopySourceToUnity;
+      _UnityXmlDataClean;
+      _CopyXmlDataToUnity;
       _GenerateMdbFiles;
       <!-- Unity .pdb files are automatically cleaned after .mdb files are generated -->
+      _UnityScriptClean;  <!-- Don't clean Unity scripts until no build or .mdb failure can occur -->
       CopyScriptsToUnity;
-      _CopyXmlDataToUnity;  <!--ADDED!!!!!!!!!-->
       _LaunchUnity;
       _PromptMonoDebuggerLaunch;
     </UnityTestDependsOn>
@@ -191,19 +211,23 @@
   <Target Name="_CopyOutputToUnity" >
     <!-- No need for incremental copy as Unity is cleaned before this task is called -->
     <ItemGroup>
-      <AllReleaseOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\*.*" />
+      <AllOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\*.*" />
       <!-- None of the output file types below have any use inside of the Unity Engine -->
-      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\*.Tests.*" />
-      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\*.config" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\*.Tests.*" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\*.config" />
       <!-- The Unity Engine/Editor and nunit Assemblies are not needed in the Unity CodeLibrary -->
-      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEngine.dll" />
-      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEditor.dll" />
-      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\nunit.framework.dll" />    
-      <!--<ExcludedReleaseOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\*-*\**\*.*" /> Would exclude Resource Satellite files -->
-      <!-- No need for any Unity Script Assemblies used as references in support of VS -->                          <!--ADDED!!!!!!-->
-      <ExcludedReleaseOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\*CSharp*.dll" />      <!--ADDED!!!!!!-->
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEngine.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEditor.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\nunit.framework.dll" />    
+      <!--<ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\*-*\**\*.*" /> Would exclude Resource Satellite files -->
+      <!--<ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\CustomTools.NguiAssemblyGenerator.*" />-->
+      
+      <!-- Referencing Assembly-CSharp-firstpass.dll supports UnitySerializer references. The following exclusion is redundant as CopyLocal=false -->
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\Assembly-CSharp-firstpass.dll" />
+      <!-- Referencing NGUI Project's Assembly-CSharp.dll supports NGUI references. The following exclusion is redundant as CopyLocal=false -->
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\Assembly-CSharp.dll" />
 
-      <OutputFilesToCopy Include="@(AllReleaseOutputFiles)" Exclude="@(ExcludedReleaseOutputFiles)" />
+      <OutputFilesToCopy Include="@(AllOutputFiles)" Exclude="@(ExcludedOutputFiles)" />
       <!-- UNCLEAR what about .config files and copy local references? -->
     </ItemGroup>
 
@@ -251,7 +275,7 @@
       <!-- pdb2mdb.exe does not work if copied to a \contrib folder -->
       <!-- $(ProgramFiles) required to accommodate C:\Program Files(x86)\ on 64 bit machines -->
       
-      <!-- Registry's Unity Editor 4.x\Location does not exist so stick with 3.x-->      <!-- ADDED Comment!!!!!! -->
+      <!-- Registry's Unity Editor 4.x\Location does not exist so stick with 3.x--> 
       <UnityInstallDir>$([System.IO.Path]::GetDirectoryName($(registry:HKEY_CURRENT_USER\Software\Unity Technologies\Unity Editor 3.x\Location)))\</UnityInstallDir>
       <MdbGeneratorPath>$(UnityInstallDir)Data\MonoBleedingEdge\lib\mono\4.0\pdb2mdb.exe</MdbGeneratorPath>
       <!--<MdbGeneratorPath>$(ProgramFiles)\Unity\Editor\Data\Mono\lib\mono\2.0\pdb2mdb.exe</MdbGeneratorPath>-->
@@ -272,7 +296,6 @@
     <!-- pdb2mdb.exe will only work if called from the directory containing the .dll and .pdb files -->
     <Exec Condition=" @(MdbAssemblies) != ''" WorkingDirectory="$(UnityCodeLibraryDir)" Command='"$(MdbGeneratorPath)" %(MdbAssemblies.Identity)' />
   </Target>
-
 
   <!-- Delete the .pdb files from Unity -->
   <Target Name="_CleanUnityPdbFiles" AfterTargets="_GenerateMdbFiles" >
@@ -332,13 +355,14 @@
     <Copy SourceFiles="@(EditorScriptsToCopy)" DestinationFolder="$(UnityEditorDir)%(EditorScriptsToCopy.RecursiveDir)" OverwriteReadOnlyFiles="true" />
   </Target>
 
-  <!-- Copy Data .xml files to Unity's DataLibrary Folder -->  <!-- ADDED ENTIRE TARGET!!!!!! -->
+  <!-- Copy Data .xml files to Unity's DataLibrary Folder -->  
   <Target Name="_CopyXmlDataToUnity" AfterTargets="CopyScriptsToUnity">
     <ItemGroup>
       <!-- Include every .xml file in the Master Solution and the targeted Solution's DataLibrary -->
       <IncludedData Include="$(SolutionDir)DataLibrary\**\*.xml" />
       <IncludedData Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)DataLibrary\**\*.xml" />
-      <ExcludedData></ExcludedData> 
+      <ExcludedData Include="$(SolutionDir)DataLibrary\Schemas\**\*.*"/> <!-- Schemas not needed during runtime -->
+      <ExcludedData Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)DataLibrary\Schemas\**\*.*" />
 
       <DataToCopy Include="@(IncludedData)" Exclude="@(ExcludedData)" />
     </ItemGroup>
@@ -350,7 +374,6 @@
     <Copy SourceFiles="@(DataToCopy)" DestinationFolder="$(UnityDataLibraryDir)%(DataToCopy.RecursiveDir)" OverwriteReadOnlyFiles="true" />
   </Target>
   
-  
   <!-- Launch Unity -->
   <Target Name="_LaunchUnity" >
     <PropertyGroup>
@@ -361,7 +384,6 @@
     <!-- <Exec Command="$(UnityProjectScenePath)" /> Confirmed working. -->
     <Message Text="Dummy _LaunchUnity Target called." Importance="high"/>
   </Target>
-
 
   <!-- Operator is prompted to manually launch and attach MonoD to Unity -->
   <Target Name="_PromptMonoDebuggerLaunch" >

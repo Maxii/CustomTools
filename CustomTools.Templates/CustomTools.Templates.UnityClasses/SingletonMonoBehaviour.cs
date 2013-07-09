@@ -24,7 +24,6 @@
     public class $safeitemname$ : MonoBehaviour {
 
         #region MonoBehaviour Singleton Pattern
-        private bool isTempGO;
 
         private static $safeitemname$ instance = null;
         public static $safeitemname$ Instance {
@@ -41,7 +40,6 @@
                         if (instance == null) {
                             Debug.LogError("Problem during the creation of {0}.".Inject(thisType.ToString()));
                         }
-                        isTempGO = true;
                     }
                     instance.Initialize();
                 }
@@ -66,9 +64,6 @@
 
         private void Initialize() {
             // do any required initialization here as you would normally do in Awake()
-            if(isTempGO) {
-                // TODO
-            }
         }
 
         public override string ToString() {

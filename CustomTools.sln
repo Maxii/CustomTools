@@ -68,8 +68,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Reflector", "Cu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analysis Tools", "Analysis Tools", "{CFD57FB8-0C47-4728-8C9E-E732B92CFE38}"
 	ProjectSection(SolutionItems) = preProject
-		AnalyzeDll.bat = AnalyzeDll.bat
-		PromptToAnalyzeDll.bat = PromptToAnalyzeDll.bat
+		Analysis Tools\AnalyzeDll.bat = Analysis Tools\AnalyzeDll.bat
+		Analysis Tools\PromptToAnalyzeDll.bat = Analysis Tools\PromptToAnalyzeDll.bat
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.StdClassLibrary", "CustomTools.Templates\CustomTools.Templates.StdClassLibrary\CustomTools.Templates.StdClassLibrary.csproj", "{9C73E4E7-7A2A-4329-89A0-1BE47C203698}"
@@ -235,8 +235,8 @@ Global
 		{9C8574A4-64BA-49B1-B66D-7572ECFFFCFB} = {3C2FFD88-0203-4D9C-84DA-D1B648AC4E15}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_ConfigurationName = Any
-		BuildVersion_UseGlobalSettings = True
 		BuildVersion_DetectChanges = True
+		BuildVersion_UseGlobalSettings = True
+		BuildVersion_ConfigurationName = Any
 	EndGlobalSection
 EndGlobal
