@@ -66,7 +66,7 @@
   <PropertyGroup>
     <CommonOutputDir Condition ="$(CommonOutputDir) == ''">$(SolutionRootDir)BuildOutput\Latest\bin\</CommonOutputDir>
     <UnityCodeLibraryDir>$(UnityProjectDir)Assets\CodeLibrary\</UnityCodeLibraryDir>
-    <UnityDataLibraryDir>$(UnityProjectDir)Assets\DataLibrary\</UnityDataLibraryDir>    <!--ADDED!!!!!!!!-->
+    <UnityDataLibraryDir>$(UnityProjectDir)DataLibrary\</UnityDataLibraryDir>  <!-- 7/13 moved DataLibrary from Assets to Project folder -->
     <UnityScriptsDir>$(UnityProjectDir)Assets\Scripts\</UnityScriptsDir>
     <UnityEditorDir>$(UnityProjectDir)Assets\Editor\</UnityEditorDir>
     <UnityCodeLibrarySourceDir>$(UnityProjectDir)CodeLibrarySource\</UnityCodeLibrarySourceDir>

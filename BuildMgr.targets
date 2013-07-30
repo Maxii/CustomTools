@@ -286,7 +286,7 @@
       <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\UnityEngine.dll; $(UnityCodeLibraryDir)**\UnityEditor.dll" />
       <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\nunit.framework.dll" />
       <!-- Pdb2Mdb throws up on resource satellite assemblies so they are excluded below -->
-      <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)*-*\**\*.*" />  
+      <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)*-*\**\*.*" /> 
 
       <MdbAssemblies Include="@(AllAssembliesInUnity)" Exclude="@(ExcludedAssembliesInUnity)" />
     </ItemGroup>
