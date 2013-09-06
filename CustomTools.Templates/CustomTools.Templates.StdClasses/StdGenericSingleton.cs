@@ -6,7 +6,7 @@
 // </copyright> 
 // <summary> 
 // File: $safeitemname$.$fileinputextension$
-// Generic SingletonPattern. COMMENT - one line to give a brief idea of what the file does.
+// Singleton. COMMENT - one line to give a brief idea of what the file does.
 // </summary> 
 // -------------------------------------------------------------------------------------------------------------------- 
 
@@ -23,32 +23,16 @@ namespace $rootnamespace$ {
     using CodeEnv.Master.Common.LocalResources;
 
     /// <summary>
-    /// Generic abstract Singleton.
+    /// Singleton. COMMENT
     /// </summary>
-    /// <typeparam name="T">The derived class type.</typeparam>
-    public abstract class $safeitemname$<T> where T : class {
+    public class $safeitemname$ : AGenericSingleton<$safeitemname$> {
 
-        #region Generic Singleton Pattern
-
-        private static T instance;
-
-        /// <summary>Returns the singleton instance of the derived class.</summary>
-        public static T Instance {
-            get {
-                if (instance == null) {
-                    instance = (T)Activator.CreateInstance(typeof(T), true);
-                }
-                return instance;
-            }
+        private $safeitemname$() {
+            Initialize();
         }
 
-        #endregion
-
-        ///<summary>
-        /// IMPORTANT: This must be called from the PRIVATE constructor in the derived class.
-        /// </summary>
-        protected virtual void Initialize() {
-            // TODO do any base class initialization here
+        protected override void Initialize() {
+            // TODO do any initialization here
         }
 
     }

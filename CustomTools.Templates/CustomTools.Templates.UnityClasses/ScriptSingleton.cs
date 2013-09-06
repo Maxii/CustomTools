@@ -6,11 +6,10 @@
 // </copyright> 
 // <summary> 
 // File: $safeitemname$.$fileinputextension$
-// COMMENT - one line to give a brief idea of what this file does.
+// Singleton. COMMENT - one line to give a brief idea of what this file does.
 // </summary> 
 // -------------------------------------------------------------------------------------------------------------------- 
 
-#define DEBUG_LOG
 #define DEBUG_WARN
 #define DEBUG_ERROR
 
@@ -19,31 +18,28 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using CodeEnv.Master.Common;
 using CodeEnv.Master.Common.LocalResources;
 using CodeEnv.Master.Common.Unity;
+using UnityEngine;
 
 /// <summary>
-/// COMMENT 
+/// Singleton. COMMENT 
 /// </summary>
-[Obsolete]
-public class $safeitemname$ : MonoBehaviour {
+public class $safeitemname$ : AMonoBehaviourBaseSingleton<$safeitemname$> {
 
-    void Awake() {
-
-    }
-
-    void Start() {
-    // Keep at a minimum, an empty Start method so that instances receive the OnDestroy event
-    }
-
-    void Update() {
+    protected override void Awake() {
+        base.Awake();
 
     }
 
-    void LateUpdate() {
+    protected override void Start() {
+        base.Start();
 
+    }
+
+    protected override void OnApplicationQuit() {
+        _instance = null;
     }
 
     public override string ToString() {

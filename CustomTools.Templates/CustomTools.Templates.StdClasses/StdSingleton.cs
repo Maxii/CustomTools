@@ -25,6 +25,7 @@ namespace $rootnamespace$ {
     /// <summary>
     /// SingletonPattern. COMMENT
     /// </summary>
+    [Obsolete]
     public sealed class $safeitemname$ {
 
         #region Singleton Pattern

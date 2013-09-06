@@ -46,6 +46,7 @@
     <Compile Include="..\..\CustomTools.AssemblyVersionInfo\Properties\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ScriptSingleton.cs" />
     <Compile Include="Script_ExternalDll.cs" />
     <Compile Include="Script.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

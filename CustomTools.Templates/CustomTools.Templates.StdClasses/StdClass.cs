@@ -22,6 +22,9 @@ namespace $rootnamespace$ {
     using CodeEnv.Master.Common;
     using CodeEnv.Master.Common.LocalResources;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class $safeitemname$ {
 
         public $safeitemname$() { }

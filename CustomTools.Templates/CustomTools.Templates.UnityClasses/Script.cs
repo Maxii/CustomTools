@@ -10,34 +10,31 @@
 // </summary> 
 // -------------------------------------------------------------------------------------------------------------------- 
 
+#define DEBUG_WARN
+#define DEBUG_ERROR
+
 // default namespace
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using CodeEnv.Master.Common;
 using CodeEnv.Master.Common.LocalResources;
 using CodeEnv.Master.Common.Unity;
+using UnityEngine;
 
 /// <summary>
 /// COMMENT 
 /// </summary>
 public class $safeitemname$ : AMonoBehaviourBase {
 
-    void Awake() {
+    protected override void Awake() {
+        base.Awake();
 
     }
 
-    void Start() {
-        // Keep at a minimum, an empty Start method so that instances receive the OnDestroy event
-    }
-
-    void Update() {
-
-    }
-
-    void LateUpdate() {
+    protected override void Start() {
+        base.Start();
 
     }
 

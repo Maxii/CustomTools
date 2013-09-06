@@ -74,8 +74,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analysis Tools", "Analysis 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.StdClassLibrary", "CustomTools.Templates\CustomTools.Templates.StdClassLibrary\CustomTools.Templates.StdClassLibrary.csproj", "{9C73E4E7-7A2A-4329-89A0-1BE47C203698}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.NguiAssemblyGenerator", "CustomTools.NguiAssemblyGenerator\CustomTools.NguiAssemblyGenerator.csproj", "{F291DB11-FC18-437B-BE1C-65813BAB02A0}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -200,16 +198,6 @@ Global
 		{9C73E4E7-7A2A-4329-89A0-1BE47C203698}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{9C73E4E7-7A2A-4329-89A0-1BE47C203698}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9C73E4E7-7A2A-4329-89A0-1BE47C203698}.Release|x86.ActiveCfg = Release|Any CPU
-		{F291DB11-FC18-437B-BE1C-65813BAB02A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F291DB11-FC18-437B-BE1C-65813BAB02A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F291DB11-FC18-437B-BE1C-65813BAB02A0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{F291DB11-FC18-437B-BE1C-65813BAB02A0}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{F291DB11-FC18-437B-BE1C-65813BAB02A0}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F291DB11-FC18-437B-BE1C-65813BAB02A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F291DB11-FC18-437B-BE1C-65813BAB02A0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F291DB11-FC18-437B-BE1C-65813BAB02A0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{F291DB11-FC18-437B-BE1C-65813BAB02A0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{F291DB11-FC18-437B-BE1C-65813BAB02A0}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -235,8 +223,8 @@ Global
 		{9C8574A4-64BA-49B1-B66D-7572ECFFFCFB} = {3C2FFD88-0203-4D9C-84DA-D1B648AC4E15}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_DetectChanges = True
-		BuildVersion_UseGlobalSettings = True
 		BuildVersion_ConfigurationName = Any
+		BuildVersion_UseGlobalSettings = True
+		BuildVersion_DetectChanges = True
 	EndGlobalSection
 EndGlobal

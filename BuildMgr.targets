@@ -238,6 +238,7 @@
     <Copy SourceFiles="@(OutputFilesToCopy)" DestinationFolder="$(UnityCodeLibraryDir)%(OutputFilesToCopy.RecursiveDir)" OverwriteReadOnlyFiles="true" />
   </Target>
 
+  <!-- Copies the source (.cs text files) of files built in separate assemblies to the Source folder to support MonoDev debug -->
   <Target Name="_CopySourceToUnity" AfterTargets="_CopyOutputToUnity">
     <ItemGroup>
       <!-- Include every .cs file in the Master Solution and the targeted Solution -->
@@ -323,10 +324,13 @@
   <Target Name="_CopyGameScriptsToUnity" >
     <ItemGroup>
       <IncludedGameScripts Include="$(SolutionDir)$(SolutionName).GameScriptsFactory\**\*.cs" />
+      <!--<IncludedGameScripts Include="$(SolutionDir)$(SolutionName).MyNguiScriptsFactory\**\*.cs" />-->
+
       <IncludedGameScripts Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)$(MasterSolutionName).GameScriptsFactory\**\*.cs" />
+      <!--<IncludedGameScripts Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)$(MasterSolutionName).MyNguiScriptsFactory\**\*.cs" />-->
       <!--Exclude AssemblyInfo.cs -->
-      <ExcludedGameScripts Include="$(SolutionDir)$(SolutionName).GameScriptsFactory\Properties\*" />  
-      <ExcludedGameScripts Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)$(MasterSolutionName).GameScriptsFactory\Properties\*" />
+      <ExcludedGameScripts Include="$(SolutionDir)$(SolutionName).*\Properties\*" />  
+      <ExcludedGameScripts Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)$(MasterSolutionName).*\Properties\*" />
       
       <GameScriptsToCopy Include="@(IncludedGameScripts)" Exclude="@(ExcludedGameScripts)" />
     </ItemGroup>
