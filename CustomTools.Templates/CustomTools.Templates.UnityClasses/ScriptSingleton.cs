@@ -10,9 +10,6 @@
 // </summary> 
 // -------------------------------------------------------------------------------------------------------------------- 
 
-#define DEBUG_WARN
-#define DEBUG_ERROR
-
 // default namespace
 
 using System;
@@ -20,7 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CodeEnv.Master.Common;
 using CodeEnv.Master.Common.LocalResources;
-using CodeEnv.Master.Common.Unity;
+using CodeEnv.Master.GameContent;
 using UnityEngine;
 
 /// <summary>
@@ -36,10 +33,6 @@ public class $safeitemname$ : AMonoBehaviourBaseSingleton<$safeitemname$> {
     protected override void Start() {
         base.Start();
 
-    }
-
-    protected override void OnApplicationQuit() {
-        _instance = null;
     }
 
     public override string ToString() {
