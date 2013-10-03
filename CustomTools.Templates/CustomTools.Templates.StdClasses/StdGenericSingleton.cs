@@ -21,6 +21,7 @@ namespace $rootnamespace$ {
     using System.Linq;
     using CodeEnv.Master.Common;
     using CodeEnv.Master.Common.LocalResources;
+    using UnityEngine;
 
     /// <summary>
     /// Singleton. COMMENT
