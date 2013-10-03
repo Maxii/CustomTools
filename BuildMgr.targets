@@ -226,6 +226,8 @@
       <!-- Referencing NGUI Project's Assembly-CSharp.dll supports NGUI references. The following exclusion is redundant as CopyLocal=false -->
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\Assembly-CSharp.dll" />
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\Vectrosity.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\Ngui.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\Contextual.dll" />
 
       <OutputFilesToCopy Include="@(AllOutputFiles)" Exclude="@(ExcludedOutputFiles)" />
       <!-- UNCLEAR what about .config files and copy local references? -->
@@ -287,6 +289,9 @@
       <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\UnityEngine.dll; $(UnityCodeLibraryDir)**\UnityEditor.dll" />
       <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\nunit.framework.dll" />
       <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\Vectrosity.dll" />
+      <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\Ngui.dll" />
+      <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\Contextual.dll" />
+
 
       <!-- Pdb2Mdb throws up on resource satellite assemblies so they are excluded below -->
       <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)*-*\**\*.*" /> 
