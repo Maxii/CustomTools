@@ -30,10 +30,6 @@ public class $safeitemname$ : AMonoBehaviourBase {
 
     }
 
-    protected override void Start() {
-        base.Start();
-
-    }
 
     public override string ToString() {
         return new ObjectAnalyzer().ToString(this);
