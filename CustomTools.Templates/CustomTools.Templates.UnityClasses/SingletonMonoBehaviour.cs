@@ -20,45 +20,47 @@
     using CodeEnv.Master.Common.LocalResources;
     using UnityEngine;
 
-[Obsolete]
     public class $safeitemname$ : MonoBehaviour {
 
         #region MonoBehaviour Singleton Pattern
 
-        private static $safeitemname$ instance = null;
+        private static $safeitemname$ _instance;
         public static $safeitemname$ Instance {
             get {
-                if (instance == null) {
+                if (_instance == null) {
                     // Instance is required for the first time, so look for it                        
                     Type thisType = typeof($safeitemname$);
-                    instance = GameObject.FindObjectOfType(thisType) as $safeitemname$;
-                    if (instance == null) {
+                    _instance = GameObject.FindObjectOfType(thisType) as $safeitemname$;
+                    if (_instance == null) {
                         // an instance of this singleton doesn't yet exist so create a temporary one
-                        Debug.LogWarning("No instance of {0} found, so a temporary one has been created.".Inject(thisType.ToString()));
-                        GameObject tempGO = new GameObject("Temp Instance of {0}.".Inject(thisType.ToString()), thisType);
-                        instance = tempGO.GetComponent<$safeitemname$>();
-                        if (instance == null) {
-                            Debug.LogError("Problem during the creation of {0}.".Inject(thisType.ToString()));
+                    System.Diagnostics.StackFrame stackFrame = new System.Diagnostics.StackTrace().GetFrame(2);
+                    string callerIdMessage = " Called by {0}.{1}().".Inject(stackFrame.GetFileName(), stackFrame.GetMethod().Name);
+                    D.Warn("No instance of {0} found, so a temporary one has been created. Called by {1}.", thisType.Name, callerIdMessage);
+
+                        GameObject tempGO = new GameObject(thisType.Name, thisType);
+                        _instance = tempGO.GetComponent<$safeitemname$>();
+                        if (_instance == null) {
+                            D.Error("Problem during the creation of {0}.", thisType.Name);
                         }
                     }
-                    instance.Initialize();
+                    _instance.Initialize();
                 }
-                return instance;
+                return _instance;
             }
         }
 
         void Awake() {
             // If no other MonoBehaviour has requested Instance in an Awake() call executing
             // before this one, then we are it. There is no reason to search for an object
-            if (instance == null) {
-                instance = this as $safeitemname$;
-                instance.Initialize();
+            if (_instance == null) {
+                _instance = this as $safeitemname$;
+                _instance.Initialize();
             }
         }
 
         // Make sure Instance isn't referenced anymore
         void OnApplicationQuit() {
-            instance = null;
+            _instance = null;
         }
         #endregion
 

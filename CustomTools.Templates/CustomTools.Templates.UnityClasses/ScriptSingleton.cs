@@ -10,6 +10,10 @@
 // </summary> 
 // -------------------------------------------------------------------------------------------------------------------- 
 
+#define DEBUG_LOG
+#define DEBUG_WARN
+#define DEBUG_ERROR
+
 // default namespace
 
 using System;
@@ -23,7 +27,7 @@ using UnityEngine;
 /// <summary>
 /// Singleton. COMMENT 
 /// </summary>
-public class $safeitemname$ : AMonoBehaviourBaseSingleton<$safeitemname$> {
+public class $safeitemname$ : AMonoBaseSingleton<$safeitemname$> {
 
     protected override void Awake() {
         base.Awake();

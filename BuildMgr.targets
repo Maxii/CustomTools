@@ -129,7 +129,7 @@
     </MSBuild>
     <!--<Message Text="Configuration= @(ConfigurationList)" Importance="high" />-->
     <!--<Message Text="Assembly Version Output: $(NewLine)@(AssemblyVersionBuildOutput, '$(NewLine)')" Importance="high" />-->
-    <Warning Text="Auto Version Increment does not work. %0aDid you remember to increment the Assembly Version by rebuilding the AssemblyVersionInfo Project manually?" />
+    <!--<Warning Text="Auto Version Increment does not work. %0aDid you remember to increment the Assembly Version by rebuilding the AssemblyVersionInfo Project manually?" />-->
   </Target>
 
   <!-- Test - fills in any build gaps, then runs all Unit Tests -->
