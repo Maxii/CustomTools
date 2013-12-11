@@ -60,8 +60,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.Unity
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Templates.ScriptsProject", "CustomTools.Templates\CustomTools.Templates.ScriptsProject\CustomTools.Templates.ScriptsProject.csproj", "{84AB84FA-983B-4FB8-BFD9-34D3B93D8000}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeEnv.Master.ExternalMonoBehaviours", "..\CodeEnv\CodeEnv.Master\CodeEnv.Master.ExternalMonoBehaviours\CodeEnv.Master.ExternalMonoBehaviours.csproj", "{9C8574A4-64BA-49B1-B66D-7572ECFFFCFB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.Reflector", "CustomTools.Reflector\CustomTools.Reflector.csproj", "{9900D237-620D-4EC7-B111-3EF2A5002A49}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analysis Tools", "Analysis Tools", "{CFD57FB8-0C47-4728-8C9E-E732B92CFE38}"
@@ -150,7 +148,6 @@ Global
 		{30988A11-A4F0-4FDC-82D5-41B87EA410BE}.Release|x86.ActiveCfg = Release|Any CPU
 		{7E32BD55-F315-4BDE-885C-646841C273F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7E32BD55-F315-4BDE-885C-646841C273F7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{7E32BD55-F315-4BDE-885C-646841C273F7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{7E32BD55-F315-4BDE-885C-646841C273F7}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{7E32BD55-F315-4BDE-885C-646841C273F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E32BD55-F315-4BDE-885C-646841C273F7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
@@ -162,14 +159,6 @@ Global
 		{84AB84FA-983B-4FB8-BFD9-34D3B93D8000}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84AB84FA-983B-4FB8-BFD9-34D3B93D8000}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{84AB84FA-983B-4FB8-BFD9-34D3B93D8000}.Release|x86.ActiveCfg = Release|Any CPU
-		{9C8574A4-64BA-49B1-B66D-7572ECFFFCFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C8574A4-64BA-49B1-B66D-7572ECFFFCFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C8574A4-64BA-49B1-B66D-7572ECFFFCFB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{9C8574A4-64BA-49B1-B66D-7572ECFFFCFB}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{9C8574A4-64BA-49B1-B66D-7572ECFFFCFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C8574A4-64BA-49B1-B66D-7572ECFFFCFB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9C8574A4-64BA-49B1-B66D-7572ECFFFCFB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{9C8574A4-64BA-49B1-B66D-7572ECFFFCFB}.Release|x86.ActiveCfg = Release|Any CPU
 		{9900D237-620D-4EC7-B111-3EF2A5002A49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9900D237-620D-4EC7-B111-3EF2A5002A49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9900D237-620D-4EC7-B111-3EF2A5002A49}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -210,12 +199,11 @@ Global
 		{EC98A928-9A0F-496B-8EE2-587E39F9BBED} = {B50FA6CA-A2CC-4B23-84EF-FC6634957B45}
 		{1557C03E-56EE-4C70-9BD8-AB637D3191CF} = {3C2FFD88-0203-4D9C-84DA-D1B648AC4E15}
 		{30988A11-A4F0-4FDC-82D5-41B87EA410BE} = {3C2FFD88-0203-4D9C-84DA-D1B648AC4E15}
-		{9C8574A4-64BA-49B1-B66D-7572ECFFFCFB} = {3C2FFD88-0203-4D9C-84DA-D1B648AC4E15}
 		{129DCF86-4FC5-4CAF-AAFE-911EFC560E10} = {3C2FFD88-0203-4D9C-84DA-D1B648AC4E15}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_DetectChanges = True
-		BuildVersion_UseGlobalSettings = True
 		BuildVersion_ConfigurationName = Any
+		BuildVersion_UseGlobalSettings = True
+		BuildVersion_DetectChanges = True
 	EndGlobalSection
 EndGlobal
