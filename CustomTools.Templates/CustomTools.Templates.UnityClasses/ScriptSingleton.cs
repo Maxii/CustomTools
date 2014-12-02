@@ -27,13 +27,49 @@ using UnityEngine;
 /// <summary>
 /// Singleton. COMMENT 
 /// </summary>
-public class $safeitemname$ : AMonoBaseSingleton<$safeitemname$> {
+public class $safeitemname$ : AMonoSingleton<$safeitemname$> {
 
-    protected override void Awake() {
-        base.Awake();
-
+    protected override bool IsPersistentAcrossScenes {
+        get { 
+            // TODO return true if this Singleton is persistent. Default is false
+            return base.IsPersistentAcrossScenes;
+        }
     }
 
+    #region Initialization
+
+    /// <summary>
+    /// Called on the first Instance call or from Awake, whichever comes first, this method is limited to initializing 
+    /// local references and values that don't rely on ANY other MonoBehaviour Awake methods having already run.
+    /// </summary>
+    protected override void InitializeOnInstance() {
+        base.InitializeOnInstance();
+        // TODO  
+    }
+
+    /// <summary>
+    /// Called from Awake after InitializeOnInstance, this method should be limited to initializing local references and values. 
+    /// Note: Other MonoBehaviour Awake methods may or may not have yet been called depending on ScriptExecutionOrder.
+    /// </summary>
+    protected override void InitializeOnAwake() {
+        base.InitializeOnAwake();
+        // TODO
+    }
+
+    #endregion
+
+    protected override void ExecutePriorToDestroy() {
+        base.ExecutePriorToDestroy();
+        // TODO tasks to execute before this extra copy of this persistent singleton is destroyed. Default does nothing
+    }
+
+    #region Cleanup
+
+    protected override void Cleanup() {
+        // TODO
+    }
+
+    #endregion
 
     public override string ToString() {
         return new ObjectAnalyzer().ToString(this);
