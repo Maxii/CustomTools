@@ -21,8 +21,8 @@ namespace $rootnamespace$ {
     using System.Linq;
     using CodeEnv.Master.Common;
     using CodeEnv.Master.Common.LocalResources;
-        using CodeEnv.Master.GameContent;
-using UnityEngine;
+    using CodeEnv.Master.GameContent;
+    using UnityEngine;
 
     /// <summary>
     /// Singleton. COMMENT
@@ -35,6 +35,11 @@ using UnityEngine;
 
         protected override void Initialize() {
             // TODO do any initialization here
+            // WARNING: Donot use Instance or _instance in here as this is still part of Constructor
+        }
+
+        public override string ToString() {
+            return new ObjectAnalyzer().ToString(this);
         }
 
     }
