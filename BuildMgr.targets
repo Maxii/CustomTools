@@ -173,7 +173,8 @@
       <!-- FxCop requires the presence of any .dll references not in the GAC (ie. Unity Assys). nunit.framework is dragged along with
       the unity references probably because they reference it. None of these need to be analyzed. -->
       <ExcludedReleaseAssemblies Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEngine.dll" />
-                                 <ExcludedReleaseAssemblies Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEditor.dll" />
+      <ExcludedReleaseAssemblies Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEngine.UI.dll" /> <!-- New Unity5 UI.dll -->
+      <ExcludedReleaseAssemblies Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEditor.dll" />
       <ExcludedReleaseAssemblies Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\nunit.framework.dll" />
       <!-- Resource Satellite files -->
       <ExcludedReleaseAssemblies Include="$(CommonOutputDir)%(ConfigurationList.Identity)\*-*\**\*.*" />
@@ -215,12 +216,16 @@
       <!-- None of the output file types below have any use inside of the Unity Engine -->
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\*.Tests.*" />
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\*.config" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\*.xml" />  <!-- New Unity5 API Comment files -->
+      
       <!-- The Unity Engine/Editor and nunit Assemblies are not needed in the Unity CodeLibrary -->
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEngine.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEngine.UI.dll" /> <!-- New Unity5 UI.dll -->
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEditor.dll" />
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\nunit.framework.dll" />    
       <!--<ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\*-*\**\*.*" /> Would exclude Resource Satellite files -->
-      
+
+
       <!-- Referencing Assembly-CSharp-firstpass.dll supports UnitySerializer references. The following exclusion is redundant as CopyLocal=false -->
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\Assembly-CSharp-firstpass.dll" />
       <!-- Referencing NGUI Project's Assembly-CSharp.dll supports NGUI references. The following exclusion is redundant as CopyLocal=false -->
@@ -228,6 +233,9 @@
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\Vectrosity.dll" />
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\Ngui.dll" />
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\Contextual.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\GridFramework.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\AStar.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\SoundManagerPro.dll" />
 
       <OutputFilesToCopy Include="@(AllOutputFiles)" Exclude="@(ExcludedOutputFiles)" />
       <!-- UNCLEAR what about .config files and copy local references? -->
@@ -275,30 +283,40 @@
   <Target Name="_GenerateMdbFiles" >
     <!-- No need for incremental approach as Unity is cleaned before this task is called -->
     <PropertyGroup>
-      <!-- pdb2mdb.exe does not work if copied to a \contrib folder -->
-      <!-- $(ProgramFiles) required to accommodate C:\Program Files(x86)\ on 64 bit machines -->
+      <!-- pdb2mdb.exe does not work if copied to a \contrib folder. It probably needs Mono.Cecil -->
+      <!-- $(ProgramFiles) required to accommodate C:\Program Files(x86)\ on 64 bit machines for Unity4.x -->
+      <!-- I DONOT UNDERSTAND WHY THE ProgramFiles EnvVariable points to C:\Program Files(x86)! -->
       
-      <!-- Registry's Unity Editor 4.x\Location does not exist so stick with 3.x--> 
-      <UnityInstallDir>$([System.IO.Path]::GetDirectoryName($(registry:HKEY_CURRENT_USER\Software\Unity Technologies\Unity Editor 3.x\Location)))\</UnityInstallDir>
-      <MdbGeneratorPath>$(UnityInstallDir)Data\MonoBleedingEdge\lib\mono\4.0\pdb2mdb.exe</MdbGeneratorPath>
-      <!--<MdbGeneratorPath>$(ProgramFiles)\Unity\Editor\Data\Mono\lib\mono\2.0\pdb2mdb.exe</MdbGeneratorPath>-->
+      <!-- Registry's Unity Editor 4.x\Location does not exist so stick with 3.x. Points to same place --> 
+       <!--<UnityInstallDir>$([System.IO.Path]::GetDirectoryName($(registry:HKEY_CURRENT_USER\Software\Unity Technologies\Unity Editor 3.x\Location)))\</UnityInstallDir> -->
+      <!-- <MdbGeneratorPath>$(UnityInstallDir)Data\MonoBleedingEdge\lib\mono\4.0\pdb2mdb.exe</MdbGeneratorPath> -->
+
+      <!-- Registry's Unity Editor 5.x\Location does not exist so hard code UnityInstallDir here. -->
+      <!-- <UnityInstallDir>$(ProgramFiles)\Unity\Editor\</UnityInstallDir> --> <!-- $(ProgramFiles) returns C:\Program Files (x86)\-->
+      <UnityInstallDir>C:\Program Files\Unity\Editor\</UnityInstallDir>    <!-- Unity5 64 bit install location-->
+      <!-- IMPORTANT ..\mono\4.5\pdb2mdb.exe throws FileNotFound error about Mono.Cecil.dll which is in ..\mono\gac
+      so I copied it to ..\4.5\ Dir and it now works. I also found a Unity bug filed about it. -->
+      <MdbGeneratorPath>$(UnityInstallDir)Data\MonoBleedingEdge\lib\mono\4.5\pdb2mdb.exe</MdbGeneratorPath>
     </PropertyGroup>
 
     <ItemGroup>
       <AllAssembliesInUnity Include="$(UnityCodeLibraryDir)**\*.dll; $(UnityCodeLibraryDir)**\*.exe" />
-      <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\UnityEngine.dll; $(UnityCodeLibraryDir)**\UnityEditor.dll" />
+      <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\UnityEngine.dll" />
+      <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\UnityEditor.dll" />
+      <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\UnityEngine.UI.dll" />      <!-- New Unity5 -->
       <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\nunit.framework.dll" />
       <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\Vectrosity.dll" />
       <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\Ngui.dll" />
       <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\Contextual.dll" />
-
+      <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\MoreLinq.dll" />         <!-- New as lost WhyDoIDoIt.Radical -->
 
       <!-- Pdb2Mdb throws up on resource satellite assemblies so they are excluded below -->
       <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)*-*\**\*.*" /> 
 
       <MdbAssemblies Include="@(AllAssembliesInUnity)" Exclude="@(ExcludedAssembliesInUnity)" />
     </ItemGroup>
-
+    
+    <!-- <Message Text="Path to pdb2mdb.exe: $(MdbGeneratorPath)" Importance="high"/> -->
     <Message Text="Assemblies used to produce .mdb files: $(NewLine)@(MdbAssemblies, '$(NewLine)')" Importance="high"/>
 
     <!-- pdb2mdb.exe will only work if called from the directory containing the .dll and .pdb files -->
@@ -336,7 +354,8 @@
       <!--Exclude AssemblyInfo.cs -->
       <ExcludedGameScripts Include="$(SolutionDir)$(SolutionName).*\Properties\*" />  
       <ExcludedGameScripts Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)$(MasterSolutionName).*\Properties\*" />
-      
+      <!-- No need to exclude referenced Assemblies as only *.cs are copied -->
+
       <GameScriptsToCopy Include="@(IncludedGameScripts)" Exclude="@(ExcludedGameScripts)" />
     </ItemGroup>
 
@@ -353,7 +372,8 @@
       <!--Exclude AssemblyInfo.cs -->
       <ExcludedEditorScripts Include="$(SolutionDir)$(SolutionName).EditorScriptsFactory\Properties\*" />
       <ExcludedEditorScripts Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)$(MasterSolutionName).EditorScriptsFactory\Properties\*" />
-
+      <!-- No need to exclude referenced Assemblies as only *.cs are copied -->
+      
       <EditorScriptsToCopy Include="@(IncludedEditorScripts)" Exclude="@(ExcludedEditorScripts)" />
     </ItemGroup>
 
