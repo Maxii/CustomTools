@@ -3,6 +3,8 @@
   <!-- Multiple warnings from poorly designed MS Schema -->
   <!-- Desktop (but not Laptop) system has lost Intellisense for MSBuild due to an MSBuild bug -->
   <!-- NOTE: MSBuildStartupDirectory has no trailing \ -->
+  <!-- 12/15 POC and Trials Solutions and Zonked Project are no longer used. -->
+  <!-- 12/15 FxCop Analysis no longer used as VS 2015 Community uses better version (uses Roslyn Rules) in Code Analysis Tools -->
 
   <PropertyGroup>
     <NewLine>%0a%0d</NewLine>
@@ -10,31 +12,31 @@
 
   <PropertyGroup>
     <CodeEnvDir Condition ="$(CodeEnvDir) == ''">$(GameDevDir)CodeEnv\</CodeEnvDir>
-    <TrialsDir Condition ="$(TrialsDir) == ''">$(GameDevDir)Trials\</TrialsDir>
-    <PocDir Condition ="$(PocDir) == ''">$(GameDevDir)POC\</PocDir>
+    <!--<TrialsDir Condition ="$(TrialsDir) == ''">$(GameDevDir)Trials\</TrialsDir>-->
+    <!--<PocDir Condition ="$(PocDir) == ''">$(GameDevDir)POC\</PocDir>-->
     <UnityEnvDir Condition = "$(UnityEnvDir) == ''">$(GameDevDir)UnityEnv\</UnityEnvDir>
     <CustomToolsDir Condition="$(CustomToolsDir) == ''">$(GameDevDir)CustomTools\</CustomToolsDir>
   </PropertyGroup>
 
   <PropertyGroup>
     <MasterSolutionRootDir>$(CodeEnvDir)</MasterSolutionRootDir>
-    <PocSolutionRootDir>$(PocDir)</PocSolutionRootDir>
-    <TrialsSolutionRootDir>$(TrialsDir)</TrialsSolutionRootDir>
+    <!--<PocSolutionRootDir>$(PocDir)</PocSolutionRootDir>-->
+    <!--<TrialsSolutionRootDir>$(TrialsDir)</TrialsSolutionRootDir>-->
     <CustomToolsSolutionRootDir>$(CustomToolsDir)</CustomToolsSolutionRootDir>
   </PropertyGroup>
 
   <PropertyGroup>
     <MasterSolutionName>CodeEnv.Master</MasterSolutionName>
-    <PocToUnitySolutionName>POC.ToUnity</PocToUnitySolutionName>
-    <TrialsToUnitySolutionName>Trials.ToUnity</TrialsToUnitySolutionName>
-    <PocNetSolutionName>POC.Net</PocNetSolutionName>
+    <!--<PocToUnitySolutionName>POC.ToUnity</PocToUnitySolutionName>-->
+    <!--<TrialsToUnitySolutionName>Trials.ToUnity</TrialsToUnitySolutionName>-->
+    <!--<PocNetSolutionName>POC.Net</PocNetSolutionName>-->
   </PropertyGroup>
 
   <PropertyGroup>
     <MasterSolutionDir>$(MasterSolutionRootDir)$(MasterSolutionName)\</MasterSolutionDir>
-    <PocToUnitySolutionDir>$(PocSolutionRootDir)$(PocToUnitySolutionName)\</PocToUnitySolutionDir>
-    <TrialsToUnitySolutionDir>$(TrialsSolutionRootDir)$(TrialsToUnitySolutionName)\</TrialsToUnitySolutionDir>
-    <PocNetSolutionDir>$(PocSolutionRootDir)$(PocNetSolutionName)\</PocNetSolutionDir>
+    <!--<PocToUnitySolutionDir>$(PocSolutionRootDir)$(PocToUnitySolutionName)\</PocToUnitySolutionDir>-->
+    <!--<TrialsToUnitySolutionDir>$(TrialsSolutionRootDir)$(TrialsToUnitySolutionName)\</TrialsToUnitySolutionDir>-->
+    <!--<PocNetSolutionDir>$(PocSolutionRootDir)$(PocNetSolutionName)\</PocNetSolutionDir>-->
     <CustomToolsSolutionDir>$(CustomToolsSolutionRootDir)</CustomToolsSolutionDir>
   </PropertyGroup>
 
@@ -46,9 +48,9 @@
 
   <PropertyGroup>
     <SolutionRootDir>$(MasterSolutionRootDir)</SolutionRootDir>
-    <SolutionRootDir Condition ="$(SolutionName) == $(TrialsToUnitySolutionName)">$(TrialsSolutionRootDir)</SolutionRootDir>
-    <SolutionRootDir Condition ="$(SolutionName) == $(PocToUnitySolutionName)">$(PocSolutionRootDir)</SolutionRootDir>
-    <SolutionRootDir Condition ="$(SolutionName) == $(PocNetSolutionName)" >$(PocSolutionRootDir)</SolutionRootDir>
+    <!--<SolutionRootDir Condition ="$(SolutionName) == $(TrialsToUnitySolutionName)">$(TrialsSolutionRootDir)</SolutionRootDir>-->
+    <!--<SolutionRootDir Condition ="$(SolutionName) == $(PocToUnitySolutionName)">$(PocSolutionRootDir)</SolutionRootDir>-->
+    <!--<SolutionRootDir Condition ="$(SolutionName) == $(PocNetSolutionName)" >$(PocSolutionRootDir)</SolutionRootDir>-->
   </PropertyGroup>
   <PropertyGroup>
     <SolutionDir>$(SolutionRootDir)$(SolutionName)\</SolutionDir>
@@ -56,8 +58,8 @@
 
   <PropertyGroup>
     <UnityProjectName>UnityEntry</UnityProjectName>
-    <UnityProjectName Condition="$(SolutionName) == $(TrialsToUnitySolutionName)">UnityTrials</UnityProjectName>
-    <UnityProjectName Condition="$(SolutionName) == $(PocToUnitySolutionName)">UnityPOC</UnityProjectName>
+    <!--<UnityProjectName Condition="$(SolutionName) == $(TrialsToUnitySolutionName)">UnityTrials</UnityProjectName>-->
+    <!--<UnityProjectName Condition="$(SolutionName) == $(PocToUnitySolutionName)">UnityPOC</UnityProjectName>-->
   </PropertyGroup>
   <PropertyGroup>
     <UnityProjectDir>$(UnityEnvDir)$(UnityProjectName)\</UnityProjectDir>
@@ -94,6 +96,8 @@
   </PropertyGroup>
 
   <!--____________________________FxCop definitions begin here______________________ -->
+  <!-- 12/15 FxCop Analysis no longer used as VS 2015 Community uses better version (uses Roslyn Rules) in Code Analysis Tools -->
+
 
   <!-- Extension Pack required for fxcop.targets file -->
   <Import Project="$(ExtensionTasksPath)MSBuild.ExtensionPack.tasks"/>

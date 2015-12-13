@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="UnityTest" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+  <!-- 12/15 POC and Trials Solutions and Zonked Project are no longer used. -->
+  <!-- 12/15 FxCop Analysis no longer used as VS 2015 Community uses better version (uses Roslyn Rules) in Code Analysis Tools -->
+
   <!-- For the Attrib task that removes readonly flags -->
   <Import Project="$(MSBuildCommunityTasksPath)MSBuild.Community.Tasks.Targets" />
 
@@ -9,7 +12,8 @@
   <PropertyGroup>
     <CleanDependsOn>
       $(CleanDependsOn);
-      CleanFxCop; <!-- Clean FxCop first before the FxCopAssemblies are cleaned to avoid fxcop.targets error -->
+      <!-- 12/15 FxCop Analysis no longer used as VS 2015 Community uses better version (uses Roslyn Rules) in Code Analysis Tools -->
+      <!-- CleanFxCop; --> <!-- Clean FxCop first before the FxCopAssemblies are cleaned to avoid fxcop.targets error -->
       _CoreClean;
       _ProjectClean;
     </CleanDependsOn>
@@ -145,7 +149,8 @@
     <!-- Need notification of success or failure -->
     <Message Text="Running Unit Tests which currently do nothing." Importance="high"/>
   </Target>
-
+  
+  <!-- 12/15 FxCop Analysis no longer used as VS 2015 Community uses better version (uses Roslyn Rules) in Code Analysis Tools -->
   <!-- FxCopAndUnitTest - cleans, builds and runs FxCop and then Unit Tests -->
   <PropertyGroup>
     <RunFxCopDependsOn>
@@ -197,7 +202,7 @@
       _CopySourceToUnity;
       _UnityXmlDataClean;
       _CopyXmlDataToUnity;
-      _GenerateMdbFiles;
+      <!--_GenerateMdbFiles;-->;  <!-- Removed 12/15 to make move to VSToolsForUnity -->
       <!-- Unity .pdb files are automatically cleaned after .mdb files are generated -->
       _UnityScriptClean;  <!-- Don't clean Unity scripts until no build or .mdb failure can occur -->
       CopyScriptsToUnity;
@@ -225,17 +230,27 @@
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\nunit.framework.dll" />    
       <!--<ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\*-*\**\*.*" /> Would exclude Resource Satellite files -->
 
-
-      <!-- Referencing Assembly-CSharp-firstpass.dll supports UnitySerializer references. The following exclusion is redundant as CopyLocal=false -->
-      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\Assembly-CSharp-firstpass.dll" />
-      <!-- Referencing NGUI Project's Assembly-CSharp.dll supports NGUI references. The following exclusion is redundant as CopyLocal=false -->
-      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\Assembly-CSharp.dll" />
-      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\Vectrosity.dll" />
-      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\Ngui.dll" />
-      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\Contextual.dll" />
-      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\GridFramework.dll" />
+      <!-- Excluding these .dlls should be redundant as CopyLocal=false -->
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\AStar.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\AStarEditor.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\Contextual.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\ContextualEditor.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\ContextualExamples.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\GridFramework.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\GridFrameworkDebug.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\GridFrameworkEditor.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\Ngui.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\NguiEditor.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\NguiExamples.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\SciFiEffects.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\SmoothTurret.dll" />
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\SoundManagerPro.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\SoundManagerProEditor.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\SpaceD.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\SpaceDEditor.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\Vectrosity.dll" />
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\VectrosityEditor.dll" />
+      <!--11/15 UnitySerializer removed. <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\Assembly-CSharp-firstpass.dll" />-->
 
       <OutputFilesToCopy Include="@(AllOutputFiles)" Exclude="@(ExcludedOutputFiles)" />
       <!-- UNCLEAR what about .config files and copy local references? -->
@@ -266,8 +281,11 @@
       <!-- Exclude anything (autogenerated *.g.cs files) in \obj -->
       <ExcludedSource Include="$(SolutionDir)**\obj\**\*" />
       <ExcludedSource Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)**\obj\**\*" />
+      <!-- Exclude GlobalSuppressions.cs files -->
+      <ExcludedSource Include="$(SolutionDir)**\GlobalSuppressions.cs" />
+      <ExcludedSource Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)**\GlobalSuppressions.cs" />
       <!-- Exclude anything from the Projects that are explicitly excluded from the build -->
-      <ExcludedSource Include="@(ExcludedProjectList -> '%(RootDir)%(Directory)**\*.cs')" />
+      <!--<ExcludedSource Include="@(ExcludedProjectList -> '%(RootDir)%(Directory)**\*.cs')" />--> <!-- Uncomment this if ExcludedProjectList is declared. -->
 
       <SourceToCopy Include="@(IncludedSource)" Exclude="@(ExcludedSource)" />
     </ItemGroup>
@@ -305,10 +323,11 @@
       <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\UnityEditor.dll" />
       <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\UnityEngine.UI.dll" />      <!-- New Unity5 -->
       <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\nunit.framework.dll" />
-      <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\Vectrosity.dll" />
-      <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\Ngui.dll" />
-      <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\Contextual.dll" />
       <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\MoreLinq.dll" />         <!-- New as lost WhyDoIDoIt.Radical -->
+      <!-- Exclusions not needed as .dlls are not copied to CodeLibraryDir -->
+      <!--<ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\Vectrosity.dll" />-->
+      <!--<ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\Ngui.dll" />-->
+      <!--<ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)**\Contextual.dll" />-->
 
       <!-- Pdb2Mdb throws up on resource satellite assemblies so they are excluded below -->
       <ExcludedAssembliesInUnity Include="$(UnityCodeLibraryDir)*-*\**\*.*" /> 
@@ -354,6 +373,9 @@
       <!--Exclude AssemblyInfo.cs -->
       <ExcludedGameScripts Include="$(SolutionDir)$(SolutionName).*\Properties\*" />  
       <ExcludedGameScripts Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)$(MasterSolutionName).*\Properties\*" />
+      <!-- Exclude GlobalSuppressions.cs files -->
+      <ExcludedGameScripts Include="$(SolutionDir)**\GlobalSuppressions.cs" />
+      <ExcludedGameScripts Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)**\GlobalSuppressions.cs" />
       <!-- No need to exclude referenced Assemblies as only *.cs are copied -->
 
       <GameScriptsToCopy Include="@(IncludedGameScripts)" Exclude="@(ExcludedGameScripts)" />
@@ -372,6 +394,9 @@
       <!--Exclude AssemblyInfo.cs -->
       <ExcludedEditorScripts Include="$(SolutionDir)$(SolutionName).EditorScriptsFactory\Properties\*" />
       <ExcludedEditorScripts Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)$(MasterSolutionName).EditorScriptsFactory\Properties\*" />
+      <!-- Exclude GlobalSuppressions.cs files -->
+      <ExcludedEditorScripts Include="$(SolutionDir)**\GlobalSuppressions.cs" />
+      <ExcludedEditorScripts Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)**\GlobalSuppressions.cs" />
       <!-- No need to exclude referenced Assemblies as only *.cs are copied -->
       
       <EditorScriptsToCopy Include="@(IncludedEditorScripts)" Exclude="@(ExcludedEditorScripts)" />

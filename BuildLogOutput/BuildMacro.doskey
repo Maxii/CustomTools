@@ -1,1 +1,5 @@
-build=msbuild.exe /clp:verbosity=minimal /clp:summary /flp:verbosity=detailed;logfile=buildlogoutput\build.detailed.log /flp1:errorsonly;logfile=buildlogoutput\build.errors.log /flp2:warningsonly;logfile=buildlogoutput\build.warnings.log /m /p:BuildInParallel=true $*
+build="%MSBuildDir%msbuild.exe" /clp:verbosity=minimal /clp:summary /flp:verbosity=detailed;logfile=buildlogoutput\build.detailed.log /flp1:errorsonly;logfile=buildlogoutput\build.errors.log /flp2:warningsonly;logfile=buildlogoutput\build.warnings.log /maxcpucount /property:BuildInParallel=true $*
+
+;= is a comment workaround
+;= $* at end is a replaceable parameter, ie. everything you type on the cmd line after the macro name "build" is substituted
+;= for the $* in the macro
