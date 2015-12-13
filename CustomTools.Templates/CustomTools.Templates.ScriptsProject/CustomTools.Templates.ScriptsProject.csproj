@@ -59,10 +59,6 @@
       <Project>{1557c03e-56ee-4c70-9bd8-ab637d3191cf}</Project>
       <Name>CodeEnv.Master.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\CodeEnv\CodeEnv.Master\CodeEnv.Master.GameContent\CodeEnv.Master.GameContent.csproj">
-      <Project>{129dcf86-4fc5-4caf-aafe-911efc560e10}</Project>
-      <Name>CodeEnv.Master.GameContent</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
