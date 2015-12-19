@@ -284,6 +284,9 @@
       <!-- Exclude GlobalSuppressions.cs files -->
       <ExcludedSource Include="$(SolutionDir)**\GlobalSuppressions.cs" />
       <ExcludedSource Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)**\GlobalSuppressions.cs" />
+      <!-- Exclude anything in the DeadCode folder -->
+      <ExcludedSource Include="$(SolutionDir)DeadCode\**\*" />
+      <ExcludedSource Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)DeadCode\**\*" />
       <!-- Exclude anything from the Projects that are explicitly excluded from the build -->
       <!--<ExcludedSource Include="@(ExcludedProjectList -> '%(RootDir)%(Directory)**\*.cs')" />--> <!-- Uncomment this if ExcludedProjectList is declared. -->
 
