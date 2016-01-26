@@ -250,6 +250,8 @@
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\SpaceDEditor.dll" />
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\Vectrosity.dll" />
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\VectrosityEditor.dll" />
+
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\Vectrosity.pdb" />
       <!--11/15 UnitySerializer removed. <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\Assembly-CSharp-firstpass.dll" />-->
 
       <OutputFilesToCopy Include="@(AllOutputFiles)" Exclude="@(ExcludedOutputFiles)" />
@@ -386,7 +388,7 @@
 
     <!-- If the Unity Scripts directory doesn't exist then create it -->
     <MakeDir Directories="$(UnityScriptsDir)" Condition="!Exists('$(UnityScriptsDir)')"/>
-    <Message Text="Script (.cs) files copied to Unity Scripts Folder: $(NewLine)@(GameScriptsToCopy, '$(NewLine)')" Importance="high"/>
+    <!--<Message Text="Script (.cs) files copied to Unity Scripts Folder: $(NewLine)@(GameScriptsToCopy, '$(NewLine)')" Importance="high"/>-->
     <!-- The Well-known Item Metadata ".RecursiveDir" also copies scripts in deeper nested folders in the ScriptsFactory project.  -->
     <Copy SourceFiles="@(GameScriptsToCopy)" DestinationFolder="$(UnityScriptsDir)%(GameScriptsToCopy.RecursiveDir)" OverwriteReadOnlyFiles="true" />
   </Target>
