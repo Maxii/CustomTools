@@ -202,7 +202,7 @@
       _CopySourceToUnity;
       _UnityXmlDataClean;
       _CopyXmlDataToUnity;
-      <!--_GenerateMdbFiles;-->;  <!-- Removed 12/15 to make move to VSToolsForUnity -->
+      _GenerateMdbFiles;  <!-- Removed 12/15 to make move to VSToolsForUnity. Added back 3.11.16 to get DLL line numbers back -->
       <!-- Unity .pdb files are automatically cleaned after .mdb files are generated -->
       _UnityScriptClean;  <!-- Don't clean Unity scripts until no build or .mdb failure can occur -->
       CopyScriptsToUnity;
@@ -316,10 +316,14 @@
 
       <!-- Registry's Unity Editor 5.x\Location does not exist so hard code UnityInstallDir here. -->
       <!-- <UnityInstallDir>$(ProgramFiles)\Unity\Editor\</UnityInstallDir> --> <!-- $(ProgramFiles) returns C:\Program Files (x86)\-->
-      <UnityInstallDir>C:\Program Files\Unity\Editor\</UnityInstallDir>    <!-- Unity5 64 bit install location-->
+      <!-- <UnityInstallDir>C:\Program Files\Unity\Editor\</UnityInstallDir>  Unity5 64 bit install location. No longer needed-->
       <!-- IMPORTANT ..\mono\4.5\pdb2mdb.exe throws FileNotFound error about Mono.Cecil.dll which is in ..\mono\gac
-      so I copied it to ..\4.5\ Dir and it now works. I also found a Unity bug filed about it. -->
-      <MdbGeneratorPath>$(UnityInstallDir)Data\MonoBleedingEdge\lib\mono\4.5\pdb2mdb.exe</MdbGeneratorPath>
+      so I copied it to ..\4.5\ Dir and it now works. Unity bug filed about this is not fixable by Unity. -->
+      <!-- Update 3.11.16: see http://forum.unity3d.com/threads/running-pdb2mdb-with-unity-5-and-later.390456/ -->
+      <!--<MdbGeneratorPath>$(UnityInstallDir)Data\MonoBleedingEdge\lib\mono\4.5\pdb2mdb.exe</MdbGeneratorPath>-->
+      
+      <!-- VSTU version of pdb2mdb.exe works with VS2015. Now resident in CustomTools as of 3.11.16. -->
+      <MdbGeneratorPath>$(ContribDir)pdb2mdb.exe</MdbGeneratorPath>
     </PropertyGroup>
 
     <ItemGroup>

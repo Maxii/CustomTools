@@ -20,6 +20,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTools.FormatUtility", "CustomTools.FormatUtility\CustomTools.FormatUtility.csproj", "{13E67FA6-3522-4CC5-A809-1FE498B962C6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contrib", "Contrib", "{0ED89569-396E-4281-8FE6-0A0AA83CEC4C}"
+	ProjectSection(SolutionItems) = preProject
+		Contrib\pdb2mdb.exe = Contrib\pdb2mdb.exe
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExtensionPack", "ExtensionPack", "{B50FA6CA-A2CC-4B23-84EF-FC6634957B45}"
 EndProject
@@ -191,8 +194,8 @@ Global
 		{CFD57FB8-0C47-4728-8C9E-E732B92CFE38} = {E20D30F5-50A3-4827-8516-A7A104523212}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_DetectChanges = True
-		BuildVersion_UseGlobalSettings = True
 		BuildVersion_ConfigurationName = Any
+		BuildVersion_UseGlobalSettings = True
+		BuildVersion_DetectChanges = True
 	EndGlobalSection
 EndGlobal
