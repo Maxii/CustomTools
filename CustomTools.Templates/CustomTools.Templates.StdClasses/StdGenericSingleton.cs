@@ -14,33 +14,35 @@
 #define DEBUG_WARN
 #define DEBUG_ERROR
 
+#define ENABLE_PROFILER
+
 namespace $rootnamespace$ {
 
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using CodeEnv.Master.Common;
-    using CodeEnv.Master.Common.LocalResources;
-    using CodeEnv.Master.GameContent;
-    using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
+using CodeEnv.Master.Common;
+using CodeEnv.Master.Common.LocalResources;
+using CodeEnv.Master.GameContent;
+using UnityEngine;
 
-    /// <summary>
-    /// Singleton. COMMENT
-    /// </summary>
-    public class $safeitemname$ : AGenericSingleton<$safeitemname$> {
+/// <summary>
+/// Singleton. COMMENT
+/// </summary>
+public class $safeitemname$ : AGenericSingleton<$safeitemname$> {
 
         private $safeitemname$() {
             Initialize();
-        }
+}
 
-        protected override void Initialize() {
-            // TODO do any initialization here
-            // WARNING: Donot use Instance or _instance in here as this is still part of Constructor
-        }
+protected override void Initialize() {
+    // TODO do any initialization here
+    // WARNING: Do not use Instance or _instance in here as this is still part of Constructor
+}
 
-        public override string ToString() {
-            return new ObjectAnalyzer().ToString(this);
-        }
+public override string ToString() {
+    return new ObjectAnalyzer().ToString(this);
+}
 
     }
 }

@@ -14,26 +14,28 @@
 #define DEBUG_WARN
 #define DEBUG_ERROR
 
+#define ENABLE_PROFILER
+
 namespace $rootnamespace$ {
 
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using CodeEnv.Master.Common;
-    using CodeEnv.Master.Common.LocalResources;
-    using CodeEnv.Master.GameContent;
-    using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
+using CodeEnv.Master.Common;
+using CodeEnv.Master.Common.LocalResources;
+using CodeEnv.Master.GameContent;
+using UnityEngine;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public class $safeitemname$ {
+/// <summary>
+/// 
+/// </summary>
+public class $safeitemname$ {
 
         public $safeitemname$() { }
 
-        public override string ToString() {
-            return new ObjectAnalyzer().ToString(this);
-        }
+public override string ToString() {
+    return new ObjectAnalyzer().ToString(this);
+}
 
     }
 }

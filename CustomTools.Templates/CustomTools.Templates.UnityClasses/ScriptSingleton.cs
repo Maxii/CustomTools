@@ -14,6 +14,8 @@
 #define DEBUG_WARN
 #define DEBUG_ERROR
 
+#define ENABLE_PROFILER
+
 // default namespace
 
 using System;

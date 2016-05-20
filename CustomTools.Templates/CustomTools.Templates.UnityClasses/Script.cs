@@ -14,6 +14,8 @@
 #define DEBUG_WARN
 #define DEBUG_ERROR
 
+#define ENABLE_PROFILER
+
 // default namespace
 
 using System;
@@ -30,14 +32,14 @@ using UnityEngine;
 public class $safeitemname$ : AMonoBase {
 
     protected override void Awake() {
-        base.Awake();
+    base.Awake();
 
-    }
+}
 
 
-    public override string ToString() {
-        return new ObjectAnalyzer().ToString(this);
-    }
+public override string ToString() {
+    return new ObjectAnalyzer().ToString(this);
+}
 
 }
 
