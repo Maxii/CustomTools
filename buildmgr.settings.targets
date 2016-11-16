@@ -40,7 +40,7 @@
     <CustomToolsSolutionDir>$(CustomToolsSolutionRootDir)</CustomToolsSolutionDir>
   </PropertyGroup>
 
-  <!-- Default Solution Name, overriden by command line parameter switch. 
+  <!-- Default Solution Name, overridden by command line parameter switch. 
   For Trials\Trials.ToUnity use /p:SolutionName=Trials.ToUnity, for POC\POC.ToUnity use /p:SolutionName=POC.ToUnity -->
   <PropertyGroup>
     <SolutionName>$(MasterSolutionName)</SolutionName>
@@ -77,7 +77,7 @@
   <PropertyGroup>
     <ContribDir Condition="$(ContribDir) == ''">$(CustomToolsDir)Contrib\</ContribDir>
     <!-- MSBuildExtensionsPath is the path where ALL extensions to MSBuild are located. As a reserved property, it 
-        is automatically setup by MSBuild programatically. However, it can be overridden.  I'm overriding it so I can 
+        is automatically setup by MSBuild programmatically. However, it can be overridden.  I'm overriding it so I can 
         put selected ExtensionTasks and CommunityTasks under source control. MSBuildExtensionsPath normally points to 
         $(ProgramFiles)MSBuild\ by default. -->
     <MSBuildExtensionsPath>$(ContribDir)</MSBuildExtensionsPath>
