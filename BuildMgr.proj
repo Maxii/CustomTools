@@ -35,6 +35,7 @@
 
   <ItemGroup>
     <AllConfigurations Include="Debug" />
+    <AllConfigurations Include ="ProfilerDebug" />
     <AllConfigurations Include="Release" />
   </ItemGroup>
 

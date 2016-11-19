@@ -19,8 +19,11 @@ doskey /macrofile=buildlogoutput\BuildMacro.doskey
 @echo                               =POC.ToUnity	(no longer implemented)
 @echo
 @echo                        Config=Debug(default),
+@echo							   =ProfilerDebug,
 @echo                              =Release,
 @echo                              =Debug+Release
+
+@echo To enable profiler: build buildmgr.proj /p:Config=ProfilerDebug
 
 
 @REM -----------------------------------------------------------------------

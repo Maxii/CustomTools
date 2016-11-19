@@ -10,11 +10,9 @@
 // </summary> 
 // -------------------------------------------------------------------------------------------------------------------- 
 
-#define DEBUG_LOG
-#define DEBUG_WARN
-#define DEBUG_ERROR
-
-#define ENABLE_PROFILER
+////#define DEBUG_LOG
+////#define DEBUG_WARN
+////#define DEBUG_ERROR
 
 // default namespace
 
@@ -35,7 +33,6 @@ public class $safeitemname$ : AMonoBase {
     base.Awake();
 
 }
-
 
 public override string ToString() {
     return new ObjectAnalyzer().ToString(this);
