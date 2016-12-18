@@ -175,7 +175,7 @@
       <AllReleaseAssemblies Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\*.dll; $(CommonOutputDir)%(ConfigurationList.Identity)\**\*.exe" />
       
       <ExcludedReleaseAssemblies Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\*.Tests.*" />
-      <!-- FxCop requires the presence of any .dll references not in the GAC (ie. Unity Assemblies). nunit.framework is dragged along with
+      <!-- FxCop requires the presence of any .dll references not in the GAC (IE. Unity Assemblies). nunit.framework is dragged along with
       the unity references probably because they reference it. None of these need to be analyzed. -->
       <ExcludedReleaseAssemblies Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEngine.dll" />
       <ExcludedReleaseAssemblies Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEngine.UI.dll" /> <!-- New Unity5 UI.dll -->
@@ -222,13 +222,15 @@
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\*.Tests.*" />
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\*.config" />
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\*.xml" />  <!-- New Unity5 API Comment files -->
-      
+            
       <!-- The Unity Engine/Editor and nunit Assemblies are not needed in the Unity CodeLibrary -->
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEngine.dll" />
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEngine.UI.dll" /> <!-- New Unity5 UI.dll -->
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEditor.dll" />
-      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\nunit.framework.dll" />    
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\nunit.framework.dll" /> 
+      
       <!--<ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\*-*\**\*.*" /> Would exclude Resource Satellite files -->
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\fr-FR\**\*.*" /> <!-- 12.1.16 Excluded FR Resource Satellite files due to Unity 5.5 compiler error  -->
 
       <!-- Excluding these .dlls should be redundant as CopyLocal=false -->
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\AStar.dll" />
@@ -428,7 +430,7 @@
       <!-- Include every .xml file in the Master Solution and the targeted Solution's DataLibrary -->
       <IncludedData Include="$(SolutionDir)DataLibrary\**\*.xml" />
       <IncludedData Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)DataLibrary\**\*.xml" />
-      <ExcludedData Include="$(SolutionDir)DataLibrary\Schemas\**\*.*"/> <!-- Schemas not needed during runtime -->
+      <ExcludedData Include="$(SolutionDir)DataLibrary\Schemas\**\*.*"/> <!-- Schema not needed during runtime -->
       <ExcludedData Condition="$(SolutionDir) != $(MasterSolutionDir)" Include="$(MasterSolutionDir)DataLibrary\Schemas\**\*.*" />
 
       <DataToCopy Include="@(IncludedData)" Exclude="@(ExcludedData)" />
