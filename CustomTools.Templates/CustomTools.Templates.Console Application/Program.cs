@@ -16,8 +16,9 @@ namespace $safeprojectname$ {
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using CodeEnv.Master.Common;
 
-    class Program {
+class Program {
 
         static void Main(string[] args) {
         }
