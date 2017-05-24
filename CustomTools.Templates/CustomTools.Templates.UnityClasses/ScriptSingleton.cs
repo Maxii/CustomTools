@@ -29,7 +29,10 @@ using UnityEngine;
 /// </summary>
 public class $safeitemname$ : AMonoSingleton<$safeitemname$> {
 
-    public override bool IsPersistentAcrossScenes {
+            public string DebugName { get { return GetType().Name; } }
+
+
+public override bool IsPersistentAcrossScenes {
     get {
         // TODO return true if this Singleton is persistent. Default is false
         return base.IsPersistentAcrossScenes;
@@ -72,7 +75,7 @@ protected override void Cleanup() {
 #endregion
 
 public override string ToString() {
-    return new ObjectAnalyzer().ToString(this);
+    return DebugName;
 }
 
 }

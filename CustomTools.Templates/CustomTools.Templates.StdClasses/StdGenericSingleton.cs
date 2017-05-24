@@ -17,20 +17,23 @@
 namespace $rootnamespace$ {
 
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using CodeEnv.Master.Common;
-    using CodeEnv.Master.Common.LocalResources;
-    using CodeEnv.Master.GameContent;
-    using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
+using CodeEnv.Master.Common;
+using CodeEnv.Master.Common.LocalResources;
+using CodeEnv.Master.GameContent;
+using UnityEngine;
 
 /// <summary>
 /// Singleton. COMMENT
 /// </summary>
 public class $safeitemname$ : AGenericSingleton<$safeitemname$> {
 
-        private $safeitemname$() {
-            Initialize();
+            public string DebugName { get { return GetType().Name; } }
+
+
+private $safeitemname$() {
+                        Initialize();
 }
 
 protected override void Initialize() {
@@ -39,7 +42,7 @@ protected override void Initialize() {
 }
 
 public override string ToString() {
-    return new ObjectAnalyzer().ToString(this);
+    return DebugName;
 }
 
     }

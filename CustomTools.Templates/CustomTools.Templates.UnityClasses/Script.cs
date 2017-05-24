@@ -29,13 +29,15 @@ using UnityEngine;
 /// </summary>
 public class $safeitemname$ : AMonoBase {
 
-    protected override void Awake() {
+            public string DebugName { get { return GetType().Name; } }
+
+protected override void Awake() {
     base.Awake();
 
 }
 
 public override string ToString() {
-    return new ObjectAnalyzer().ToString(this);
+    return DebugName;
 }
 
 }
