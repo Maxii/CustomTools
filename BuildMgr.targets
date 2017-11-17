@@ -227,8 +227,10 @@
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEngine.dll" />
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEngine.UI.dll" /> <!-- New Unity5 UI.dll -->
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\UnityEditor.dll" />
-      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\nunit.framework.dll" /> 
-      
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\nunit.framework.dll" />
+      <!-- 11.17.17 UNCLEAR UnitTestFramework.dll started being copied after changing to VS 2017 failing pdb2mdb conversion -->
+      <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\**\*.UnitTestFramework.dll" />
+
       <!--<ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\*-*\**\*.*" /> Would exclude Resource Satellite files -->
       <ExcludedOutputFiles Include="$(CommonOutputDir)%(ConfigurationList.Identity)\fr-FR\**\*.*" /> <!-- 12.1.16 Excluded FR Resource Satellite files due to Unity 5.5 compiler error  -->
 
